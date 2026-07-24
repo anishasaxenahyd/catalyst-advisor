@@ -21,6 +21,6 @@ services:
       - key: LLM_FALLBACK_TO_MOCK
         value: "true"
       - key: FRONTEND_ORIGIN
-        value: "https://REPLACE-WITH-YOUR-VERCEL-DOMAIN.vercel.app"
+        value: "https://catalyst-advisor.vercel.app"
       - key: LOG_LEVEL
         value: INFO
