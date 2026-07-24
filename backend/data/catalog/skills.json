@@ -1,0 +1,29 @@
+[
+  {
+    "id": "skill-document-extraction",
+    "category": "skill",
+    "name": "Document Extraction Skill",
+    "description": "Pulls structured fields (dates, parties, amounts, clauses) out of unstructured documents such as contracts, invoices, and forms.",
+    "tags": ["document-heavy", "structured", "retrieval"],
+    "reuse_score": 85,
+    "compliance": ["SOC2", "GDPR"]
+  },
+  {
+    "id": "skill-sql-generation",
+    "category": "skill",
+    "name": "SQL Generation Skill",
+    "description": "Translates a natural-language question into a parameterized SQL query against a registered enterprise schema.",
+    "tags": ["structured", "assist", "reasoning"],
+    "reuse_score": 78,
+    "compliance": ["SOC2"]
+  },
+  {
+    "id": "skill-policy-compliance-checker",
+    "category": "skill",
+    "name": "Policy Compliance Checker Skill",
+    "description": "Checks generated or retrieved content against a configurable rulebook (e.g. internal policy, regulatory clause) before it reaches a user.",
+    "tags": ["safety", "document-heavy", "workflow"],
+    "reuse_score": 72,
+    "compliance": ["SOC2", "HIPAA-eligible", "GDPR"]
+  }
+]

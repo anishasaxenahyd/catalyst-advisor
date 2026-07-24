@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: catalyst-advisor-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: LLM_PROVIDER
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: GROQ_TIMEOUT_SECONDS
+        value: "20"
+      - key: GROQ_MAX_RETRIES
+        value: "2"
+      - key: LLM_FALLBACK_TO_MOCK
+        value: "true"
+      - key: FRONTEND_ORIGIN
+        value: "https://REPLACE-WITH-YOUR-VERCEL-DOMAIN.vercel.app"
+      - key: LOG_LEVEL
+        value: INFO

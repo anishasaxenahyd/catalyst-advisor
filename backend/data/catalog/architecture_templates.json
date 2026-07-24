@@ -1,0 +1,47 @@
+[
+  {
+    "id": "pattern-rag-enterprise-docs",
+    "name": "RAG over Enterprise Docs",
+    "description": "Retrieval-augmented generation over an indexed enterprise document store. The model answers or drafts using retrieved passages instead of relying on parametric memory alone.",
+    "complexity_tier": 2,
+    "suitable_for_tags": ["document-heavy", "retrieval", "assist", "structured"],
+    "scale_ceiling": "enterprise",
+    "mermaid_template": "flowchart LR\n  U[User query] --> R[Retriever]\n  R --> IDX[(Document Index)]\n  R --> G[Generator model]\n  G --> A[Answer with citations]"
+  },
+  {
+    "id": "pattern-agentic-hitl",
+    "name": "Agentic Workflow with Human-in-the-loop",
+    "description": "A multi-step agent plans and executes a workflow across enterprise systems, pausing for human approval at defined checkpoints rather than acting fully autonomously.",
+    "complexity_tier": 4,
+    "suitable_for_tags": ["agentic", "workflow", "integration-heavy", "copilot"],
+    "scale_ceiling": "department",
+    "mermaid_template": "flowchart LR\n  U[Trigger] --> AG[Agent planner]\n  AG --> T1[Tool / system call]\n  AG --> CP{Checkpoint}\n  CP -- approve --> T2[Next action]\n  CP -- reject --> H[Human edits plan]\n  T2 --> DONE[Workflow complete]"
+  },
+  {
+    "id": "pattern-realtime-copilot",
+    "name": "Real-time Copilot Sidecar",
+    "description": "A low-latency assistant embedded alongside an existing application surface, suggesting actions or drafting content as the user works, without taking action itself.",
+    "complexity_tier": 3,
+    "suitable_for_tags": ["realtime", "copilot", "assist", "low-latency"],
+    "scale_ceiling": "enterprise",
+    "mermaid_template": "flowchart LR\n  APP[Host application] -- context --> SC[Copilot sidecar]\n  SC --> M[Low-latency model]\n  M --> SC\n  SC -- suggestion --> APP"
+  },
+  {
+    "id": "pattern-batch-classification",
+    "name": "Batch Classification Pipeline",
+    "description": "A scheduled or event-triggered pipeline that classifies or scores a high volume of records without a human in the loop per record.",
+    "complexity_tier": 1,
+    "suitable_for_tags": ["batch", "classification", "high-scale", "structured"],
+    "scale_ceiling": "enterprise",
+    "mermaid_template": "flowchart LR\n  SRC[(Source records)] --> Q[Batch queue]\n  Q --> CL[Classifier model]\n  CL --> OUT[(Scored output store)]"
+  },
+  {
+    "id": "pattern-autonomous-multi-agent",
+    "name": "Autonomous Multi-Agent Orchestration",
+    "description": "Multiple specialized agents coordinate on a shared objective with minimal human checkpoints, each responsible for a distinct sub-task.",
+    "complexity_tier": 5,
+    "suitable_for_tags": ["agentic", "autonomous", "integration-heavy", "high-scale"],
+    "scale_ceiling": "enterprise",
+    "mermaid_template": "flowchart LR\n  ORC[Orchestrator agent] --> A1[Sub-agent: research]\n  ORC --> A2[Sub-agent: execution]\n  ORC --> A3[Sub-agent: verification]\n  A1 & A2 & A3 --> ORC\n  ORC --> OUT[Objective complete]"
+  }
+]

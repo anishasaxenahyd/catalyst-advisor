@@ -1,0 +1,20 @@
+[
+  {
+    "id": "agent-customer-support-triage",
+    "category": "agent",
+    "name": "Customer Support Triage Agent",
+    "description": "Pre-built agent that classifies, prioritizes, and routes inbound support tickets, optionally drafting a first-response reply for human review.",
+    "tags": ["copilot", "assist", "realtime", "workflow"],
+    "reuse_score": 70,
+    "compliance": ["SOC2"]
+  },
+  {
+    "id": "agent-contract-review",
+    "category": "agent",
+    "name": "Contract Review Agent",
+    "description": "Agentic workflow that reads an incoming contract, flags clauses that deviate from an approved playbook, and produces a redline summary for legal review.",
+    "tags": ["agentic", "document-heavy", "workflow"],
+    "reuse_score": 65,
+    "compliance": ["SOC2", "GDPR"]
+  }
+]

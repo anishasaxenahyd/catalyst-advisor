@@ -1,0 +1,20 @@
+[
+  {
+    "id": "workspace-standard",
+    "name": "Standard",
+    "description": "Shared managed workspace for day-to-day pilots and department-scale builds.",
+    "compatible_security_profiles": ["security-standard"]
+  },
+  {
+    "id": "workspace-regulated",
+    "name": "Regulated",
+    "description": "Dedicated managed workspace with the controls required for PHI or other regulated data.",
+    "compatible_security_profiles": ["security-phi-regulated"]
+  },
+  {
+    "id": "workspace-research-sandbox",
+    "name": "Research Sandbox",
+    "description": "Isolated, non-production workspace for exploratory or public-sector work that can't share tenancy with anything else.",
+    "compatible_security_profiles": ["security-public-sector-isolated"]
+  }
+]

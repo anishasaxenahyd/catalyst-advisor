@@ -1,0 +1,26 @@
+[
+  {
+    "id": "compute-cpu-small",
+    "name": "CPU-Small",
+    "description": "CPU-only pool, sized for low-throughput classification or lookup-style workloads.",
+    "suitable_scale": ["pilot", "department"],
+    "suitable_cost_tiers": [1, 2],
+    "cost_tier": 1
+  },
+  {
+    "id": "compute-gpu-a10-pool",
+    "name": "GPU-A10-Pool",
+    "description": "Shared GPU pool for mid-throughput generation, multimodal, or embedding workloads.",
+    "suitable_scale": ["pilot", "department", "enterprise"],
+    "suitable_cost_tiers": [2, 3, 4],
+    "cost_tier": 3
+  },
+  {
+    "id": "compute-gpu-h100-pool",
+    "name": "GPU-H100-Pool",
+    "description": "Dedicated high-throughput GPU pool for enterprise-scale or latency-sensitive frontier-model workloads.",
+    "suitable_scale": ["enterprise"],
+    "suitable_cost_tiers": [4, 5],
+    "cost_tier": 5
+  }
+]

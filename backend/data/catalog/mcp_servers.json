@@ -1,0 +1,29 @@
+[
+  {
+    "id": "mcp-salesforce",
+    "category": "mcp_server",
+    "name": "Salesforce MCP Connector",
+    "description": "Read/write access to Accounts, Opportunities, and Cases via the Catalyst-managed Salesforce MCP server.",
+    "tags": ["integration-heavy", "structured", "workflow"],
+    "reuse_score": 80,
+    "compliance": ["SOC2"]
+  },
+  {
+    "id": "mcp-sharepoint",
+    "category": "mcp_server",
+    "name": "SharePoint MCP Connector",
+    "description": "Indexed access to SharePoint document libraries, used as a retrieval source for document-heavy patterns.",
+    "tags": ["document-heavy", "integration-heavy", "retrieval"],
+    "reuse_score": 82,
+    "compliance": ["SOC2", "GDPR"]
+  },
+  {
+    "id": "mcp-snowflake",
+    "category": "mcp_server",
+    "name": "Snowflake MCP Connector",
+    "description": "Query access to governed Snowflake warehouses, exposing approved schemas for structured-data use cases.",
+    "tags": ["structured", "integration-heavy", "high-scale"],
+    "reuse_score": 75,
+    "compliance": ["SOC2", "GDPR"]
+  }
+]

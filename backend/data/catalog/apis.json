@@ -1,0 +1,20 @@
+[
+  {
+    "id": "api-enterprise-identity",
+    "category": "api",
+    "name": "Enterprise Identity API",
+    "description": "Standard identity and entitlement lookups, used whenever a pattern needs to know who a user is and what they're allowed to see.",
+    "tags": ["integration-heavy", "safety"],
+    "reuse_score": 90,
+    "compliance": ["SOC2", "HIPAA-eligible", "GDPR"]
+  },
+  {
+    "id": "api-document-store",
+    "category": "api",
+    "name": "Document Store API",
+    "description": "Versioned storage and retrieval for source documents, used as the backing store behind document-heavy and retrieval patterns.",
+    "tags": ["document-heavy", "retrieval", "integration-heavy"],
+    "reuse_score": 84,
+    "compliance": ["SOC2", "GDPR"]
+  }
+]

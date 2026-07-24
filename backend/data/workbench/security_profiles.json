@@ -1,0 +1,26 @@
+[
+  {
+    "id": "security-standard",
+    "name": "Standard",
+    "description": "Default governance for internal, non-regulated data. Standard audit logging, no elevated review gate.",
+    "allowed_data_sensitivity": ["none", "pii"],
+    "compliance_flags": ["SOC2"],
+    "restrictiveness_rank": 1
+  },
+  {
+    "id": "security-phi-regulated",
+    "name": "PHI-Regulated",
+    "description": "Elevated governance for protected health information: encrypted-at-rest by default, restricted egress, mandatory access review.",
+    "allowed_data_sensitivity": ["none", "pii", "phi"],
+    "compliance_flags": ["SOC2", "HIPAA-eligible", "GDPR"],
+    "restrictiveness_rank": 2
+  },
+  {
+    "id": "security-public-sector-isolated",
+    "name": "Public-Sector-Isolated",
+    "description": "Air-gapped-style isolation for public-sector or highest-sensitivity workloads. No shared tenancy, no default external egress.",
+    "allowed_data_sensitivity": ["none", "pii", "phi"],
+    "compliance_flags": ["SOC2", "HIPAA-eligible", "GDPR", "FedRAMP-Moderate"],
+    "restrictiveness_rank": 3
+  }
+]

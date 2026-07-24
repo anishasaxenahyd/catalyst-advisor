@@ -1,0 +1,20 @@
+[
+  {
+    "id": "deploy-azure",
+    "name": "Azure",
+    "description": "Catalyst Deploy on Azure, typically paired with an existing Azure AD / M365 enterprise footprint.",
+    "supports_compliance_flags": ["SOC2", "HIPAA-eligible", "GDPR", "FedRAMP-Moderate"]
+  },
+  {
+    "id": "deploy-aws",
+    "name": "AWS",
+    "description": "Catalyst Deploy on AWS, typically paired with an existing AWS landing zone.",
+    "supports_compliance_flags": ["SOC2", "HIPAA-eligible", "GDPR"]
+  },
+  {
+    "id": "deploy-gcp",
+    "name": "GCP",
+    "description": "Catalyst Deploy on GCP, typically chosen when the enterprise's data warehouse already lives on BigQuery.",
+    "supports_compliance_flags": ["SOC2", "GDPR"]
+  }
+]
