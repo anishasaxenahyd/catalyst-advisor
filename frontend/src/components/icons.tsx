@@ -197,3 +197,71 @@ export function IconUpload(props: IconProps) {
     </svg>
   );
 }
+
+export function IconUser(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="10" cy="6.8" r="3.3" />
+      <path d="M3.8 17c.7-3.3 3.2-5 6.2-5s5.5 1.7 6.2 5" />
+    </svg>
+  );
+}
+
+export function IconLock(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="4.5" y="9" width="11" height="8" rx="1.4" />
+      <path d="M6.5 9V6.2a3.5 3.5 0 0 1 7 0V9" />
+      <path d="M10 12v2.2" />
+    </svg>
+  );
+}
+
+export function IconRoute(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="2.5" y="7" width="15" height="6" rx="1.4" />
+      <path d="M6.5 7v6M13.5 7v6" />
+      <path d="M9 10h2" />
+    </svg>
+  );
+}
+
+export function IconDatabase(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <ellipse cx="10" cy="5" rx="6" ry="2.3" />
+      <path d="M4 5v10c0 1.27 2.69 2.3 6 2.3s6-1.03 6-2.3V5" />
+      <path d="M4 10c0 1.27 2.69 2.3 6 2.3s6-1.03 6-2.3" />
+    </svg>
+  );
+}
+
+export function IconEye(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M2 10.3S5 4.8 10 4.8s8 5.5 8 5.5-3 5.5-8 5.5-8-5.5-8-5.5Z" />
+      <circle cx="10" cy="10.3" r="2.2" />
+    </svg>
+  );
+}
+
+export function IconCpu(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <rect x="6" y="6" width="8" height="8" rx="1" />
+      <rect x="8.4" y="8.4" width="3.2" height="3.2" />
+      <path d="M10 2.5v2M10 15.5v2M2.5 10h2M15.5 10h2M4.6 4.6l1.4 1.4M14 14l1.4 1.4M4.6 15.4l1.4-1.4M14 6l1.4-1.4" />
+    </svg>
+  );
+}
+
+export function IconFileText(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M6 2.5h5.5L15 6v11.5H6V2.5Z" />
+      <path d="M11.3 2.5V6H15" />
+      <path d="M8 10h4M8 12.8h4M8 7.5h1.8" />
+    </svg>
+  );
+}

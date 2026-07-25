@@ -1030,7 +1030,6 @@ button.secondary:hover {
 
 .asset-list .name {
   font-weight: 600;
-  margin-bottom: 0.25rem;
   display: flex;
   align-items: center;
   gap: 0.5em;
@@ -1083,4 +1082,308 @@ pre.mermaid-source {
   color: var(--ink-soft);
   font-size: 0.92rem;
   line-height: 1.65;
+}
+
+/* ---------------------------------------------------------------- */
+/* Enterprise Solution Blueprint                                     */
+/* ---------------------------------------------------------------- */
+
+.blueprint-shell {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.blueprint-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.blueprint-tab {
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.blueprint-tab:hover {
+  border-color: var(--line-strong);
+}
+
+.blueprint-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.blueprint-view-help {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  margin: 0 0 1.1rem;
+}
+
+.blueprint-body {
+  position: relative;
+}
+
+.blueprint-canvas-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--paper);
+  padding: 0.75rem;
+}
+
+.blueprint-canvas {
+  position: relative;
+}
+
+.blueprint-edges {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: visible;
+  color: var(--line-strong);
+}
+
+.blueprint-edge {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1.5px;
+  transition: opacity 0.2s, stroke 0.2s, stroke-width 0.2s;
+}
+
+.blueprint-edge[data-primary="true"] {
+  stroke: var(--ink-muted);
+  stroke-width: 1.75px;
+}
+
+.blueprint-edge[data-security="true"] {
+  stroke: var(--warning);
+}
+
+.blueprint-edge[data-audit="true"] {
+  stroke: var(--line-strong);
+  stroke-dasharray: 3 3;
+}
+
+.blueprint-edge[data-sensitive="true"] {
+  stroke: var(--critical);
+}
+
+.blueprint-edge[data-dim="true"] {
+  opacity: 0.15;
+}
+
+.blueprint-canvas[data-view="dataflow"] .blueprint-edge[data-primary="true"]:not([data-dim="true"]) {
+  stroke: var(--accent);
+  stroke-width: 2.25px;
+  stroke-dasharray: 7 5;
+  animation: bp-flow 1s linear infinite;
+}
+
+@keyframes bp-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.blueprint-node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--paper-raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.15;
+  padding: 0.3rem 0.4rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s, border-color 0.15s, background 0.15s;
+}
+
+.blueprint-node span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.blueprint-node:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--accent);
+}
+
+.blueprint-node.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.blueprint-node[data-dim="true"] {
+  opacity: 0.28;
+}
+
+.blueprint-node.kind-agent svg,
+.blueprint-node.kind-skill svg,
+.blueprint-node.kind-model svg,
+.blueprint-node.kind-mcp_server svg,
+.blueprint-node.kind-api svg,
+.blueprint-node.kind-database svg,
+.blueprint-node.kind-vector_store svg,
+.blueprint-node.kind-prompt svg {
+  color: var(--accent);
+}
+
+.blueprint-node.kind-auth svg,
+.blueprint-node.kind-api_gateway svg,
+.blueprint-node.kind-ai_gateway svg,
+.blueprint-node.kind-human svg,
+.blueprint-node.kind-audit svg {
+  color: var(--warning);
+}
+
+.blueprint-node.kind-user svg,
+.blueprint-node.kind-system svg,
+.blueprint-node.kind-monitoring svg,
+.blueprint-node.kind-output svg {
+  color: var(--ink-muted);
+}
+
+.blueprint-canvas[data-view="security"] .blueprint-node:not([data-dim="true"]),
+.blueprint-canvas[data-view="ai"] .blueprint-node:not([data-dim="true"]) {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft);
+}
+
+.blueprint-hint {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  margin: 0.85rem 0 0;
+}
+
+/* Detail drawer */
+.blueprint-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 24, 28, 0.35);
+  z-index: 40;
+  animation: bp-fade 0.15s ease-out;
+}
+
+.blueprint-detail {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 360px;
+  max-width: 90vw;
+  background: var(--paper-raised);
+  border-left: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+  z-index: 41;
+  padding: 1.75rem 1.5rem;
+  overflow-y: auto;
+  animation: bp-slide-in 0.2s ease-out;
+}
+
+@keyframes bp-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes bp-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.blueprint-detail-close {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink-soft);
+  margin-bottom: 1.25rem;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.blueprint-detail-close:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+.blueprint-detail-type {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-deep);
+  font-weight: 700;
+  margin: 0 0 0.3rem;
+}
+
+.blueprint-detail h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.blueprint-detail-purpose {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin: 0 0 1.25rem;
+}
+
+.blueprint-detail-list {
+  margin: 0;
+}
+
+.blueprint-detail-list dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+  font-weight: 700;
+  margin-top: 1rem;
+}
+
+.blueprint-detail-list dt:first-child {
+  margin-top: 0;
+}
+
+.blueprint-detail-list dd {
+  margin: 0.3rem 0 0;
+  font-size: 0.88rem;
+  color: var(--ink);
+  line-height: 1.5;
 }

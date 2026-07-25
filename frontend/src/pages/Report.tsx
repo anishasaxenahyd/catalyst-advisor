@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecommendation } from "../lib/RecommendationContext";
 import DecisionTraceCard from "../components/DecisionTraceCard";
-import MermaidDiagram from "../components/MermaidDiagram";
+import SolutionBlueprint from "../components/SolutionBlueprint";
 import ConfidenceBadge from "../components/ConfidenceBadge";
 import StatTile from "../components/StatTile";
 import RecommendationQualityPanel from "../components/RecommendationQualityPanel";
+import { formatAssetCategory } from "../lib/catalogLabels";
 import {
   IconArrowRight,
   IconBarChart,
@@ -100,6 +101,21 @@ export default function ReportPage() {
         </div>
       </div>
 
+      <section className="section">
+        <div className="section-head">
+          <h2>
+            <IconDiagram width={18} height={18} className="icon" />
+            Enterprise solution blueprint
+          </h2>
+        </div>
+        <p className="subtitle" style={{ marginBottom: "1rem" }}>
+          If you were building this tomorrow, here's what the architecture would look like — assembled from
+          the specific components recommended below, not a generic AI pattern. Click any component for
+          details, or switch views to see security, AI-catalog, or data-flow emphasis.
+        </p>
+        <SolutionBlueprint report={report} />
+      </section>
+
       <div className="stat-grid section">
         <StatTile label="Technical feasibility" value={`${report.feasibility.technical}/100`} />
         <StatTile label="Business feasibility" value={`${report.feasibility.business}/100`} />
@@ -121,7 +137,7 @@ export default function ReportPage() {
         <div className="section-head">
           <h2>
             <IconTarget width={18} height={18} className="icon" />
-            Recommended architecture pattern
+            Architecture pattern
           </h2>
         </div>
         <div className="card selected">
@@ -134,7 +150,6 @@ export default function ReportPage() {
           </div>
           <p className="description">{architecture_recommendation.pattern.description}</p>
           <p className="rationale">{architecture_recommendation.rationale}</p>
-          <MermaidDiagram source={architecture_recommendation.pattern.mermaid_template} />
           <DecisionTraceCard trace={architecture_recommendation.decision_trace} />
         </div>
 
@@ -160,16 +175,15 @@ export default function ReportPage() {
         <div className="section-head">
           <h2>
             <IconLayers width={18} height={18} className="icon" />
-            Enterprise asset reuse
+            Suggested AI Catalog components
           </h2>
         </div>
         <ul className="asset-list">
           {report.enterprise_reuse.map((item) => (
             <li key={item.asset.id}>
               <div className="name">
-                {item.asset.name} <span className="chip">{item.asset.category.replace("_", " ")}</span>
+                {item.asset.name} <span className="chip">{formatAssetCategory(item.asset.category)}</span>
               </div>
-              <div className="rationale">{item.rationale}</div>
             </li>
           ))}
         </ul>
