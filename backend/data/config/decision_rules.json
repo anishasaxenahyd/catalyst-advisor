@@ -48,5 +48,175 @@
     "5": "16-20 weeks incl. governance review"
   },
   "relative_cost_bands": { "low": [1, 2], "medium": [3], "high": [4, 5] },
-  "relative_latency_bands": { "low": [1, 2], "medium": [3], "high": [4, 5] }
+  "relative_latency_bands": { "low": [1, 2], "medium": [3], "high": [4, 5] },
+  "roadmap_phases_by_complexity_tier": {
+    "1": [
+      {
+        "name": "Foundation & Data Readiness",
+        "duration": "1-2 weeks",
+        "goals": ["Confirm data sources and access", "Provision the minimum compute footprint", "Validate the security profile"],
+        "deliverables": ["Data source inventory", "Provisioned workbench environment"]
+      },
+      {
+        "name": "Pilot Build & Validation",
+        "duration": "1-2 weeks",
+        "goals": ["Implement the pipeline against a representative sample", "Validate output quality against a labeled set"],
+        "deliverables": ["Working pilot pipeline", "Quality validation report"]
+      },
+      {
+        "name": "Production Rollout",
+        "duration": "0.5-1 week",
+        "goals": ["Scale to full data volume", "Stand up monitoring for output drift"],
+        "deliverables": ["Production pipeline live", "Drift monitoring in place"]
+      }
+    ],
+    "2": [
+      {
+        "name": "Foundation & Knowledge Ingestion",
+        "duration": "1-2 weeks",
+        "goals": ["Index the target document corpus", "Confirm access controls and data classification"],
+        "deliverables": ["Indexed knowledge source", "Access control mapping"]
+      },
+      {
+        "name": "Pilot Build & Retrieval Tuning",
+        "duration": "1-2 weeks",
+        "goals": ["Build the retrieval + generation pipeline", "Tune retrieval precision against representative questions"],
+        "deliverables": ["Working RAG pilot", "Retrieval quality benchmark"]
+      },
+      {
+        "name": "Production Rollout",
+        "duration": "1-2 weeks",
+        "goals": ["Roll out to the target user group", "Establish a source re-indexing cadence"],
+        "deliverables": ["Production deployment", "Re-indexing schedule"]
+      }
+    ],
+    "3": [
+      {
+        "name": "Foundation & Integration Design",
+        "duration": "1-2 weeks",
+        "goals": ["Confirm host-application integration points", "Provision low-latency serving infrastructure"],
+        "deliverables": ["Integration design", "Serving environment provisioned"]
+      },
+      {
+        "name": "Pilot Build",
+        "duration": "2-3 weeks",
+        "goals": ["Build the sidecar/copilot experience", "Tune latency against the target SLA"],
+        "deliverables": ["Working pilot integrated into the host application", "Latency benchmark"]
+      },
+      {
+        "name": "UX Validation",
+        "duration": "1-2 weeks",
+        "goals": ["Validate suggestions with real end users", "Refine tone and format based on feedback"],
+        "deliverables": ["User feedback report", "Refined prompt/response formatting"]
+      },
+      {
+        "name": "Production Rollout",
+        "duration": "1-2 weeks",
+        "goals": ["Roll out to the full user base", "Monitor adoption and suggestion acceptance rate"],
+        "deliverables": ["Production rollout", "Adoption dashboard"]
+      }
+    ],
+    "4": [
+      {
+        "name": "Foundation & Checkpoint Design",
+        "duration": "2-3 weeks",
+        "goals": ["Map the multi-step workflow and system integrations", "Define human-approval checkpoints"],
+        "deliverables": ["Workflow map", "Checkpoint design document"]
+      },
+      {
+        "name": "Pilot Build",
+        "duration": "3-4 weeks",
+        "goals": ["Build the agent and its tool integrations", "Implement approval checkpoints end-to-end"],
+        "deliverables": ["Working agentic pilot", "Checkpoint audit log"]
+      },
+      {
+        "name": "Governance Review",
+        "duration": "1-2 weeks",
+        "goals": ["Review agent permissions and action scope with governance stakeholders", "Confirm escalation paths"],
+        "deliverables": ["Governance sign-off", "Escalation runbook"]
+      },
+      {
+        "name": "Production Rollout",
+        "duration": "2-3 weeks",
+        "goals": ["Roll out to the target team", "Monitor checkpoint approval rates and exceptions"],
+        "deliverables": ["Production rollout", "Exception monitoring dashboard"]
+      }
+    ],
+    "5": [
+      {
+        "name": "Foundation & Multi-Agent Design",
+        "duration": "2-3 weeks",
+        "goals": ["Define each sub-agent's scope and credentials", "Design the orchestration logic"],
+        "deliverables": ["Sub-agent responsibility matrix", "Orchestration design"]
+      },
+      {
+        "name": "Pilot Build",
+        "duration": "4-5 weeks",
+        "goals": ["Build each sub-agent and the orchestrator", "Implement per-agent credential scoping"],
+        "deliverables": ["Working multi-agent pilot", "Credential scoping audit"]
+      },
+      {
+        "name": "Autonomous Safety Validation",
+        "duration": "2-3 weeks",
+        "goals": ["Test the system against edge cases and failure modes", "Validate the kill-switch and rollback path"],
+        "deliverables": ["Safety validation report", "Verified kill-switch"]
+      },
+      {
+        "name": "Governance Review",
+        "duration": "1-2 weeks",
+        "goals": ["Present the autonomy boundary and safety validation to the governance board", "Confirm the staged rollout plan"],
+        "deliverables": ["Governance board sign-off", "Staged rollout plan"]
+      },
+      {
+        "name": "Staged Production Rollout",
+        "duration": "3-4 weeks",
+        "goals": ["Roll out behind a capped blast radius", "Progressively expand scope as confidence grows"],
+        "deliverables": ["Production rollout with capped autonomy", "Expansion criteria and schedule"]
+      }
+    ]
+  },
+  "governance_policies_by_automation_level": {
+    "assist": [
+      {
+        "title": "Human-reviewed output only",
+        "rationale": "Assist-level automation produces advisory output only; standard review before use is sufficient governance."
+      }
+    ],
+    "copilot": [
+      {
+        "title": "Approval checkpoint before external action",
+        "rationale": "Copilot-level automation can draft or suggest actions a human still executes; document who holds final approval before anything reaches a customer or system of record."
+      }
+    ],
+    "autonomous": [
+      {
+        "title": "Mandatory kill-switch and audit logging",
+        "rationale": "Autonomous automation acts without per-action human approval; every action must be logged for post-hoc audit, and an operator-accessible kill-switch is required."
+      },
+      {
+        "title": "Staged autonomy rollout with a capped blast radius",
+        "rationale": "Roll out autonomous decisioning behind a capped threshold (dollar amount, record volume, etc.) before removing the cap, consistent with comparable implementations in the Solution Registry."
+      }
+    ]
+  },
+  "governance_policies_by_expected_scale": {
+    "pilot": [
+      {
+        "title": "Lightweight governance for pilot scope",
+        "rationale": "A pilot's limited blast radius means governance can start lightweight — standard audit logging is sufficient until scale increases."
+      }
+    ],
+    "department": [
+      {
+        "title": "Departmental data-access review",
+        "rationale": "A department-wide rollout should have its data-access scope reviewed by the data owner before go-live."
+      }
+    ],
+    "enterprise": [
+      {
+        "title": "Governance board sign-off required",
+        "rationale": "Enterprise-scale deployments should be reviewed by the AI governance board before rollout, given the broader organizational exposure."
+      }
+    ]
+  }
 }

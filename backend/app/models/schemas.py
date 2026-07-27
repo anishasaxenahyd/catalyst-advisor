@@ -309,6 +309,110 @@ class EngineOutput(BaseModel):
     confidence_scores: ConfidenceScores
 
 
+# --------------------------------------------------------------------------
+# Enterprise context enrichment (AI Catalog, Solution Registry, Enterprise
+# Knowledge Platform) — additive, populated by app.enrichment.service and
+# attached to Report.enrichment. Optional so nothing that already builds a
+# Report without it (existing tests, the mock provider path) breaks.
+# --------------------------------------------------------------------------
+
+
+class ReusableCatalogAsset(BaseModel):
+    id: str
+    name: str
+    asset_type: str
+    description: str
+    rationale: str
+
+
+class SimilarSolution(BaseModel):
+    id: str
+    title: str
+    industry: str
+    architecture_pattern_name: str
+    business_outcome: str
+    lessons_learned: list[str] = Field(default_factory=list)
+    security_considerations: list[str] = Field(default_factory=list)
+    rationale: str
+
+
+class BestPracticeReference(BaseModel):
+    id: str
+    title: str
+    vendor: str
+    category: str
+    summary: str
+    reference: str
+
+
+class BusinessUnderstanding(BaseModel):
+    """A deterministic, architect-style restatement of what was asked for —
+    built entirely from the already-validated SignalVector, never from a
+    new LLM call."""
+
+    stated_need: str
+    problem_narrative: str
+    industry: str
+    use_case_type: str
+    data_sensitivity: DataSensitivity
+    data_modality: DataModality
+    latency_requirement: LatencyRequirement
+    expected_scale: ExpectedScale
+    automation_level: AutomationLevel
+    integration_points: list[str] = Field(default_factory=list)
+    key_signals: list[str] = Field(default_factory=list)
+
+
+class SecuritySummary(BaseModel):
+    security_profile_name: str
+    restrictiveness_rank: int
+    compliance_flags: list[str] = Field(default_factory=list)
+    considerations: list[str] = Field(default_factory=list)
+    relevant_controls: list[BestPracticeReference] = Field(default_factory=list)
+
+
+class GovernanceRecommendation(BaseModel):
+    title: str
+    rationale: str
+    framework: Optional[str] = None
+    source: Literal["policy_rule", "enterprise_knowledge"]
+
+
+class RoadmapPhase(BaseModel):
+    name: str
+    duration: str
+    goals: list[str] = Field(default_factory=list)
+    deliverables: list[str] = Field(default_factory=list)
+
+
+class ImplementationRoadmap(BaseModel):
+    phases: list[RoadmapPhase] = Field(default_factory=list)
+    total_timeline: str
+
+
+class EvidenceConfidenceSummary(BaseModel):
+    overall_confidence: int
+    confidence_rationale: str
+    dimension_confidence: dict[str, int] = Field(default_factory=dict)
+    missing_information: list[str] = Field(default_factory=list)
+    validation_warnings: list[str] = Field(default_factory=list)
+    evidence_strength_summary: str
+    best_practice_count: int
+    similar_solution_count: int
+    reusable_asset_count: int
+
+
+class RecommendationEnrichment(BaseModel):
+    business_understanding: BusinessUnderstanding
+    reusable_assets: list[ReusableCatalogAsset] = Field(default_factory=list)
+    similar_solutions: list[SimilarSolution] = Field(default_factory=list)
+    best_practices: list[BestPracticeReference] = Field(default_factory=list)
+    security_summary: SecuritySummary
+    governance_recommendations: list[GovernanceRecommendation] = Field(default_factory=list)
+    implementation_roadmap: ImplementationRoadmap
+    evidence_confidence_summary: EvidenceConfidenceSummary
+
+
 class Report(BaseModel):
     mode: SubmissionMode
     signal_vector: SignalVector
@@ -324,3 +428,4 @@ class Report(BaseModel):
     assumptions: list[str]
     confidence_scores: ConfidenceScores
     next_best_actions: list[str]
+    enrichment: Optional[RecommendationEnrichment] = None

@@ -10,6 +10,7 @@ from app.engine.estimator import estimate_effort, estimate_timeline
 from app.engine.matcher import rank_candidates
 from app.engine.trace import build_decision_trace
 from app.engine.workbench_selector import select_workbench
+from app.enrichment.service import build_enrichment
 from app.models.schemas import (
     ArchitectureRecommendation,
     ConfidenceScores,
@@ -186,6 +187,22 @@ def build_report(
     # ---- narrate (LLM) ----
     narrative = llm.generate_executive_report(engine_output)
 
+    # ---- enrich (deterministic; AI Catalog + Solution Registry + Enterprise
+    # Knowledge Platform + config-driven governance/roadmap rules) ----
+    enrichment = build_enrichment(
+        signal_vector,
+        raw_text,
+        top_pattern,
+        top_model,
+        workbench_recommendation,
+        timeline_estimate,
+        confidence_scores,
+        trace_enrichment["confidence_rationale"],
+        trace_enrichment["missing_information"],
+        trace_enrichment["validation_warnings"],
+        rules,
+    )
+
     return Report(
         mode=mode,
         signal_vector=signal_vector,
@@ -201,4 +218,5 @@ def build_report(
         assumptions=narrative.assumptions,
         confidence_scores=confidence_scores,
         next_best_actions=narrative.next_best_actions,
+        enrichment=enrichment,
     )

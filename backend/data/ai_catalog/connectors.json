@@ -1,0 +1,38 @@
+[
+  {
+    "id": "asset-connector-slack",
+    "asset_type": "connector",
+    "name": "Slack Connector",
+    "description": "Posts messages and notifications to Slack channels from any internal workflow.",
+    "tags": ["integration-heavy", "realtime"],
+    "maturity": "stable",
+    "reuse_count": 6
+  },
+  {
+    "id": "asset-connector-email",
+    "asset_type": "connector",
+    "name": "Email Connector",
+    "description": "Sends and reads email through the enterprise mail system.",
+    "tags": ["integration-heavy", "workflow"],
+    "maturity": "stable",
+    "reuse_count": 8
+  },
+  {
+    "id": "asset-connector-sftp",
+    "asset_type": "connector",
+    "name": "SFTP Connector",
+    "description": "Batch file exchange with external partners over SFTP, used for scheduled data hand-offs.",
+    "tags": ["integration-heavy", "batch", "high-scale"],
+    "maturity": "stable",
+    "reuse_count": 3
+  },
+  {
+    "id": "asset-connector-data-lake",
+    "asset_type": "connector",
+    "name": "Data Lake Connector",
+    "description": "Reads and writes to the enterprise data lake, used as a staging point for large-scale batch and retrieval workflows.",
+    "tags": ["integration-heavy", "structured", "high-scale", "retrieval"],
+    "maturity": "stable",
+    "reuse_count": 4
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "asset-mcp-crm",
+    "asset_type": "mcp_server",
+    "name": "CRM MCP Server",
+    "description": "Read/write access to customer relationship records — accounts, contacts, opportunities, and case history.",
+    "tags": ["integration-heavy", "structured", "workflow"],
+    "maturity": "stable",
+    "reuse_count": 6
+  },
+  {
+    "id": "asset-mcp-erp",
+    "asset_type": "mcp_server",
+    "name": "ERP MCP Server",
+    "description": "Read access to enterprise resource planning data — inventory, purchase orders, and vendor records.",
+    "tags": ["integration-heavy", "structured", "high-scale"],
+    "maturity": "stable",
+    "reuse_count": 2
+  },
+  {
+    "id": "asset-mcp-ticketing",
+    "asset_type": "mcp_server",
+    "name": "Ticketing MCP Server",
+    "description": "Creates, updates, and queries tickets in the enterprise support/helpdesk system.",
+    "tags": ["integration-heavy", "workflow", "realtime"],
+    "maturity": "stable",
+    "reuse_count": 4
+  },
+  {
+    "id": "asset-mcp-data-warehouse",
+    "asset_type": "mcp_server",
+    "name": "Data Warehouse MCP Server",
+    "description": "Query access to the enterprise analytics warehouse for reporting and retrieval-augmented workflows.",
+    "tags": ["integration-heavy", "structured", "high-scale", "retrieval"],
+    "maturity": "stable",
+    "reuse_count": 3
+  }
+]

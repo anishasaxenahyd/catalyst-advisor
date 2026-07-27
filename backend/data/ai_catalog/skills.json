@@ -1,0 +1,38 @@
+[
+  {
+    "id": "asset-skill-pii-redaction",
+    "asset_type": "skill",
+    "name": "PII Redaction Skill",
+    "description": "Detects and redacts personal data before content is logged, stored, or forwarded to a third-party model.",
+    "tags": ["safety", "moderation", "structured"],
+    "maturity": "stable",
+    "reuse_count": 7
+  },
+  {
+    "id": "asset-skill-sentiment-classification",
+    "asset_type": "skill",
+    "name": "Sentiment Classification Skill",
+    "description": "Classifies the sentiment and urgency of inbound text so routing logic can prioritize accordingly.",
+    "tags": ["classification", "realtime"],
+    "maturity": "stable",
+    "reuse_count": 4
+  },
+  {
+    "id": "asset-skill-currency-unit-normalization",
+    "asset_type": "skill",
+    "name": "Currency & Unit Normalization Skill",
+    "description": "Normalizes currency amounts and units of measure across regional input formats into a single canonical form.",
+    "tags": ["structured", "batch"],
+    "maturity": "stable",
+    "reuse_count": 2
+  },
+  {
+    "id": "asset-skill-citation-formatting",
+    "asset_type": "skill",
+    "name": "Citation Formatting Skill",
+    "description": "Formats retrieved source citations consistently so grounded answers always reference their sources the same way.",
+    "tags": ["retrieval", "document-heavy"],
+    "maturity": "stable",
+    "reuse_count": 3
+  }
+]

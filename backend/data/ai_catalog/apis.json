@@ -1,0 +1,38 @@
+[
+  {
+    "id": "asset-api-identity-access",
+    "asset_type": "api",
+    "name": "Identity & Access API",
+    "description": "Authenticates callers and checks entitlements — the standard identity lookup every internal service is expected to call.",
+    "tags": ["integration-heavy", "safety"],
+    "maturity": "stable",
+    "reuse_count": 9
+  },
+  {
+    "id": "asset-api-document-repository",
+    "asset_type": "api",
+    "name": "Document Repository API",
+    "description": "Stores and retrieves versioned documents, used as the backing store behind document-heavy and retrieval workflows.",
+    "tags": ["document-heavy", "retrieval", "integration-heavy"],
+    "maturity": "stable",
+    "reuse_count": 5
+  },
+  {
+    "id": "asset-api-notification",
+    "asset_type": "api",
+    "name": "Notification API",
+    "description": "Sends email, SMS, and push notifications from any internal workflow.",
+    "tags": ["integration-heavy", "realtime"],
+    "maturity": "stable",
+    "reuse_count": 7
+  },
+  {
+    "id": "asset-api-payments",
+    "asset_type": "api",
+    "name": "Payments API",
+    "description": "Initiates and checks the status of payment transactions against the enterprise payment processor.",
+    "tags": ["integration-heavy", "structured", "safety"],
+    "maturity": "stable",
+    "reuse_count": 2
+  }
+]

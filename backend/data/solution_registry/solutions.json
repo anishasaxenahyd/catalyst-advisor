@@ -1,0 +1,593 @@
+[
+  {
+    "id": "solution-insurance-claims-rag",
+    "title": "Claims Document Q&A for a Mid-Size P&C Insurer",
+    "industry": "Insurance",
+    "business_problem": "Adjusters spent 20-30 minutes per claim manually searching policy documents, prior correspondence, and inspection reports to answer coverage questions, slowing claim cycle time.",
+    "architecture_pattern_id": "pattern-rag-enterprise-docs",
+    "architecture_pattern_name": "RAG over Enterprise Docs",
+    "ai_models": ["Azure OpenAI GPT-4o", "Azure AI Document Intelligence"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-api-document-repository", "asset-prompt-claims-summary", "asset-skill-pii-redaction"],
+    "security_considerations": [
+      "PII in claim narratives redacted before indexing",
+      "Row-level access control so adjusters only retrieve claims in their assigned region",
+      "All retrieved passages cited back to source document for auditability"
+    ],
+    "business_outcome": "Average claim research time dropped from 25 minutes to under 5 minutes per claim, with a 30% reduction in escalations for missing information.",
+    "lessons_learned": [
+      "Citation-backed answers were essential to get adjuster trust, not just answer accuracy",
+      "Chunking policy documents by clause (not fixed token windows) meaningfully improved retrieval precision"
+    ],
+    "tags": ["document-heavy", "retrieval", "assist", "structured"]
+  },
+  {
+    "id": "solution-healthcare-clinical-notes-rag",
+    "title": "Clinical Guideline Assistant for a Regional Hospital Network",
+    "industry": "Healthcare",
+    "business_problem": "Clinicians needed fast, trustworthy answers to guideline and formulary questions during patient visits, without leaving the EHR workflow.",
+    "architecture_pattern_id": "pattern-rag-enterprise-docs",
+    "architecture_pattern_name": "RAG over Enterprise Docs",
+    "ai_models": ["Anthropic Claude 3.5 Sonnet", "Amazon Comprehend Medical"],
+    "cloud_provider": "AWS",
+    "reused_catalog_assets": ["asset-api-document-repository", "asset-skill-citation-formatting", "asset-skill-pii-redaction"],
+    "security_considerations": [
+      "PHI-regulated data classification with encryption at rest and in transit",
+      "No PHI persisted in model provider logs; zero-retention API configuration",
+      "Mandatory human review before any clinical suggestion reaches a chart"
+    ],
+    "business_outcome": "Guideline lookup time fell by 70%, and formulary-related order errors decreased in the pilot unit over a two-quarter measurement window.",
+    "lessons_learned": [
+      "Zero-retention contractual terms with the model vendor were a hard prerequisite for clinical sign-off",
+      "Clinicians preferred short, sourced answers over long generated summaries"
+    ],
+    "tags": ["document-heavy", "retrieval", "structured", "assist"]
+  },
+  {
+    "id": "solution-banking-kyc-rag",
+    "title": "KYC Policy Assistant for a Retail Bank's Onboarding Team",
+    "industry": "Banking & Financial Services",
+    "business_problem": "Onboarding analysts referenced a constantly-changing set of KYC and AML policy documents, leading to inconsistent account-opening decisions across branches.",
+    "architecture_pattern_id": "pattern-rag-enterprise-docs",
+    "architecture_pattern_name": "RAG over Enterprise Docs",
+    "ai_models": ["Azure OpenAI GPT-4o", "Azure AI Search"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-api-document-repository", "asset-mcp-crm"],
+    "security_considerations": [
+      "Full audit trail of every retrieved passage tied to the resulting onboarding decision",
+      "Policy index rebuilt automatically whenever compliance publishes an update, with old versions retained for audit"
+    ],
+    "business_outcome": "Cross-branch KYC decision consistency improved measurably, and new-analyst ramp time to policy proficiency was cut in half.",
+    "lessons_learned": [
+      "Versioning the knowledge index mattered as much as the retrieval quality itself",
+      "Analysts needed a way to flag an answer as outdated, which fed back into re-indexing priority"
+    ],
+    "tags": ["document-heavy", "retrieval", "structured", "compliance"]
+  },
+  {
+    "id": "solution-legal-contract-rag",
+    "title": "Playbook-Aware Contract Research Assistant for an In-House Legal Team",
+    "industry": "Legal Services",
+    "business_problem": "In-house counsel needed to quickly find precedent language and prior negotiated positions across thousands of historical contracts.",
+    "architecture_pattern_id": "pattern-rag-enterprise-docs",
+    "architecture_pattern_name": "RAG over Enterprise Docs",
+    "ai_models": ["Anthropic Claude 3.5 Sonnet"],
+    "cloud_provider": "AWS",
+    "reused_catalog_assets": ["asset-api-document-repository", "asset-prompt-contract-clause-review", "asset-skill-citation-formatting"],
+    "security_considerations": [
+      "Contract corpus segmented by client/matter to prevent cross-matter leakage",
+      "Outside counsel access scoped separately from internal legal staff"
+    ],
+    "business_outcome": "Precedent research time dropped from hours to minutes for common clause types, freeing senior counsel for higher-judgment review.",
+    "lessons_learned": [
+      "Matter-level access segmentation had to be enforced at the retrieval layer, not just the UI",
+      "Lawyers trusted the tool far more once every suggested clause linked to its source contract"
+    ],
+    "tags": ["document-heavy", "retrieval", "assist"]
+  },
+  {
+    "id": "solution-insurance-fraud-hitl",
+    "title": "Agentic Fraud Investigation Workflow for a National Insurer",
+    "industry": "Insurance",
+    "business_problem": "Fraud investigators manually cross-referenced claims, policyholder history, and external databases, a multi-system process that took days per suspicious claim.",
+    "architecture_pattern_id": "pattern-agentic-hitl",
+    "architecture_pattern_name": "Agentic Workflow with Human-in-the-loop",
+    "ai_models": ["Azure OpenAI GPT-4o", "Amazon Fraud Detector"],
+    "cloud_provider": "AWS",
+    "reused_catalog_assets": ["asset-agent-fraud-detection", "asset-mcp-crm", "asset-mcp-data-warehouse", "asset-api-notification"],
+    "security_considerations": [
+      "Agent actions limited to read + draft-recommendation; no autonomous claim denial",
+      "Every agent step logged to an immutable audit trail for regulatory review",
+      "Human investigator approval required before any case is escalated externally"
+    ],
+    "business_outcome": "Time to flag high-risk claims for investigation dropped from days to hours, increasing recovered-fraud dollars per investigator.",
+    "lessons_learned": [
+      "Defining clear checkpoint boundaries up front avoided scope creep into fully autonomous decisioning",
+      "Investigators wanted to see the agent's evidence trail, not just its conclusion"
+    ],
+    "tags": ["agentic", "workflow", "integration-heavy", "copilot"]
+  },
+  {
+    "id": "solution-hr-onboarding-hitl",
+    "title": "New-Hire Onboarding Orchestration Agent for a 15,000-Employee Enterprise",
+    "industry": "Human Resources",
+    "business_problem": "Onboarding required coordinating IT provisioning, badge issuance, benefits enrollment, and manager tasks across five disconnected systems, frequently missing steps.",
+    "architecture_pattern_id": "pattern-agentic-hitl",
+    "architecture_pattern_name": "Agentic Workflow with Human-in-the-loop",
+    "ai_models": ["Azure OpenAI GPT-4o mini"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-agent-it-helpdesk", "asset-mcp-erp", "asset-mcp-ticketing", "asset-connector-email"],
+    "security_considerations": [
+      "Agent scoped to provisioning workflows only, no access to compensation data",
+      "HR manager approval checkpoint before account creation for contractor roles"
+    ],
+    "business_outcome": "Missed onboarding steps dropped to near zero, and new-hire day-one readiness improved from 60% to over 95%.",
+    "lessons_learned": [
+      "The highest-value checkpoint was approval before account creation, not after",
+      "Connecting five legacy systems took longer than building the agent logic itself"
+    ],
+    "tags": ["agentic", "workflow", "integration-heavy"]
+  },
+  {
+    "id": "solution-manufacturing-procurement-hitl",
+    "title": "Supplier Exception Handling Agent for a Global Manufacturer",
+    "industry": "Manufacturing",
+    "business_problem": "Procurement analysts manually resolved purchase-order mismatches (price, quantity, delivery date) against supplier invoices, a high-volume repetitive task prone to backlog.",
+    "architecture_pattern_id": "pattern-agentic-hitl",
+    "architecture_pattern_name": "Agentic Workflow with Human-in-the-loop",
+    "ai_models": ["Azure OpenAI GPT-4o", "Azure AI Document Intelligence"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-mcp-erp", "asset-api-document-repository", "asset-skill-currency-unit-normalization"],
+    "security_considerations": [
+      "Agent cannot approve payments; only drafts a resolution for finance sign-off",
+      "Full ERP write access logged and reviewed weekly"
+    ],
+    "business_outcome": "Invoice exception backlog fell by 65%, and average resolution time dropped from 4 days to under 8 hours.",
+    "lessons_learned": [
+      "Currency and unit normalization across supplier formats was the single biggest source of false-positive mismatches",
+      "Giving the agent a 'propose, don't post' boundary made finance stakeholders comfortable approving the rollout"
+    ],
+    "tags": ["agentic", "workflow", "integration-heavy", "structured"]
+  },
+  {
+    "id": "solution-telecom-support-hitl",
+    "title": "Tier-2 Network Incident Triage Agent for a Telecom Operator",
+    "industry": "Telecommunications",
+    "business_problem": "Tier-2 support engineers spent significant time correlating alarms across monitoring systems before even starting root-cause diagnosis.",
+    "architecture_pattern_id": "pattern-agentic-hitl",
+    "architecture_pattern_name": "Agentic Workflow with Human-in-the-loop",
+    "ai_models": ["Google Gemini 1.5 Pro"],
+    "cloud_provider": "GCP",
+    "reused_catalog_assets": ["asset-mcp-ticketing", "asset-mcp-data-warehouse", "asset-connector-slack"],
+    "security_considerations": [
+      "Agent restricted to read-only access on production network telemetry",
+      "All proposed remediation steps require on-call engineer approval before execution"
+    ],
+    "business_outcome": "Mean time to root-cause identification improved by roughly 40% during the pilot on core network incidents.",
+    "lessons_learned": [
+      "Read-only scoping for the agent was non-negotiable for the network operations team",
+      "Posting agent findings directly into the existing Slack incident channel drove adoption more than a separate UI"
+    ],
+    "tags": ["agentic", "workflow", "integration-heavy", "copilot"]
+  },
+  {
+    "id": "solution-retail-support-copilot",
+    "title": "Real-Time Customer Support Copilot for an E-commerce Retailer",
+    "industry": "Retail & E-commerce",
+    "business_problem": "Support agents needed to look up order status, return policy, and product details across multiple systems mid-conversation, extending average handle time.",
+    "architecture_pattern_id": "pattern-realtime-copilot",
+    "architecture_pattern_name": "Real-time Copilot Sidecar",
+    "ai_models": ["Azure OpenAI GPT-4o mini"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-prompt-support-reply", "asset-mcp-crm", "asset-api-notification"],
+    "security_considerations": [
+      "Copilot suggestions require agent confirmation before sending to a customer",
+      "Payment details masked in any context passed to the model"
+    ],
+    "business_outcome": "Average handle time dropped 22% and first-contact resolution improved, with no increase in customer complaint rate.",
+    "lessons_learned": [
+      "Sub-second suggestion latency was necessary for agents to actually use the tool mid-call",
+      "Agents ignored suggestions that didn't match the brand's tone, so tone-tuning the prompt mattered more than raw accuracy"
+    ],
+    "tags": ["realtime", "copilot", "assist", "low-latency"]
+  },
+  {
+    "id": "solution-banking-advisor-copilot",
+    "title": "Relationship Manager Copilot for Wealth Management",
+    "industry": "Banking & Financial Services",
+    "business_problem": "Relationship managers needed real-time talking points and portfolio context pulled up during live client calls without breaking conversation flow.",
+    "architecture_pattern_id": "pattern-realtime-copilot",
+    "architecture_pattern_name": "Real-time Copilot Sidecar",
+    "ai_models": ["Anthropic Claude 3.5 Sonnet"],
+    "cloud_provider": "AWS",
+    "reused_catalog_assets": ["asset-mcp-crm", "asset-model-enterprise-fast-classifier"],
+    "security_considerations": [
+      "Suggestions never sent directly to the client; advisor-facing only",
+      "Portfolio data scoped to the advisor's assigned client list"
+    ],
+    "business_outcome": "Advisors reported meaningfully higher confidence in cross-sell conversations, with a measurable increase in follow-on meeting bookings.",
+    "lessons_learned": [
+      "Keeping the sidecar strictly advisor-facing (never client-facing) simplified compliance review significantly",
+      "Advisors wanted the copilot to surface caveats, not just opportunities"
+    ],
+    "tags": ["realtime", "copilot", "assist", "low-latency"]
+  },
+  {
+    "id": "solution-travel-agent-copilot",
+    "title": "Booking Agent Copilot for a Travel & Hospitality Contact Center",
+    "industry": "Travel & Hospitality",
+    "business_problem": "Booking agents juggled fare rules, loyalty status, and change-fee policies across systems while customers waited on the line.",
+    "architecture_pattern_id": "pattern-realtime-copilot",
+    "architecture_pattern_name": "Real-time Copilot Sidecar",
+    "ai_models": ["Google Gemini 1.5 Flash"],
+    "cloud_provider": "GCP",
+    "reused_catalog_assets": ["asset-prompt-support-reply", "asset-mcp-crm"],
+    "security_considerations": [
+      "No autonomous rebooking; copilot only surfaces options for the agent to execute",
+      "Loyalty tier and payment data excluded from prompt context by default"
+    ],
+    "business_outcome": "Average call time decreased and policy-exception errors (wrong fee waived, wrong fare rule applied) dropped substantially.",
+    "lessons_learned": [
+      "Fare-rule content changed often enough that a stale cache became the main failure mode, requiring a shorter refresh interval",
+      "Agents most valued the copilot for exceptions, not for routine bookings they already knew well"
+    ],
+    "tags": ["realtime", "copilot", "assist", "low-latency"]
+  },
+  {
+    "id": "solution-it-helpdesk-copilot",
+    "title": "IT Service Desk Copilot for a Global Professional Services Firm",
+    "industry": "Professional Services",
+    "business_problem": "Level-1 IT support handled a high volume of repetitive password, access, and software-install requests, creating long queue times for more complex issues.",
+    "architecture_pattern_id": "pattern-realtime-copilot",
+    "architecture_pattern_name": "Real-time Copilot Sidecar",
+    "ai_models": ["Azure OpenAI GPT-4o mini"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-agent-it-helpdesk", "asset-mcp-ticketing", "asset-api-identity-access"],
+    "security_considerations": [
+      "Identity verification required before any account-related suggestion is actioned",
+      "Copilot cannot reset credentials directly; hands off to the identity API under agent supervision"
+    ],
+    "business_outcome": "Level-1 ticket resolution time dropped by half, and queue backlog for complex issues shrank accordingly.",
+    "lessons_learned": [
+      "Tight integration with the identity/access API was more valuable than broader knowledge coverage",
+      "A narrow, well-scoped copilot outperformed an earlier broad 'ask IT anything' prototype"
+    ],
+    "tags": ["realtime", "copilot", "assist", "low-latency"]
+  },
+  {
+    "id": "solution-insurance-underwriting-batch",
+    "title": "Automated Submission Triage for Commercial Underwriting",
+    "industry": "Insurance",
+    "business_problem": "Underwriters manually reviewed every inbound submission to classify risk category and completeness before detailed review, creating a queue bottleneck.",
+    "architecture_pattern_id": "pattern-batch-classification",
+    "architecture_pattern_name": "Batch Classification Pipeline",
+    "ai_models": ["Amazon Comprehend", "Azure AI Document Intelligence"],
+    "cloud_provider": "AWS",
+    "reused_catalog_assets": ["asset-model-enterprise-fast-classifier", "asset-api-document-repository"],
+    "security_considerations": [
+      "Classification pipeline runs in an isolated batch environment with no external network egress",
+      "Incomplete-data flags reviewed by a human before any submission is declined"
+    ],
+    "business_outcome": "Submission triage throughput increased roughly 4x, letting underwriters focus review time on complex, high-value accounts.",
+    "lessons_learned": [
+      "Batch classification worked well precisely because no single decision needed to be real-time",
+      "Clear escalation rules for low-confidence classifications prevented silent misrouting"
+    ],
+    "tags": ["batch", "classification", "high-scale", "structured"]
+  },
+  {
+    "id": "solution-retail-review-batch",
+    "title": "Product Review Moderation and Tagging Pipeline for a Marketplace",
+    "industry": "Retail & E-commerce",
+    "business_problem": "Millions of monthly product reviews needed moderation for policy violations and tagging by sentiment and topic, far beyond manual review capacity.",
+    "architecture_pattern_id": "pattern-batch-classification",
+    "architecture_pattern_name": "Batch Classification Pipeline",
+    "ai_models": ["Amazon Comprehend", "Amazon Rekognition"],
+    "cloud_provider": "AWS",
+    "reused_catalog_assets": ["asset-skill-sentiment-classification", "asset-model-enterprise-fast-classifier"],
+    "security_considerations": [
+      "Automated removal limited to high-confidence policy violations; borderline cases queued for human moderators",
+      "Image and text moderation logs retained for a fixed period to support appeals"
+    ],
+    "business_outcome": "Moderation coverage reached effectively 100% of submitted reviews, cutting median policy-violation exposure time from days to minutes.",
+    "lessons_learned": [
+      "A conservative auto-removal confidence threshold reduced false positives that had previously frustrated sellers",
+      "Appeals volume dropped once moderation reasons were shown to the reviewer"
+    ],
+    "tags": ["batch", "classification", "high-scale", "structured"]
+  },
+  {
+    "id": "solution-energy-inspection-batch",
+    "title": "Pipeline Inspection Image Classification for an Energy Utility",
+    "industry": "Energy & Utilities",
+    "business_problem": "Drone inspection footage of pipeline infrastructure required manual review to flag corrosion and defects, a slow process against a large and growing backlog of footage.",
+    "architecture_pattern_id": "pattern-batch-classification",
+    "architecture_pattern_name": "Batch Classification Pipeline",
+    "ai_models": ["Azure AI Custom Vision", "Amazon Rekognition"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-model-enterprise-multimodal", "asset-connector-data-lake"],
+    "security_considerations": [
+      "Inspection imagery classified as critical-infrastructure data with restricted access",
+      "Every flagged defect routed to a certified inspector for confirmation before work orders are issued"
+    ],
+    "business_outcome": "Backlog of unreviewed footage was cleared within a quarter, and flagged-defect turnaround time dropped from weeks to days.",
+    "lessons_learned": [
+      "Model performance varied significantly by camera angle and lighting, requiring a targeted fine-tuning pass on utility-specific footage",
+      "The batch pipeline's value was throughput, not novel detection accuracy over the existing manual process"
+    ],
+    "tags": ["batch", "classification", "high-scale", "image"]
+  },
+  {
+    "id": "solution-logistics-routing-batch",
+    "title": "Overnight Shipment Exception Classification for a Logistics Provider",
+    "industry": "Logistics & Supply Chain",
+    "business_problem": "Thousands of nightly shipment exceptions (delays, address issues, customs holds) needed categorization each morning before regional teams could act on them.",
+    "architecture_pattern_id": "pattern-batch-classification",
+    "architecture_pattern_name": "Batch Classification Pipeline",
+    "ai_models": ["Google Gemini 1.5 Flash"],
+    "cloud_provider": "GCP",
+    "reused_catalog_assets": ["asset-model-enterprise-fast-classifier", "asset-connector-data-lake"],
+    "security_considerations": [
+      "Customs-related exception data handled under the same controls as cross-border compliance records",
+      "Pipeline outputs validated against a sample audit each morning before regional dispatch"
+    ],
+    "business_outcome": "Morning triage time for regional operations teams dropped from roughly two hours to fifteen minutes.",
+    "lessons_learned": [
+      "Running the pipeline overnight avoided any real-time latency requirement entirely, simplifying the architecture",
+      "A small daily human audit sample caught drift in exception categories before it became a systemic issue"
+    ],
+    "tags": ["batch", "classification", "high-scale", "structured"]
+  },
+  {
+    "id": "solution-pharma-adverse-event-batch",
+    "title": "Adverse Event Report Triage for a Pharmaceutical Manufacturer",
+    "industry": "Pharmaceuticals & Life Sciences",
+    "business_problem": "Pharmacovigilance teams manually screened incoming adverse event reports for severity and regulatory reportability, a compliance-critical bottleneck as report volume grew.",
+    "architecture_pattern_id": "pattern-batch-classification",
+    "architecture_pattern_name": "Batch Classification Pipeline",
+    "ai_models": ["Amazon Comprehend Medical", "Azure OpenAI GPT-4o"],
+    "cloud_provider": "AWS",
+    "reused_catalog_assets": ["asset-model-enterprise-fast-classifier", "asset-skill-pii-redaction"],
+    "security_considerations": [
+      "PHI redaction applied before any report leaves the validated processing boundary",
+      "Every automated severity classification independently reviewed by a qualified person, per regulatory requirement"
+    ],
+    "business_outcome": "Initial triage time per report fell significantly, helping the team consistently meet regulatory reporting-window deadlines.",
+    "lessons_learned": [
+      "Regulatory requirements meant the model could accelerate triage but never replace the qualified-person review step",
+      "Validation documentation for the pipeline took longer to produce than the pipeline itself"
+    ],
+    "tags": ["batch", "classification", "structured", "compliance"]
+  },
+  {
+    "id": "solution-manufacturing-multiagent",
+    "title": "Multi-Agent Production Planning for a Global Electronics Manufacturer",
+    "industry": "Manufacturing",
+    "business_problem": "Production planning required continuously reconciling demand forecasts, supplier lead times, and factory capacity across regions, a coordination problem too complex for a single automated workflow.",
+    "architecture_pattern_id": "pattern-autonomous-multi-agent",
+    "architecture_pattern_name": "Autonomous Multi-Agent Orchestration",
+    "ai_models": ["Azure OpenAI GPT-4o", "Amazon Forecast"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-mcp-erp", "asset-mcp-data-warehouse", "asset-model-enterprise-reasoning"],
+    "security_considerations": [
+      "Each sub-agent scoped to a single system's write permissions, no shared over-privileged credential",
+      "Orchestrator changes to production schedules require a planning-manager checkpoint above a defined cost threshold"
+    ],
+    "business_outcome": "Planning cycle time dropped from days to hours, and forecast-to-plan variance improved across the pilot product lines.",
+    "lessons_learned": [
+      "Per-agent credential scoping was the single most important control for stakeholder trust",
+      "Coordination failures were easier to debug once each sub-agent's reasoning was logged separately rather than as one combined trace"
+    ],
+    "tags": ["agentic", "autonomous", "integration-heavy", "high-scale"]
+  },
+  {
+    "id": "solution-financial-research-multiagent",
+    "title": "Autonomous Research Desk for Equity Research Analysts",
+    "industry": "Banking & Financial Services",
+    "business_problem": "Analysts spent significant time assembling company research packets from earnings calls, filings, and market data before starting actual analysis.",
+    "architecture_pattern_id": "pattern-autonomous-multi-agent",
+    "architecture_pattern_name": "Autonomous Multi-Agent Orchestration",
+    "ai_models": ["Anthropic Claude 3.5 Sonnet"],
+    "cloud_provider": "AWS",
+    "reused_catalog_assets": ["asset-model-enterprise-reasoning", "asset-api-document-repository", "asset-skill-citation-formatting"],
+    "security_considerations": [
+      "Research agents restricted to approved public and licensed data sources only, no open web access",
+      "Every claim in the final packet must trace to a cited source before it reaches an analyst"
+    ],
+    "business_outcome": "Time to assemble a first-draft research packet dropped from a full day to under two hours, per analyst feedback in the pilot group.",
+    "lessons_learned": [
+      "Restricting agents to a licensed data source allowlist avoided a major compliance concern early in the design",
+      "Analysts still fully rewrote conclusions, but reused the assembled facts and citations directly"
+    ],
+    "tags": ["agentic", "autonomous", "integration-heavy", "document-heavy"]
+  },
+  {
+    "id": "solution-telecom-network-multiagent",
+    "title": "Self-Healing Network Operations for a Telecom Core Network",
+    "industry": "Telecommunications",
+    "business_problem": "Routine network remediation (capacity rebalancing, known-fault recovery) required manual coordination across multiple operations teams, delaying resolution for well-understood issues.",
+    "architecture_pattern_id": "pattern-autonomous-multi-agent",
+    "architecture_pattern_name": "Autonomous Multi-Agent Orchestration",
+    "ai_models": ["Google Gemini 1.5 Pro"],
+    "cloud_provider": "GCP",
+    "reused_catalog_assets": ["asset-mcp-ticketing", "asset-model-enterprise-reasoning"],
+    "security_considerations": [
+      "Autonomous remediation limited to a pre-approved playbook of low-risk actions; anything outside the playbook requires human approval",
+      "Full action log streamed to the network operations center in real time for oversight"
+    ],
+    "business_outcome": "Mean time to resolution for known-pattern incidents dropped substantially, freeing engineers to focus on novel issues.",
+    "lessons_learned": [
+      "Starting with a narrow, pre-approved playbook was what made an autonomous rollout acceptable to network operations leadership",
+      "Real-time visibility into agent actions mattered more to stakeholders than the autonomy itself"
+    ],
+    "tags": ["agentic", "autonomous", "integration-heavy", "high-scale"]
+  },
+  {
+    "id": "solution-government-services-rag",
+    "title": "Citizen Services Knowledge Assistant for a State Government Agency",
+    "industry": "Government & Public Sector",
+    "business_problem": "Call center staff struggled to keep up with frequently changing benefits eligibility rules spread across dozens of policy documents.",
+    "architecture_pattern_id": "pattern-rag-enterprise-docs",
+    "architecture_pattern_name": "RAG over Enterprise Docs",
+    "ai_models": ["Azure OpenAI GPT-4o", "Azure AI Search"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-api-document-repository", "asset-skill-citation-formatting"],
+    "security_considerations": [
+      "Deployment within a FedRAMP-authorized environment boundary",
+      "No citizen PII included in any prompt; lookups keyed by case ID resolved server-side"
+    ],
+    "business_outcome": "Call handling time for eligibility questions decreased, and policy-application consistency across call center staff improved.",
+    "lessons_learned": [
+      "FedRAMP authorization requirements shaped the deployment topology more than any modeling decision",
+      "Staff needed plain-language answers with a link to the exact regulation, not regulation text verbatim"
+    ],
+    "tags": ["document-heavy", "retrieval", "structured", "compliance"]
+  },
+  {
+    "id": "solution-education-advising-copilot",
+    "title": "Academic Advising Copilot for a Large Public University",
+    "industry": "Higher Education",
+    "business_problem": "Academic advisors managed large student caseloads and needed fast access to degree requirements and prior advising notes during walk-in sessions.",
+    "architecture_pattern_id": "pattern-realtime-copilot",
+    "architecture_pattern_name": "Real-time Copilot Sidecar",
+    "ai_models": ["Google Gemini 1.5 Flash"],
+    "cloud_provider": "GCP",
+    "reused_catalog_assets": ["asset-api-document-repository", "asset-mcp-crm"],
+    "security_considerations": [
+      "Student record access scoped under FERPA to the advisor's assigned caseload only",
+      "Advising notes summarized for the advisor's own review, never sent to the student directly"
+    ],
+    "business_outcome": "Average walk-in advising session prep time dropped substantially, letting advisors see more students during peak registration periods.",
+    "lessons_learned": [
+      "FERPA scoping requirements were simplest to enforce at the data-access layer rather than in the prompt",
+      "Advisors valued a concise session-prep summary far more than an open-ended chat interface"
+    ],
+    "tags": ["realtime", "copilot", "assist", "structured"]
+  },
+  {
+    "id": "solution-media-content-batch",
+    "title": "Automated Content Tagging Pipeline for a Streaming Media Library",
+    "industry": "Media & Entertainment",
+    "business_problem": "A growing content library needed consistent metadata tagging (genre, mood, content warnings) for search and recommendation, far beyond the manual cataloging team's capacity.",
+    "architecture_pattern_id": "pattern-batch-classification",
+    "architecture_pattern_name": "Batch Classification Pipeline",
+    "ai_models": ["Google Gemini 1.5 Pro", "Amazon Rekognition"],
+    "cloud_provider": "GCP",
+    "reused_catalog_assets": ["asset-model-enterprise-multimodal", "asset-connector-data-lake"],
+    "security_considerations": [
+      "Content-warning classifications reviewed by the catalog team before publishing to the live library",
+      "Pipeline runs against a staging copy of the content library, never production streaming infrastructure directly"
+    ],
+    "business_outcome": "Tagging throughput increased roughly 6x, letting the catalog team clear a multi-year backlog within a single quarter.",
+    "lessons_learned": [
+      "Multimodal classification of both video and audio track content was needed to catch content-warning cases text metadata alone missed",
+      "A lightweight human spot-check step caught genre miscategorizations that materially affected recommendations"
+    ],
+    "tags": ["batch", "classification", "high-scale", "multimodal"]
+  },
+  {
+    "id": "solution-automotive-diagnostics-copilot",
+    "title": "Technician Diagnostic Copilot for an Automotive Service Network",
+    "industry": "Automotive",
+    "business_problem": "Service technicians needed fast access to model-specific diagnostic procedures and technical service bulletins while working on a vehicle in the bay.",
+    "architecture_pattern_id": "pattern-realtime-copilot",
+    "architecture_pattern_name": "Real-time Copilot Sidecar",
+    "ai_models": ["Azure OpenAI GPT-4o mini"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-api-document-repository", "asset-model-enterprise-multimodal"],
+    "security_considerations": [
+      "Diagnostic suggestions clearly labeled as advisory; technician retains final sign-off on any repair",
+      "Vehicle identification data scoped to the active service order only"
+    ],
+    "business_outcome": "Average diagnostic time for complex issues decreased, and first-time-fix rate improved across pilot service centers.",
+    "lessons_learned": [
+      "Technicians most valued fast access to the exact technical service bulletin over general troubleshooting advice",
+      "Photo-based query support (technician photographs a component) drove adoption more than text search alone"
+    ],
+    "tags": ["realtime", "copilot", "assist", "multimodal"]
+  },
+  {
+    "id": "solution-utilities-outage-hitl",
+    "title": "Storm Outage Response Coordination Agent for an Electric Utility",
+    "industry": "Energy & Utilities",
+    "business_problem": "During major storm events, dispatch coordinators manually triaged thousands of outage reports and crew assignments under severe time pressure.",
+    "architecture_pattern_id": "pattern-agentic-hitl",
+    "architecture_pattern_name": "Agentic Workflow with Human-in-the-loop",
+    "ai_models": ["Azure OpenAI GPT-4o", "Amazon Forecast"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-mcp-data-warehouse", "asset-connector-slack", "asset-api-notification"],
+    "security_considerations": [
+      "Agent proposes crew assignments; dispatch supervisor retains final approval at all times",
+      "System designed to degrade gracefully to fully manual dispatch if the agent's confidence drops during extreme load"
+    ],
+    "business_outcome": "Average outage-to-crew-dispatch time improved during the storm season pilot, most notably during peak-volume events.",
+    "lessons_learned": [
+      "Graceful degradation to manual mode under extreme load was as important a design requirement as the automation itself",
+      "Dispatch coordinators wanted priority reasoning shown up front, not buried in a detail view"
+    ],
+    "tags": ["agentic", "workflow", "integration-heavy", "copilot"]
+  },
+  {
+    "id": "solution-retail-inventory-multiagent",
+    "title": "Autonomous Inventory Rebalancing Across a Regional Store Network",
+    "industry": "Retail & E-commerce",
+    "business_problem": "Regional inventory managers manually decided which stores should transfer stock to which, a decision that scaled poorly across hundreds of stores and thousands of SKUs.",
+    "architecture_pattern_id": "pattern-autonomous-multi-agent",
+    "architecture_pattern_name": "Autonomous Multi-Agent Orchestration",
+    "ai_models": ["Amazon Forecast", "Azure OpenAI GPT-4o"],
+    "cloud_provider": "AWS",
+    "reused_catalog_assets": ["asset-mcp-erp", "asset-model-enterprise-reasoning", "asset-connector-data-lake"],
+    "security_considerations": [
+      "Transfer-order agent capped to a pre-approved dollar threshold per transaction; larger transfers require manager approval",
+      "All automated transfer decisions logged with the demand signal that triggered them, for post-hoc audit"
+    ],
+    "business_outcome": "Stockout rate for high-velocity SKUs declined, and manual rebalancing workload for regional managers dropped substantially.",
+    "lessons_learned": [
+      "A hard dollar cap on autonomous transfer decisions was what got the finance team comfortable with the rollout",
+      "Regional managers needed an easy override, not just a dashboard, to keep trust in the system during edge cases"
+    ],
+    "tags": ["agentic", "autonomous", "integration-heavy", "high-scale"]
+  },
+  {
+    "id": "solution-insurance-policy-rag",
+    "title": "Agent Support Assistant for Independent Insurance Agents",
+    "industry": "Insurance",
+    "business_problem": "Independent agents selling multiple carriers' products needed fast, accurate answers about product coverage differences without calling underwriting.",
+    "architecture_pattern_id": "pattern-realtime-copilot",
+    "architecture_pattern_name": "Real-time Copilot Sidecar",
+    "ai_models": ["Anthropic Claude 3.5 Haiku"],
+    "cloud_provider": "AWS",
+    "reused_catalog_assets": ["asset-api-document-repository", "asset-prompt-support-reply"],
+    "security_considerations": [
+      "Product guidance clearly disclaimed as informational, not binding coverage confirmation",
+      "Underwriting escalation path preserved for any question outside the copilot's confidence threshold"
+    ],
+    "business_outcome": "Underwriting call volume for routine product questions dropped meaningfully, and agent quote turnaround time improved.",
+    "lessons_learned": [
+      "A visible confidence threshold with an escalation path avoided the copilot overstating coverage guarantees",
+      "Agents adopted the tool fastest when it was embedded directly in their existing quoting software"
+    ],
+    "tags": ["realtime", "copilot", "assist", "low-latency"]
+  },
+  {
+    "id": "solution-manufacturing-quality-batch",
+    "title": "Visual Defect Classification on a Consumer Electronics Line",
+    "industry": "Manufacturing",
+    "business_problem": "Quality inspectors manually reviewed sampled product images for surface defects, limiting inspection coverage to a small percentage of total production.",
+    "architecture_pattern_id": "pattern-batch-classification",
+    "architecture_pattern_name": "Batch Classification Pipeline",
+    "ai_models": ["Azure AI Custom Vision"],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": ["asset-model-enterprise-multimodal"],
+    "security_considerations": [
+      "Inspection pipeline isolated on the factory network with no external connectivity",
+      "Borderline defect classifications routed to a human inspector rather than auto-rejected"
+    ],
+    "business_outcome": "Inspection coverage increased from roughly 10% to effectively 100% of units, catching defects earlier in the line.",
+    "lessons_learned": [
+      "Line lighting variability required more image normalization work than the classification model itself",
+      "100% coverage surfaced upstream process issues that sampling had never revealed"
+    ],
+    "tags": ["batch", "classification", "high-scale", "image"]
+  }
+]

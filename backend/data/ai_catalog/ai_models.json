@@ -1,0 +1,38 @@
+[
+  {
+    "id": "asset-model-enterprise-reasoning",
+    "asset_type": "ai_model",
+    "name": "Enterprise-Approved Reasoning Model",
+    "description": "The organization's approved internal alias for its frontier reasoning model — routes to a specific vendor model behind the scenes, so callers don't hardcode a vendor.",
+    "tags": ["reasoning", "agentic", "multi-step"],
+    "maturity": "stable",
+    "reuse_count": 6
+  },
+  {
+    "id": "asset-model-enterprise-fast-classifier",
+    "asset_type": "ai_model",
+    "name": "Enterprise-Approved Fast Classifier",
+    "description": "The organization's approved internal alias for its low-latency, high-volume classification model.",
+    "tags": ["classification", "realtime", "low-latency", "high-scale"],
+    "maturity": "stable",
+    "reuse_count": 8
+  },
+  {
+    "id": "asset-model-enterprise-multimodal",
+    "asset_type": "ai_model",
+    "name": "Enterprise-Approved Multimodal Model",
+    "description": "The organization's approved internal alias for its document- and image-understanding model.",
+    "tags": ["image", "pdf", "multimodal", "document-heavy"],
+    "maturity": "stable",
+    "reuse_count": 3
+  },
+  {
+    "id": "asset-model-enterprise-embedding",
+    "asset_type": "ai_model",
+    "name": "Enterprise-Approved Embedding Model",
+    "description": "The organization's approved internal alias for its embedding model, used consistently across every retrieval-augmented workflow.",
+    "tags": ["embeddings", "retrieval", "document-heavy"],
+    "maturity": "stable",
+    "reuse_count": 5
+  }
+]

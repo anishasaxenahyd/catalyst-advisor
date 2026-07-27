@@ -1,0 +1,38 @@
+[
+  {
+    "id": "asset-prompt-claims-summary",
+    "asset_type": "prompt_template",
+    "name": "Claims Summary Prompt Template",
+    "description": "Standardized prompt for summarizing a claim file into a consistent structured format for adjuster review.",
+    "tags": ["document-heavy", "workflow"],
+    "maturity": "stable",
+    "reuse_count": 3
+  },
+  {
+    "id": "asset-prompt-support-reply",
+    "asset_type": "prompt_template",
+    "name": "Support Reply Drafting Prompt Template",
+    "description": "Standardized prompt for drafting a customer support reply in the company's approved tone and brand voice.",
+    "tags": ["copilot", "assist", "realtime"],
+    "maturity": "stable",
+    "reuse_count": 5
+  },
+  {
+    "id": "asset-prompt-contract-clause-review",
+    "asset_type": "prompt_template",
+    "name": "Contract Clause Review Prompt Template",
+    "description": "Standardized prompt for comparing a contract's clauses against the approved legal playbook and flagging deviations.",
+    "tags": ["document-heavy", "agentic"],
+    "maturity": "stable",
+    "reuse_count": 2
+  },
+  {
+    "id": "asset-prompt-meeting-notes",
+    "asset_type": "prompt_template",
+    "name": "Meeting Notes Summarization Prompt Template",
+    "description": "Standardized prompt for turning raw meeting transcripts into structured notes with action items.",
+    "tags": ["document-heavy", "assist"],
+    "maturity": "stable",
+    "reuse_count": 4
+  }
+]

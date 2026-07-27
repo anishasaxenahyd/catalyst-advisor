@@ -68,14 +68,75 @@ User-supplied hints always win over whatever the LLM inferred for the same
 field — the prompt already asks providers to echo hints verbatim, but nothing
 enforced that before this layer existed.
 
+## Enterprise Knowledge Platform (foundation)
+
+`app/enterprise_knowledge/` is a separate, additive module — a vendor-neutral
+knowledge base (Architecture Patterns, AI Models, Security Controls,
+Governance Rules, Cloud Services, AI Catalog Components, Reference
+Architectures) seeded with curated public knowledge from Microsoft, AWS,
+Google Cloud, Anthropic, and OpenAI (`data/enterprise_knowledge/*.json`,
+47 entries). It does not touch, and is not touched by, the deterministic
+engine (`app/engine/`) or the Catalyst-specific catalog
+(`app/providers/knowledge/`) — those still serve `/api/recommendations`
+exactly as before.
+
+- **Ingestion** (`ingestion/`): `KnowledgeSourceLoader` interface with
+  working JSON and YAML implementations. A new source format is one small
+  loader class, not a rewrite.
+- **Retrieval** (`retrieval/`): `RetrievalService` with a real
+  `InMemoryKeywordRetrievalService` (category/vendor/tag filtering + keyword
+  scoring). `VectorSearchCapable` and `GraphTraversalCapable` are defined
+  extension points — a future implementation can add either without
+  changing the interface or any caller.
+- **Pipeline** (`pipeline/`): `RecommendationPipeline` interface plus
+  `Evidence`/`ConfidenceScore` output types, for a future LLM-assisted,
+  retrieval-augmented recommendation flow. `NotImplementedRecommendationPipeline`
+  is the only implementation today — it returns a valid, clearly-labeled
+  placeholder rather than reasoning over anything.
+- **API**: `GET /api/knowledge/categories`, `GET /api/knowledge/search`,
+  `POST /api/knowledge/recommend` — new routes under `/api/knowledge`,
+  mounted alongside (not replacing) the existing router.
+
+## AI Catalog & Solution Registry
+
+Two more additive, JSON-seeded modules, each with the same
+loader-with-`lru_cache` shape as everything else in this codebase:
+
+- **AI Catalog** (`app/ai_catalog/`, `data/ai_catalog/*.json`) — 28 sample
+  reusable enterprise assets (agents, MCP servers, APIs, models, prompt
+  templates, skills, connectors). Independent of both the Catalyst-specific
+  catalog and the Enterprise Knowledge Platform — this is a fictional
+  enterprise's own asset inventory.
+- **Solution Registry** (`app/solution_registry/`, `data/solution_registry/solutions.json`)
+  — 28 fictional-but-realistic past implementations across 16 industries and
+  all 5 architecture patterns, each with a business problem, security
+  considerations, outcome, and lessons learned.
+
+## Recommendation enrichment
+
+`app/enrichment/` deterministically enriches every `Report` with an
+`enrichment` field built from the three sources above plus the engine's own
+config-driven rules — no LLM call, no new scoring dimension. It's the one
+intentional touch to `app/engine/recommend.py` (one import, one function
+call, one field on the final `Report`). Per-concern builders:
+
+- `business.py` — a templated restatement of the `SignalVector`
+- `security.py` — workbench + Solution Registry + Enterprise Knowledge
+  Platform security controls, matched via a tag-vocabulary bridge (the EKP's
+  own tags don't overlap the engine's controlled tag set)
+- `governance.py` — compliance-flag rules, automation/scale policy tables in
+  `decision_rules.json`, and matched EKP governance rules
+- `roadmap.py` — phase templates looked up by the pattern's complexity tier
+- `evidence.py` — a consolidated confidence/evidence-strength summary
+
 ## Tests
 
 ```bash
 pytest
 ```
 
-30 tests: the retry helper, `FallbackLLMProvider`, `GroqProvider`'s error
-classification (via monkeypatched `httpx.Client.post` — no network calls in
-the suite), the validation/normalization layer, and provenance-weighted
-confidence scoring. Live network behavior is verified manually against the
-real Groq endpoint; see the phase reports for details.
+67 tests: everything above, plus the retry helper, `FallbackLLMProvider`,
+`GroqProvider`'s error classification (via monkeypatched `httpx.Client.post`
+— no network calls in the suite), the validation/normalization layer, and
+provenance-weighted confidence scoring. Live network behavior is verified
+manually against the real Groq endpoint; see the phase reports for details.

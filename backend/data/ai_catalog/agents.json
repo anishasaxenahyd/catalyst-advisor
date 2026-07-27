@@ -1,0 +1,38 @@
+[
+  {
+    "id": "asset-agent-claims-intake",
+    "asset_type": "agent",
+    "name": "Claims Intake Agent",
+    "description": "Reads an incoming claim submission, extracts key fields, classifies claim type, and routes it to the right downstream queue.",
+    "tags": ["document-heavy", "classification", "workflow"],
+    "maturity": "stable",
+    "reuse_count": 4
+  },
+  {
+    "id": "asset-agent-fraud-detection",
+    "asset_type": "agent",
+    "name": "Fraud Detection Agent",
+    "description": "Screens transactions or claims against anomaly-detection rules and flags high-risk items for human review.",
+    "tags": ["classification", "safety", "realtime"],
+    "maturity": "stable",
+    "reuse_count": 3
+  },
+  {
+    "id": "asset-agent-it-helpdesk",
+    "asset_type": "agent",
+    "name": "IT Helpdesk Agent",
+    "description": "Resolves common employee IT requests (password resets, access requests) automatically and escalates anything unfamiliar to a human technician.",
+    "tags": ["assist", "copilot", "workflow", "realtime"],
+    "maturity": "stable",
+    "reuse_count": 5
+  },
+  {
+    "id": "asset-agent-contract-review",
+    "asset_type": "agent",
+    "name": "Contract Review Agent",
+    "description": "Reads an incoming contract, compares clauses against an approved playbook, and produces a redline summary for legal review.",
+    "tags": ["document-heavy", "agentic", "workflow"],
+    "maturity": "stable",
+    "reuse_count": 2
+  }
+]
