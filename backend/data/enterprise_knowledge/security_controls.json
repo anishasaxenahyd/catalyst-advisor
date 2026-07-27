@@ -1,0 +1,102 @@
+[
+  {
+    "id": "control-least-privilege-iam",
+    "name": "Least-Privilege Identity & Access Management",
+    "summary": "Grant an AI workload's service identity only the specific permissions it needs — nothing broader — and prefer short-lived, scoped credentials over standing access.",
+    "tags": ["identity", "access-control"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "Least-privilege access — common cloud security guidance",
+      "reference": "Consistent guidance across Microsoft Entra ID, AWS IAM, and Google Cloud IAM documentation.",
+      "published": "2023"
+    },
+    "control_family": "Identity & Access",
+    "frameworks": ["NIST AI RMF", "ISO 27001"]
+  },
+  {
+    "id": "control-encryption-at-rest-transit",
+    "name": "Encryption at Rest and in Transit",
+    "summary": "Encrypt stored data (documents, embeddings, logs) and data in motion between services, using platform-managed or customer-managed keys depending on compliance requirements.",
+    "tags": ["data-protection", "encryption"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "Data encryption — common cloud security baseline",
+      "reference": "Baseline guidance shared across Microsoft, AWS, and Google Cloud security documentation.",
+      "published": "2023"
+    },
+    "control_family": "Data Protection",
+    "frameworks": ["ISO 27001", "SOC 2"]
+  },
+  {
+    "id": "control-azure-ai-content-safety",
+    "name": "Azure AI Content Safety",
+    "summary": "A managed service that screens model input and output for harmful content categories (hate, violence, self-harm, sexual content) and supports custom blocklists.",
+    "tags": ["guardrails", "content-safety"],
+    "source": {
+      "vendor": "microsoft",
+      "title": "Azure AI Content Safety documentation",
+      "reference": "Microsoft Learn — Azure AI Content Safety.",
+      "published": "2024"
+    },
+    "control_family": "Content Safety",
+    "frameworks": ["Microsoft Responsible AI Standard"]
+  },
+  {
+    "id": "control-bedrock-guardrails",
+    "name": "Amazon Bedrock Guardrails",
+    "summary": "Configurable policies that filter denied topics, harmful content, and sensitive information (e.g. PII) in both prompts and model responses, applied consistently across models used through Bedrock.",
+    "tags": ["guardrails", "content-safety", "pii"],
+    "source": {
+      "vendor": "aws",
+      "title": "Amazon Bedrock Guardrails documentation",
+      "reference": "AWS documentation — Amazon Bedrock Guardrails.",
+      "published": "2024"
+    },
+    "control_family": "Content Safety",
+    "frameworks": ["AWS Well-Architected"]
+  },
+  {
+    "id": "control-prompt-injection-mitigation",
+    "name": "Prompt Injection Mitigation",
+    "summary": "Layered defenses against malicious instructions embedded in retrieved content or user input — input/output filtering, privilege separation between trusted and untrusted content, and human confirmation before high-impact actions.",
+    "tags": ["prompt-injection", "agentic-safety"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "LLM Top 10 — Prompt Injection",
+      "reference": "OWASP Top 10 for Large Language Model Applications.",
+      "published": "2024"
+    },
+    "control_family": "Application Security",
+    "frameworks": ["OWASP LLM Top 10"]
+  },
+  {
+    "id": "control-human-in-the-loop-approval",
+    "name": "Human-in-the-Loop Approval Gates",
+    "summary": "Require explicit human review and approval before an agent takes a high-impact or irreversible action, rather than allowing fully autonomous execution.",
+    "tags": ["human-in-the-loop", "agentic-safety"],
+    "source": {
+      "vendor": "anthropic",
+      "title": "Human oversight in agentic systems",
+      "reference": "Anthropic engineering guidance on agent safety and human oversight.",
+      "published": "2024"
+    },
+    "control_family": "Agentic Safety",
+    "frameworks": ["NIST AI RMF"]
+  },
+  {
+    "id": "control-customer-managed-encryption-keys",
+    "name": "Customer-Managed Encryption Keys (CMK)",
+    "summary": "Use keys the customer controls (rather than platform-managed keys) to encrypt data at rest, so the organization — not the cloud vendor — controls key rotation and revocation for regulated workloads.",
+    "tags": ["data-protection", "encryption", "regulated-industry"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "Customer-managed keys — common cloud security guidance",
+      "reference": "Consistent guidance across Azure Key Vault, AWS KMS, and Google Cloud KMS documentation.",
+      "published": "2023",
+      "evidence_type": "best_practice_guide",
+      "confidence": "high"
+    },
+    "control_family": "Data Protection",
+    "frameworks": ["SOC 2", "ISO 27001"]
+  }
+]

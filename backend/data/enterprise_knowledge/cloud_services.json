@@ -1,0 +1,102 @@
+[
+  {
+    "id": "service-azure-ai-foundry",
+    "name": "Azure AI Foundry",
+    "summary": "Microsoft's unified platform for discovering, customizing, and deploying AI models (including Azure OpenAI Service models) with built-in evaluation, monitoring, and governance tooling.",
+    "tags": ["model-catalog", "orchestration", "managed-platform"],
+    "source": {
+      "vendor": "microsoft",
+      "title": "Azure AI Foundry documentation",
+      "reference": "Microsoft Learn — Azure AI Foundry.",
+      "published": "2024"
+    },
+    "service_type": "AI development platform",
+    "deployment_models": ["managed"]
+  },
+  {
+    "id": "service-amazon-bedrock",
+    "name": "Amazon Bedrock",
+    "summary": "A fully managed service offering a single API to access foundation models from multiple providers, with built-in fine-tuning, agents, guardrails, and knowledge base (RAG) support.",
+    "tags": ["model-catalog", "managed-platform", "agents"],
+    "source": {
+      "vendor": "aws",
+      "title": "Amazon Bedrock documentation",
+      "reference": "AWS documentation — Amazon Bedrock.",
+      "published": "2024"
+    },
+    "service_type": "AI development platform",
+    "deployment_models": ["managed", "serverless"]
+  },
+  {
+    "id": "service-vertex-ai",
+    "name": "Google Vertex AI",
+    "summary": "Google Cloud's unified ML/AI platform covering model access (including Gemini), fine-tuning, RAG/grounding, agent building, and MLOps tooling.",
+    "tags": ["model-catalog", "orchestration", "managed-platform"],
+    "source": {
+      "vendor": "google_cloud",
+      "title": "Vertex AI documentation",
+      "reference": "Google Cloud — Vertex AI.",
+      "published": "2024"
+    },
+    "service_type": "AI development platform",
+    "deployment_models": ["managed"]
+  },
+  {
+    "id": "service-azure-ai-search",
+    "name": "Azure AI Search",
+    "summary": "A managed search service with built-in vector, keyword, and hybrid search, commonly used as the retrieval layer in enterprise RAG architectures on Azure.",
+    "tags": ["vector-search", "retrieval"],
+    "source": {
+      "vendor": "microsoft",
+      "title": "Azure AI Search documentation",
+      "reference": "Microsoft Learn — Azure AI Search.",
+      "published": "2024"
+    },
+    "service_type": "Vector / hybrid search",
+    "deployment_models": ["managed"]
+  },
+  {
+    "id": "service-amazon-opensearch",
+    "name": "Amazon OpenSearch Service",
+    "summary": "A managed search and analytics service with vector engine support, commonly used as the retrieval layer for RAG architectures on AWS.",
+    "tags": ["vector-search", "retrieval"],
+    "source": {
+      "vendor": "aws",
+      "title": "Amazon OpenSearch Service documentation",
+      "reference": "AWS documentation — Amazon OpenSearch Service.",
+      "published": "2024"
+    },
+    "service_type": "Vector / hybrid search",
+    "deployment_models": ["managed", "serverless"]
+  },
+  {
+    "id": "service-vertex-vector-search",
+    "name": "Vertex AI Vector Search",
+    "summary": "Google Cloud's managed, high-scale approximate nearest-neighbor vector search service, used for embedding-based retrieval.",
+    "tags": ["vector-search", "retrieval"],
+    "source": {
+      "vendor": "google_cloud",
+      "title": "Vertex AI Vector Search documentation",
+      "reference": "Google Cloud — Vertex AI Vector Search.",
+      "published": "2024"
+    },
+    "service_type": "Vector search",
+    "deployment_models": ["managed"]
+  },
+  {
+    "id": "service-amazon-healthlake",
+    "name": "Amazon HealthLake",
+    "summary": "A HIPAA-eligible managed data lake purpose-built for healthcare data, storing clinical data in the FHIR standard format and enabling structured querying and analytics.",
+    "tags": ["healthcare", "data-platform", "fhir"],
+    "source": {
+      "vendor": "aws",
+      "title": "Amazon HealthLake documentation",
+      "reference": "AWS documentation — Amazon HealthLake.",
+      "published": "2024",
+      "evidence_type": "official_documentation",
+      "confidence": "high"
+    },
+    "service_type": "Healthcare data platform",
+    "deployment_models": ["managed"]
+  }
+]

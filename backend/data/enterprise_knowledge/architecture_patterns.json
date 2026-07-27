@@ -1,0 +1,109 @@
+[
+  {
+    "id": "pattern-rag",
+    "name": "Retrieval-Augmented Generation (RAG)",
+    "summary": "Grounds a model's responses in retrieved passages from an indexed knowledge source instead of relying on parametric memory alone, reducing hallucination and enabling citation of enterprise content.",
+    "tags": ["retrieval", "grounding", "document-heavy"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "Retrieval-Augmented Generation — cross-vendor architecture guidance",
+      "reference": "Documented consistently across Microsoft Learn, AWS Prescriptive Guidance, Google Cloud Architecture Center, and Anthropic/OpenAI cookbooks.",
+      "published": "2023"
+    },
+    "use_cases": ["Enterprise document Q&A", "Support knowledge-base assistants", "Policy/compliance lookup"],
+    "components": ["Document ingestion pipeline", "Embedding model", "Vector index", "Retriever", "Generation model"],
+    "trade_offs": ["Answer quality depends heavily on retrieval quality and chunking strategy", "Adds indexing/freshness operational overhead"]
+  },
+  {
+    "id": "pattern-agentic-tool-use",
+    "name": "Agentic Workflow with Tool Use",
+    "summary": "A model plans a sequence of steps and calls external tools or APIs to gather information or take action, rather than answering from context alone.",
+    "tags": ["agentic", "tool-use", "orchestration"],
+    "source": {
+      "vendor": "anthropic",
+      "title": "Building Effective Agents",
+      "reference": "Anthropic engineering guidance on agent and tool-use design patterns.",
+      "published": "2024"
+    },
+    "use_cases": ["Multi-step research assistants", "Workflow automation", "Customer support triage"],
+    "components": ["Planner/orchestrator", "Tool/function definitions", "Execution loop", "Model"],
+    "trade_offs": ["Harder to test/predict than single-shot generation", "Requires guardrails against runaway tool calls"]
+  },
+  {
+    "id": "pattern-multi-agent-orchestration",
+    "name": "Multi-Agent Orchestration",
+    "summary": "Multiple specialized agents collaborate on a shared objective, each responsible for a sub-task, coordinated by an orchestrator agent.",
+    "tags": ["agentic", "orchestration", "multi-agent"],
+    "source": {
+      "vendor": "microsoft",
+      "title": "Multi-agent patterns — Semantic Kernel and AutoGen documentation",
+      "reference": "Microsoft Learn guidance on multi-agent orchestration patterns.",
+      "published": "2024"
+    },
+    "use_cases": ["Complex research and synthesis", "Multi-domain enterprise automation"],
+    "components": ["Orchestrator agent", "Specialist sub-agents", "Shared state / message bus"],
+    "trade_offs": ["Higher latency and cost than a single agent", "Coordination failures are harder to debug"]
+  },
+  {
+    "id": "pattern-azure-landing-zone-ai",
+    "name": "Landing Zone for AI Workloads",
+    "summary": "A pre-provisioned, governed environment (networking, identity, policy) that AI workloads are deployed into, so security and compliance controls are consistent from day one.",
+    "tags": ["governance", "platform", "enterprise-scale"],
+    "source": {
+      "vendor": "microsoft",
+      "title": "Azure landing zones for AI",
+      "reference": "Microsoft Cloud Adoption Framework — AI workload landing zone guidance.",
+      "published": "2024"
+    },
+    "use_cases": ["Enterprise-wide AI platform rollout", "Regulated-industry AI deployment"],
+    "components": ["Identity/access baseline", "Network segmentation", "Policy-as-code", "Shared AI platform services"],
+    "trade_offs": ["Upfront platform investment before the first workload ships"]
+  },
+  {
+    "id": "pattern-aws-ml-well-architected",
+    "name": "Well-Architected Machine Learning Lens",
+    "summary": "A structured way to evaluate an ML/AI workload against operational excellence, security, reliability, performance, and cost pillars.",
+    "tags": ["governance", "best-practice", "review-framework"],
+    "source": {
+      "vendor": "aws",
+      "title": "Machine Learning Lens — AWS Well-Architected Framework",
+      "reference": "AWS Well-Architected Framework, Machine Learning Lens.",
+      "published": "2023"
+    },
+    "use_cases": ["Architecture review before production launch", "Ongoing workload health checks"],
+    "components": ["Pillar-based review checklist", "Workload-specific improvement plan"],
+    "trade_offs": ["A review framework, not an implementation — still requires engineering follow-through"]
+  },
+  {
+    "id": "pattern-vertex-rag-reference",
+    "name": "Vertex AI RAG Reference Pattern",
+    "summary": "Google Cloud's reference pattern for grounding generative responses using Vertex AI Search or a custom vector index alongside Vertex AI models.",
+    "tags": ["retrieval", "grounding", "google-cloud"],
+    "source": {
+      "vendor": "google_cloud",
+      "title": "Vertex AI RAG reference architecture",
+      "reference": "Google Cloud Architecture Center — generative AI grounding guidance.",
+      "published": "2024"
+    },
+    "use_cases": ["Enterprise search-augmented chat", "Grounded document summarization"],
+    "components": ["Vertex AI Search or Vector Search index", "Grounding service", "Vertex AI model endpoint"],
+    "trade_offs": ["Ties the retrieval layer to Google Cloud-native services"]
+  },
+  {
+    "id": "pattern-intelligent-document-processing",
+    "name": "Intelligent Document Processing (IDP)",
+    "summary": "Combines OCR/document-understanding models with classification and extraction to turn unstructured documents (claims, invoices, applications) into structured data, typically with a human review step for low-confidence extractions.",
+    "tags": ["document-heavy", "extraction", "classification", "human-in-the-loop"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "Intelligent document processing — cross-vendor guidance",
+      "reference": "Documented consistently across Microsoft Learn (Azure AI Document Intelligence), AWS Prescriptive Guidance (IDP), and Google Cloud Document AI guidance.",
+      "published": "2023",
+      "evidence_type": "best_practice_guide",
+      "confidence": "high"
+    },
+    "use_cases": ["Insurance claims intake", "Invoice and receipt processing", "Loan/application processing"],
+    "components": ["Document ingestion pipeline", "OCR/document-understanding model", "Classification/extraction step", "Human review queue for low-confidence results"],
+    "trade_offs": ["Accuracy varies significantly by document quality and layout consistency", "Human review queue is a throughput bottleneck at high volume"]
+  }
+]

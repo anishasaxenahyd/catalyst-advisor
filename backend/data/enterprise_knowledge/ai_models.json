@@ -1,0 +1,109 @@
+[
+  {
+    "id": "model-gpt-4o-family",
+    "name": "GPT-4o / GPT-4.1 family",
+    "summary": "OpenAI's flagship multimodal model family, handling text, image, and audio input with strong general-purpose reasoning and tool-use support.",
+    "tags": ["multimodal", "general-purpose", "tool-use"],
+    "source": {
+      "vendor": "openai",
+      "title": "OpenAI models overview",
+      "reference": "OpenAI Platform documentation — models overview.",
+      "published": "2024"
+    },
+    "modality": ["text", "image", "audio"],
+    "strengths": ["Broad general-purpose reasoning", "Strong tool/function calling support", "Wide ecosystem and tooling"],
+    "considerations": ["Cost scales with context length and multimodal input", "Model behavior changes across dated snapshots"]
+  },
+  {
+    "id": "model-openai-o-series",
+    "name": "OpenAI o-series reasoning models",
+    "summary": "Models tuned for extended step-by-step reasoning on hard problems (math, coding, planning), trading latency and cost for deeper reasoning.",
+    "tags": ["reasoning", "coding", "planning"],
+    "source": {
+      "vendor": "openai",
+      "title": "OpenAI reasoning models documentation",
+      "reference": "OpenAI Platform documentation — reasoning models.",
+      "published": "2024"
+    },
+    "modality": ["text"],
+    "strengths": ["Strong multi-step reasoning and planning", "Good fit for complex coding/math tasks"],
+    "considerations": ["Higher latency than general-purpose chat models", "Typically higher cost per request"]
+  },
+  {
+    "id": "model-claude-family",
+    "name": "Claude model family",
+    "summary": "Anthropic's model family spanning fast/lightweight to frontier-capability tiers, with an emphasis on instruction-following, long-context handling, and constitutional-AI-based safety alignment.",
+    "tags": ["general-purpose", "long-context", "agentic"],
+    "source": {
+      "vendor": "anthropic",
+      "title": "Claude models overview",
+      "reference": "Anthropic documentation — models overview.",
+      "published": "2024"
+    },
+    "modality": ["text", "image"],
+    "strengths": ["Strong long-context comprehension", "Reliable structured/tool-use output", "Emphasis on safety alignment"],
+    "considerations": ["Tiered model selection needed to balance cost vs. capability per task"]
+  },
+  {
+    "id": "model-gemini-family",
+    "name": "Gemini model family",
+    "summary": "Google's natively multimodal model family, available via the Gemini API and Vertex AI, spanning lightweight to high-capability tiers.",
+    "tags": ["multimodal", "general-purpose", "long-context"],
+    "source": {
+      "vendor": "google_cloud",
+      "title": "Gemini models overview",
+      "reference": "Google Cloud Vertex AI documentation — Gemini models.",
+      "published": "2024"
+    },
+    "modality": ["text", "image", "audio", "video"],
+    "strengths": ["Native multimodal input including video", "Long context windows", "Tight integration with Google Cloud data services"],
+    "considerations": ["Best-fit tier varies by latency/cost/capability trade-off"]
+  },
+  {
+    "id": "model-azure-openai-service",
+    "name": "Azure OpenAI Service hosted models",
+    "summary": "OpenAI models (GPT and o-series) hosted within a customer's Azure tenant, adding Azure identity, networking, and compliance controls around the same underlying models.",
+    "tags": ["enterprise", "managed-hosting", "compliance"],
+    "source": {
+      "vendor": "microsoft",
+      "title": "Azure OpenAI Service documentation",
+      "reference": "Microsoft Learn — Azure OpenAI Service.",
+      "published": "2024"
+    },
+    "modality": ["text", "image", "audio"],
+    "strengths": ["Enterprise identity (Entra ID) and private networking", "Regional data residency options", "Unified Azure billing/governance"],
+    "considerations": ["Model/version availability lags slightly behind OpenAI's direct API in some regions"]
+  },
+  {
+    "id": "model-amazon-titan-bedrock",
+    "name": "Amazon Titan and Bedrock-hosted third-party models",
+    "summary": "Amazon's own Titan model family plus third-party models (Anthropic, Meta, Mistral, and others) offered through a single managed API via Amazon Bedrock.",
+    "tags": ["enterprise", "managed-hosting", "multi-model"],
+    "source": {
+      "vendor": "aws",
+      "title": "Amazon Bedrock documentation",
+      "reference": "AWS documentation — Amazon Bedrock model catalog.",
+      "published": "2024"
+    },
+    "modality": ["text", "image"],
+    "strengths": ["Single API across multiple model providers", "AWS-native IAM, networking, and billing"],
+    "considerations": ["Feature/version parity with a vendor's own direct API can lag"]
+  },
+  {
+    "id": "model-amazon-comprehend-medical",
+    "name": "Amazon Comprehend Medical",
+    "summary": "A specialized natural language processing service that extracts medical conditions, medications, and clinical entities from unstructured clinical text, distinct from general-purpose LLMs.",
+    "tags": ["healthcare", "specialized-nlp", "entity-extraction"],
+    "source": {
+      "vendor": "aws",
+      "title": "Amazon Comprehend Medical documentation",
+      "reference": "AWS documentation — Amazon Comprehend Medical.",
+      "published": "2024",
+      "evidence_type": "official_documentation",
+      "confidence": "high"
+    },
+    "modality": ["text"],
+    "strengths": ["Purpose-built medical entity recognition", "HIPAA-eligible service"],
+    "considerations": ["Narrower scope than a general-purpose LLM — a complement to, not a replacement for, broader reasoning models"]
+  }
+]

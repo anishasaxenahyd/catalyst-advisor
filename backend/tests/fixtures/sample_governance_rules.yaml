@@ -1,0 +1,14 @@
+# Proves the ingestion layer is genuinely format-agnostic — same
+# GovernanceRuleEntry shape as the JSON seed data, just YAML. Not
+# production seed data; used only by test_enterprise_knowledge.py.
+- id: governance-sample-yaml-source
+  name: Sample YAML-sourced governance rule
+  summary: Demonstrates that a new knowledge source can ship as YAML without any code changes to the ingestion layer.
+  tags: [sample, yaml]
+  source:
+    vendor: vendor_neutral
+    title: Test fixture
+    reference: Internal test fixture, not a real source.
+    published: "2026"
+  framework: Sample Framework
+  applies_to: [test-only]

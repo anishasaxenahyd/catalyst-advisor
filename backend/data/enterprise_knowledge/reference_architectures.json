@@ -1,0 +1,88 @@
+[
+  {
+    "id": "refarch-azure-enterprise-rag",
+    "name": "Enterprise RAG on Azure",
+    "summary": "Azure OpenAI Service for generation, Azure AI Search for retrieval, and Azure Kubernetes Service or App Service for hosting, wired together behind Entra ID and private networking.",
+    "tags": ["rag", "enterprise", "azure"],
+    "source": {
+      "vendor": "microsoft",
+      "title": "Chat with your enterprise data using Azure OpenAI and Azure AI Search",
+      "reference": "Microsoft Learn Architecture Center — enterprise RAG reference.",
+      "published": "2024"
+    },
+    "industries": ["cross-industry"],
+    "related_pattern_ids": ["pattern-rag", "pattern-azure-landing-zone-ai"]
+  },
+  {
+    "id": "refarch-aws-genai-bedrock",
+    "name": "Generative AI on AWS with Bedrock",
+    "summary": "Amazon Bedrock for model access and guardrails, Amazon OpenSearch Service for vector retrieval, and Lambda/API Gateway for the application layer.",
+    "tags": ["rag", "enterprise", "aws"],
+    "source": {
+      "vendor": "aws",
+      "title": "Generative AI application builder reference architecture",
+      "reference": "AWS Prescriptive Guidance — generative AI reference architectures.",
+      "published": "2024"
+    },
+    "industries": ["cross-industry"],
+    "related_pattern_ids": ["pattern-rag", "pattern-aws-ml-well-architected"]
+  },
+  {
+    "id": "refarch-google-genai-vertex",
+    "name": "Generative AI on Google Cloud with Vertex AI",
+    "summary": "Vertex AI (Gemini) for generation, Vertex AI Search or Vector Search for grounding, and Cloud Run for the application layer.",
+    "tags": ["rag", "enterprise", "google-cloud"],
+    "source": {
+      "vendor": "google_cloud",
+      "title": "Generative AI reference architecture",
+      "reference": "Google Cloud Architecture Center — generative AI reference architectures.",
+      "published": "2024"
+    },
+    "industries": ["cross-industry"],
+    "related_pattern_ids": ["pattern-vertex-rag-reference"]
+  },
+  {
+    "id": "refarch-anthropic-agentic-support",
+    "name": "Claude-based Agentic Customer Support",
+    "summary": "A Claude-powered agent with tool use (via MCP or function calling) for ticket triage and drafting, with a human-in-the-loop approval step before customer-facing replies are sent.",
+    "tags": ["agentic", "customer-support", "human-in-the-loop"],
+    "source": {
+      "vendor": "anthropic",
+      "title": "Agentic customer support patterns",
+      "reference": "Anthropic engineering guidance and customer case studies on support automation.",
+      "published": "2024"
+    },
+    "industries": ["cross-industry", "retail", "financial-services"],
+    "related_pattern_ids": ["pattern-agentic-tool-use"]
+  },
+  {
+    "id": "refarch-openai-enterprise-copilot",
+    "name": "OpenAI Assistants-based Enterprise Copilot",
+    "summary": "A GPT-family model with function calling and file/knowledge retrieval, embedded as a copilot inside an existing enterprise application surface.",
+    "tags": ["copilot", "enterprise", "tool-use"],
+    "source": {
+      "vendor": "openai",
+      "title": "Building enterprise copilots",
+      "reference": "OpenAI Platform documentation and enterprise solution guides.",
+      "published": "2024"
+    },
+    "industries": ["cross-industry"],
+    "related_pattern_ids": ["pattern-agentic-tool-use"]
+  },
+  {
+    "id": "refarch-aws-intelligent-document-processing",
+    "name": "Intelligent Document Processing on AWS",
+    "summary": "Amazon Textract for OCR/extraction, a classification step, and a human review workflow (e.g. Amazon Augmented AI) for low-confidence results, commonly used for claims and application processing.",
+    "tags": ["idp", "document-heavy", "insurance", "financial-services"],
+    "source": {
+      "vendor": "aws",
+      "title": "Intelligent document processing reference architecture",
+      "reference": "AWS Prescriptive Guidance — intelligent document processing.",
+      "published": "2024",
+      "evidence_type": "reference_architecture",
+      "confidence": "high"
+    },
+    "industries": ["insurance", "financial-services", "healthcare"],
+    "related_pattern_ids": ["pattern-intelligent-document-processing"]
+  }
+]

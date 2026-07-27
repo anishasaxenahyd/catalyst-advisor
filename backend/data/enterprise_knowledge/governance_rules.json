@@ -1,0 +1,103 @@
+[
+  {
+    "id": "governance-nist-ai-rmf",
+    "name": "NIST AI Risk Management Framework",
+    "summary": "A voluntary US framework organizing AI risk management into four functions — Govern, Map, Measure, Manage — used widely as a baseline for enterprise AI governance programs regardless of vendor.",
+    "tags": ["risk-management", "framework"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "AI Risk Management Framework (AI RMF 1.0)",
+      "reference": "U.S. National Institute of Standards and Technology (NIST).",
+      "published": "2023"
+    },
+    "framework": "NIST AI RMF",
+    "applies_to": ["all AI systems"]
+  },
+  {
+    "id": "governance-eu-ai-act-risk-tiers",
+    "name": "EU AI Act Risk Tiering",
+    "summary": "Classifies AI systems into unacceptable, high, limited, and minimal risk tiers, with obligations (documentation, human oversight, conformity assessment) scaling with risk tier.",
+    "tags": ["regulation", "risk-tiering"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "EU Artificial Intelligence Act",
+      "reference": "European Union regulation on artificial intelligence.",
+      "published": "2024"
+    },
+    "framework": "EU AI Act",
+    "applies_to": ["high-risk AI systems", "systems affecting EU individuals"]
+  },
+  {
+    "id": "governance-microsoft-responsible-ai",
+    "name": "Microsoft Responsible AI Standard",
+    "summary": "Microsoft's internal governance standard — fairness, reliability & safety, privacy & security, inclusiveness, transparency, and accountability — applied to AI systems built on Microsoft platforms.",
+    "tags": ["responsible-ai", "internal-standard"],
+    "source": {
+      "vendor": "microsoft",
+      "title": "Microsoft Responsible AI Standard",
+      "reference": "Microsoft Responsible AI documentation.",
+      "published": "2022"
+    },
+    "framework": "Microsoft Responsible AI Standard",
+    "applies_to": ["AI systems built on Azure / Microsoft platforms"]
+  },
+  {
+    "id": "governance-google-ai-principles",
+    "name": "Google Cloud AI Principles",
+    "summary": "Google's public commitments guiding AI development — being socially beneficial, avoiding unfair bias, being built and tested for safety, and being accountable to people.",
+    "tags": ["responsible-ai", "principles"],
+    "source": {
+      "vendor": "google_cloud",
+      "title": "Google AI Principles",
+      "reference": "Google AI Principles.",
+      "published": "2018"
+    },
+    "framework": "Google AI Principles",
+    "applies_to": ["AI systems built on Google Cloud"]
+  },
+  {
+    "id": "governance-openai-usage-policies",
+    "name": "OpenAI Usage Policies",
+    "summary": "Defines prohibited uses and required safeguards (e.g. for high-risk domains) for applications built on OpenAI models and APIs.",
+    "tags": ["acceptable-use", "policy"],
+    "source": {
+      "vendor": "openai",
+      "title": "OpenAI Usage Policies",
+      "reference": "OpenAI Usage Policies.",
+      "published": "2024"
+    },
+    "framework": "OpenAI Usage Policies",
+    "applies_to": ["applications built on OpenAI models"]
+  },
+  {
+    "id": "governance-anthropic-rsp",
+    "name": "Anthropic Responsible Scaling Policy",
+    "summary": "Anthropic's public commitment to defining AI Safety Levels and the corresponding safety/security measures required before training or deploying more capable models.",
+    "tags": ["responsible-ai", "safety-levels"],
+    "source": {
+      "vendor": "anthropic",
+      "title": "Anthropic's Responsible Scaling Policy",
+      "reference": "Anthropic Responsible Scaling Policy.",
+      "published": "2023"
+    },
+    "framework": "Anthropic Responsible Scaling Policy",
+    "applies_to": ["frontier model development and deployment"]
+  },
+  {
+    "id": "governance-regulated-industry-compliance-programs",
+    "name": "Cloud Vendor Compliance Programs for Regulated Industries",
+    "summary": "Major cloud vendors publish compliance program documentation (HIPAA eligibility, PCI-DSS, GLBA-relevant controls) identifying which specific services can be used for regulated workloads under a signed agreement (e.g. a Business Associate Agreement for HIPAA).",
+    "tags": ["regulated-industry", "compliance", "healthcare", "financial-services"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "Compliance program documentation — cross-vendor",
+      "reference": "Published compliance offerings documentation across Microsoft, AWS, and Google Cloud Trust Centers.",
+      "published": "2024",
+      "evidence_type": "official_documentation",
+      "confidence": "medium",
+      "excerpt": "Using a HIPAA- or PCI-eligible service is necessary but not sufficient — the surrounding architecture and signed agreements still have to be in place."
+    },
+    "framework": "Sector-specific regulation (e.g. HIPAA, PCI-DSS, GLBA)",
+    "applies_to": ["healthcare", "financial-services", "payments"]
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "component-model-context-protocol",
+    "name": "Model Context Protocol (MCP)",
+    "summary": "An open protocol for connecting AI applications to external tools, data sources, and systems through a standardized client-server interface, decoupling agent logic from integration-specific code.",
+    "tags": ["protocol", "integration", "agentic"],
+    "source": {
+      "vendor": "anthropic",
+      "title": "Model Context Protocol specification",
+      "reference": "Anthropic — Model Context Protocol.",
+      "published": "2024"
+    },
+    "component_type": "Integration Protocol"
+  },
+  {
+    "id": "component-openai-function-calling",
+    "name": "OpenAI Function / Tool Calling",
+    "summary": "A structured way for a model to request a specific function be called with specific arguments, letting an application wire model output directly to real code execution.",
+    "tags": ["tool-use", "structured-output"],
+    "source": {
+      "vendor": "openai",
+      "title": "Function calling documentation",
+      "reference": "OpenAI Platform documentation — function calling.",
+      "published": "2023"
+    },
+    "component_type": "Tool-Use Interface"
+  },
+  {
+    "id": "component-semantic-kernel",
+    "name": "Semantic Kernel",
+    "summary": "Microsoft's open-source SDK for building AI agents and multi-agent orchestration, with first-class support for plugins, planners, and enterprise integration.",
+    "tags": ["agent-framework", "orchestration"],
+    "source": {
+      "vendor": "microsoft",
+      "title": "Semantic Kernel documentation",
+      "reference": "Microsoft Learn — Semantic Kernel.",
+      "published": "2024"
+    },
+    "component_type": "Agent Framework"
+  },
+  {
+    "id": "component-bedrock-agents",
+    "name": "Amazon Bedrock Agents",
+    "summary": "A managed capability within Bedrock for building agents that plan multi-step tasks, call APIs/knowledge bases, and maintain session context, without managing the orchestration loop directly.",
+    "tags": ["agent-framework", "managed"],
+    "source": {
+      "vendor": "aws",
+      "title": "Amazon Bedrock Agents documentation",
+      "reference": "AWS documentation — Amazon Bedrock Agents.",
+      "published": "2024"
+    },
+    "component_type": "Agent Framework"
+  },
+  {
+    "id": "component-langgraph-orchestration",
+    "name": "LangGraph-style Agent Orchestration",
+    "summary": "An open-source, graph-based approach to defining agent control flow (state, branches, loops) independent of any single model vendor.",
+    "tags": ["agent-framework", "orchestration", "open-source"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "LangGraph documentation",
+      "reference": "Open-source LangGraph project documentation.",
+      "published": "2024"
+    },
+    "component_type": "Agent Framework"
+  },
+  {
+    "id": "component-structured-output-mode",
+    "name": "Structured Output / JSON Mode",
+    "summary": "A model API capability that constrains generation to a specified schema (JSON Schema or similar), so application code can rely on well-formed structured output instead of parsing free text.",
+    "tags": ["structured-output", "tool-use", "reliability"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "Structured output / JSON mode — cross-vendor capability",
+      "reference": "Available across OpenAI, Anthropic, and Google Gemini APIs under similar names.",
+      "published": "2024",
+      "evidence_type": "official_documentation",
+      "confidence": "high"
+    },
+    "component_type": "Model API Capability"
+  }
+]
