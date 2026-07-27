@@ -183,6 +183,100 @@ export interface ConfidenceScores {
   workbench: number;
 }
 
+// Enterprise context enrichment (AI Catalog, Solution Registry, Enterprise
+// Knowledge Platform) — additive, optional on Report.
+export interface ReusableCatalogAsset {
+  id: string;
+  name: string;
+  asset_type: string;
+  description: string;
+  rationale: string;
+}
+
+export interface SimilarSolution {
+  id: string;
+  title: string;
+  industry: string;
+  architecture_pattern_name: string;
+  business_outcome: string;
+  lessons_learned: string[];
+  security_considerations: string[];
+  rationale: string;
+}
+
+export interface BestPracticeReference {
+  id: string;
+  title: string;
+  vendor: string;
+  category: string;
+  summary: string;
+  reference: string;
+}
+
+export interface BusinessUnderstanding {
+  stated_need: string;
+  problem_narrative: string;
+  industry: string;
+  use_case_type: string;
+  data_sensitivity: DataSensitivity;
+  data_modality: DataModality;
+  latency_requirement: LatencyRequirement;
+  expected_scale: ExpectedScale;
+  automation_level: AutomationLevel;
+  integration_points: string[];
+  key_signals: string[];
+}
+
+export interface SecuritySummary {
+  security_profile_name: string;
+  restrictiveness_rank: number;
+  compliance_flags: string[];
+  considerations: string[];
+  relevant_controls: BestPracticeReference[];
+}
+
+export interface GovernanceRecommendation {
+  title: string;
+  rationale: string;
+  framework?: string | null;
+  source: "policy_rule" | "enterprise_knowledge";
+}
+
+export interface RoadmapPhase {
+  name: string;
+  duration: string;
+  goals: string[];
+  deliverables: string[];
+}
+
+export interface ImplementationRoadmap {
+  phases: RoadmapPhase[];
+  total_timeline: string;
+}
+
+export interface EvidenceConfidenceSummary {
+  overall_confidence: number;
+  confidence_rationale: string;
+  dimension_confidence: Record<string, number>;
+  missing_information: string[];
+  validation_warnings: string[];
+  evidence_strength_summary: string;
+  best_practice_count: number;
+  similar_solution_count: number;
+  reusable_asset_count: number;
+}
+
+export interface RecommendationEnrichment {
+  business_understanding: BusinessUnderstanding;
+  reusable_assets: ReusableCatalogAsset[];
+  similar_solutions: SimilarSolution[];
+  best_practices: BestPracticeReference[];
+  security_summary: SecuritySummary;
+  governance_recommendations: GovernanceRecommendation[];
+  implementation_roadmap: ImplementationRoadmap;
+  evidence_confidence_summary: EvidenceConfidenceSummary;
+}
+
 export interface Report {
   mode: SubmissionMode;
   signal_vector: SignalVector;
@@ -198,4 +292,5 @@ export interface Report {
   assumptions: string[];
   confidence_scores: ConfidenceScores;
   next_best_actions: string[];
+  enrichment?: RecommendationEnrichment | null;
 }

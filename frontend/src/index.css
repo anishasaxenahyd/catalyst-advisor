@@ -124,6 +124,90 @@ main.page {
   animation: page-in 0.25s ease-out both;
 }
 
+/* Report quick-jump nav — sticky just below the topbar */
+.report-subnav {
+  position: sticky;
+  top: 57px;
+  z-index: 15;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.7rem 0;
+  margin: 0 0 2rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.report-subnav a {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 0.38em 0.85em;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.report-subnav a:hover {
+  border-color: var(--line);
+  background: var(--paper-sunken);
+  color: var(--ink);
+}
+
+/* Section groups — the report's numbered "chapters" (Overview, Architecture, ...) */
+.section-group {
+  margin-bottom: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+  scroll-margin-top: 110px;
+}
+
+.section-group:first-of-type {
+  padding-top: 0;
+  border-top: none;
+}
+
+.section-group-head {
+  margin-bottom: 1.5rem;
+}
+
+.section-group-head .eyebrow {
+  margin-bottom: 0.35rem;
+}
+
+.section-group-head h2 {
+  font-size: 1.4rem;
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.01em;
+}
+
+.section-group-head p {
+  color: var(--ink-soft);
+  max-width: 68ch;
+  margin: 0;
+  line-height: 1.55;
+  font-size: 0.94rem;
+}
+
+/* Consistent small sub-heading used inside a section-group for its parts */
+.subhead {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.subhead.spaced {
+  margin-top: 1.5rem;
+}
+
 main.page.wide {
   max-width: 1080px;
 }
@@ -523,7 +607,7 @@ button.secondary:hover {
   background: linear-gradient(155deg, var(--accent-soft), var(--paper-raised) 55%);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  padding: 1.75rem;
+  padding: 2rem;
   margin-bottom: 1.5rem;
 }
 
@@ -532,6 +616,16 @@ button.secondary:hover {
   font-size: 1.05rem;
   line-height: 1.6;
   color: var(--ink);
+}
+
+.exec-summary p.lede {
+  font-size: 1.15rem;
+  max-width: 74ch;
+  margin-bottom: 1.5rem;
+}
+
+.exec-summary .primary-strip {
+  margin-bottom: 0;
 }
 
 .section {
@@ -647,6 +741,35 @@ button.secondary:hover {
   color: var(--ink-soft);
   line-height: 1.5;
   margin: 0;
+}
+
+/* Rationale callout — the visually distinct "why" behind a recommendation */
+.rationale-callout {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 1rem 1.25rem;
+  margin: 0.75rem 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.rationale-callout .callout-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--accent-deep);
+  margin-bottom: 0.35rem;
+}
+
+/* Two-column layout for closing / paired content */
+.two-col {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
 }
 
 /* Comparison grid (alternatives) */
@@ -820,6 +943,90 @@ button.secondary:hover {
   font-size: 0.85rem;
   color: var(--ink-soft);
   line-height: 1.5;
+}
+
+/* Roadmap timeline */
+.roadmap-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.roadmap-step {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 1.1rem;
+}
+
+.roadmap-step .marker-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.roadmap-step .marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.roadmap-step .connector {
+  flex: 1;
+  width: 2px;
+  background: var(--line-strong);
+  margin: 4px 0;
+  min-height: 20px;
+}
+
+.roadmap-step:last-child .connector {
+  display: none;
+}
+
+.roadmap-step .step-body {
+  padding-bottom: 1.75rem;
+}
+
+.roadmap-step .step-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.65rem;
+}
+
+.roadmap-step .step-head h3 {
+  margin: 0;
+  font-size: 1.02rem;
+}
+
+.roadmap-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.1rem;
+}
+
+.roadmap-columns h4 {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+  margin: 0 0 0.4rem;
+}
+
+.roadmap-columns ul.plain-list {
+  margin: 0;
 }
 
 /* Decision trace — expandable sections */
@@ -1146,6 +1353,52 @@ pre.mermaid-source {
   position: relative;
 }
 
+/* Swimlane zone bands — the "what layer am I looking at" labels that make
+   this read as a professional architecture diagram rather than a floating
+   node graph. */
+.blueprint-zones {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.blueprint-zone {
+  position: absolute;
+  top: 0;
+  border-right: 1px dashed var(--line);
+}
+
+.blueprint-zone:nth-child(odd) {
+  background: var(--paper-sunken);
+}
+
+.blueprint-oversight-band {
+  position: absolute;
+  left: 0;
+  border-top: 1px dashed var(--line-strong);
+  background: var(--paper-sunken);
+  opacity: 0.6;
+}
+
+.blueprint-zone .zone-label,
+.blueprint-oversight-band .zone-label {
+  position: sticky;
+  top: 6px;
+  left: 6px;
+  display: inline-block;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--ink-muted);
+  padding: 0.22rem 0.55rem;
+  margin: 6px;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
 .blueprint-edges {
   position: absolute;
   top: 0;
@@ -1279,6 +1532,41 @@ pre.mermaid-source {
   margin: 0.85rem 0 0;
 }
 
+.blueprint-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.blueprint-legend .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+.blueprint-legend .swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.blueprint-legend .line-sample {
+  width: 22px;
+  height: 0;
+  border-top: 2px solid var(--ink-muted);
+  flex-shrink: 0;
+}
+
+.blueprint-legend .line-sample.dashed {
+  border-top-style: dashed;
+}
+
 /* Detail drawer */
 .blueprint-backdrop {
   position: fixed;
@@ -1386,4 +1674,54 @@ pre.mermaid-source {
   font-size: 0.88rem;
   color: var(--ink);
   line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------- */
+/* Print — Export / Print produces a clean, boardroom-ready document */
+/* ---------------------------------------------------------------- */
+
+@media print {
+  .topbar,
+  .report-subnav,
+  .actions,
+  .back-link,
+  .blueprint-tabs,
+  .blueprint-view-help,
+  .blueprint-hint {
+    display: none !important;
+  }
+
+  body,
+  main.page,
+  main.page.wide {
+    background: white;
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .section-group {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  .card,
+  .comparison-card,
+  .roadmap-step,
+  .workbench-card,
+  .primary-tile,
+  .stat-tile {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .exec-summary {
+    background: var(--paper-sunken) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .blueprint-canvas-scroll {
+    overflow: visible;
+  }
 }

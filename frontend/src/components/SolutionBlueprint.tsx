@@ -3,6 +3,7 @@ import type { Report } from "../types/report";
 import {
   buildBlueprint,
   computeLayout,
+  computeZoneRects,
   type BlueprintEdge,
   type BlueprintNode,
   type NodeKind,
@@ -64,6 +65,7 @@ function edgePath(from: { x: number; y: number; width: number; height: number },
 export default function SolutionBlueprint({ report }: { report: Report }) {
   const blueprint = useMemo(() => buildBlueprint(report), [report]);
   const layout = useMemo(() => computeLayout(blueprint.nodes), [blueprint]);
+  const zoneRects = useMemo(() => computeZoneRects(blueprint.nodes, layout), [blueprint, layout]);
   const nodeById = useMemo(() => new Map(blueprint.nodes.map((n) => [n.id, n])), [blueprint]);
   const primaryNodeIds = useMemo(() => {
     const ids = new Set<string>();
@@ -121,6 +123,24 @@ export default function SolutionBlueprint({ report }: { report: Report }) {
       <div className="blueprint-body">
         <div className="blueprint-canvas-scroll">
           <div className="blueprint-canvas" data-view={view} style={{ width: layout.width, height: layout.height }}>
+            <div className="blueprint-zones" aria-hidden="true">
+              {zoneRects.map((zone) => (
+                <div
+                  key={zone.id}
+                  className="blueprint-zone"
+                  style={{ left: zone.x, width: zone.width, height: layout.mainLaneHeight }}
+                >
+                  <span className="zone-label">{zone.label}</span>
+                </div>
+              ))}
+              <div
+                className="blueprint-oversight-band"
+                style={{ top: layout.mainLaneHeight, width: layout.width, height: layout.height - layout.mainLaneHeight }}
+              >
+                <span className="zone-label">Governance &amp; Oversight</span>
+              </div>
+            </div>
+
             <svg className="blueprint-edges" width={layout.width} height={layout.height} aria-hidden="true">
               <defs>
                 <marker id="bp-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -223,6 +243,27 @@ export default function SolutionBlueprint({ report }: { report: Report }) {
       </div>
 
       <p className="blueprint-hint">Click any component for details. Switch views above for security, AI-catalog, or data-flow emphasis.</p>
+
+      <div className="blueprint-legend">
+        <span className="legend-item">
+          <span className="swatch" style={{ background: "var(--accent)" }} /> AI / catalog component
+        </span>
+        <span className="legend-item">
+          <span className="swatch" style={{ background: "var(--warning)" }} /> Security &amp; identity
+        </span>
+        <span className="legend-item">
+          <span className="swatch" style={{ background: "var(--ink-muted)" }} /> Enterprise / generic
+        </span>
+        <span className="legend-item">
+          <span className="line-sample" /> Primary flow
+        </span>
+        <span className="legend-item">
+          <span className="line-sample dashed" /> Audit trail
+        </span>
+        <span className="legend-item">
+          <span className="line-sample" style={{ borderTopColor: "var(--critical)" }} /> Sensitive data
+        </span>
+      </div>
     </div>
   );
 }

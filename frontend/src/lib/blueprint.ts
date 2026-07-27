@@ -380,11 +380,16 @@ const ROW_HEIGHT = 80;
 const LANE_GAP = 56;
 const MARGIN = 24;
 
-export function computeLayout(nodes: BlueprintNode[]): {
+export interface LayoutResult {
   boxes: Map<string, LayoutBox>;
   width: number;
   height: number;
-} {
+  /** Top of the oversight lane, and where the main lane ends — used to size zone bands. */
+  oversightY: number;
+  mainLaneHeight: number;
+}
+
+export function computeLayout(nodes: BlueprintNode[]): LayoutResult {
   const mainRows = nodes.filter((n) => n.lane === "main").map((n) => n.row);
   const maxMainRow = mainRows.length > 0 ? Math.max(...mainRows) : 0;
   const oversightY = MARGIN + (maxMainRow + 1) * ROW_HEIGHT + LANE_GAP;
@@ -401,5 +406,55 @@ export function computeLayout(nodes: BlueprintNode[]): {
     maxY = Math.max(maxY, y + NODE_HEIGHT);
   }
 
-  return { boxes, width: maxX + MARGIN, height: maxY + MARGIN };
+  return { boxes, width: maxX + MARGIN, height: maxY + MARGIN, oversightY, mainLaneHeight: oversightY - LANE_GAP / 2 };
+}
+
+// --------------------------------------------------------------------------
+// Zones — the swimlane groupings a professional architecture diagram uses
+// to label "what layer am I looking at" (Access & Identity, Orchestration,
+// Integration, ...). Purely a rendering aid over the same column numbers
+// `buildBlueprint` already assigns; a zone with no present nodes simply
+// doesn't render, since not every recommendation has, say, a Capabilities
+// (skills) column.
+// --------------------------------------------------------------------------
+
+export interface BlueprintZoneDef {
+  id: string;
+  label: string;
+  columns: number[];
+}
+
+export const BLUEPRINT_ZONES: BlueprintZoneDef[] = [
+  { id: "access", label: "Access & Identity", columns: [0, 1] },
+  { id: "governance", label: "AI Governance", columns: [2] },
+  { id: "orchestration", label: "Orchestration & Reasoning", columns: [3, 4] },
+  { id: "capabilities", label: "Capabilities", columns: [5] },
+  { id: "integration", label: "Integration", columns: [6] },
+  { id: "systems", label: "Enterprise Systems", columns: [7] },
+  { id: "outcome", label: "Outcome", columns: [8, 9] },
+];
+
+export interface BlueprintZoneRect {
+  id: string;
+  label: string;
+  x: number;
+  width: number;
+}
+
+export function computeZoneRects(nodes: BlueprintNode[], layout: LayoutResult): BlueprintZoneRect[] {
+  const mainNodes = nodes.filter((n) => n.lane === "main");
+  const rects: BlueprintZoneRect[] = [];
+  const pad = 10;
+
+  for (const zone of BLUEPRINT_ZONES) {
+    const inZone = mainNodes.filter((n) => zone.columns.includes(n.column));
+    if (inZone.length === 0) continue;
+    const boxes = inZone.map((n) => layout.boxes.get(n.id)).filter((b): b is LayoutBox => Boolean(b));
+    if (boxes.length === 0) continue;
+    const minX = Math.min(...boxes.map((b) => b.x)) - pad;
+    const maxX = Math.max(...boxes.map((b) => b.x + b.width)) + pad;
+    rects.push({ id: zone.id, label: zone.label, x: minX, width: maxX - minX });
+  }
+
+  return rects;
 }
