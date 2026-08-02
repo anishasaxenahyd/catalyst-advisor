@@ -1,8 +1,8 @@
 [
   {
-    "id": "catalyst-reason-1",
-    "name": "Catalyst Reason-1",
-    "family": "frontier-reasoning",
+    "id": "claude-opus-4-5",
+    "name": "Claude Opus 4.5",
+    "family": "anthropic-claude-opus",
     "modality": ["text"],
     "context_window": 200000,
     "cost_tier": 5,
@@ -12,12 +12,12 @@
     "scale_ceiling": "enterprise",
     "strengths": ["multi-step reasoning", "long-context synthesis", "reliable tool use"],
     "weaknesses": ["highest latency tier", "highest cost tier"],
-    "description": "Catalyst's frontier reasoning model. Best fit when a task requires chaining several judgment calls together, not just a single classification or lookup."
+    "description": "Anthropic's frontier reasoning model. Best fit when a task requires chaining several judgment calls together, not just a single classification or lookup."
   },
   {
-    "id": "catalyst-flow-mini",
-    "name": "Catalyst Flow-Mini",
-    "family": "fast-classification",
+    "id": "gpt-4o-mini",
+    "name": "GPT-4o mini",
+    "family": "openai-gpt-4o-mini",
     "modality": ["text"],
     "context_window": 32000,
     "cost_tier": 1,
@@ -27,12 +27,12 @@
     "scale_ceiling": "enterprise",
     "strengths": ["sub-200ms typical latency", "cheapest per-call cost in the catalog"],
     "weaknesses": ["weak multi-step reasoning", "not GDPR/HIPAA rated"],
-    "description": "A small, fast model tuned for high-volume classification and routing decisions where cost per call matters more than depth of reasoning."
+    "description": "A small, fast OpenAI model tuned for high-volume classification and routing decisions where cost per call matters more than depth of reasoning."
   },
   {
-    "id": "catalyst-vision-2",
-    "name": "Catalyst Vision-2",
-    "family": "multimodal",
+    "id": "gemini-2-0-flash",
+    "name": "Gemini 2.0 Flash",
+    "family": "google-gemini-flash",
     "modality": ["text", "image", "pdf"],
     "context_window": 64000,
     "cost_tier": 3,
@@ -42,12 +42,12 @@
     "scale_ceiling": "department",
     "strengths": ["document and diagram understanding", "reads scanned PDFs and architecture exports"],
     "weaknesses": ["mid-tier latency", "not yet HIPAA-eligible"],
-    "description": "Catalyst's multimodal model, used for reading architecture diagrams, scanned documents, and image-heavy inputs."
+    "description": "Google's multimodal model, used for reading architecture diagrams, scanned documents, and image-heavy inputs."
   },
   {
-    "id": "catalyst-embed-3",
-    "name": "Catalyst Embed-3",
-    "family": "embeddings",
+    "id": "text-embedding-3-large",
+    "name": "text-embedding-3-large",
+    "family": "openai-embeddings",
     "modality": ["text"],
     "context_window": 8000,
     "cost_tier": 1,
@@ -57,13 +57,13 @@
     "scale_ceiling": "enterprise",
     "strengths": ["cheap at large corpus scale", "strong retrieval recall for enterprise documents"],
     "weaknesses": ["not a generation model — always paired with a second model for RAG"],
-    "description": "Embedding model for retrieval-augmented patterns. Rarely the primary model in a recommendation, but frequently a supporting one.",
+    "description": "OpenAI's embedding model for retrieval-augmented patterns. Rarely the primary model in a recommendation, but frequently a supporting one.",
     "is_primary_candidate": false
   },
   {
-    "id": "catalyst-guard-1",
-    "name": "Catalyst Guard-1",
-    "family": "safety-moderation",
+    "id": "llama-guard-3",
+    "name": "Llama Guard 3",
+    "family": "meta-llama-guard",
     "modality": ["text"],
     "context_window": 16000,
     "cost_tier": 1,
@@ -73,7 +73,7 @@
     "scale_ceiling": "enterprise",
     "strengths": ["low-latency policy/safety screening", "broadest compliance coverage in the catalog"],
     "weaknesses": ["not intended as a primary generation model"],
-    "description": "A moderation and policy-compliance classifier, typically recommended as a supporting model alongside a primary generation model in regulated use cases.",
+    "description": "Meta's open-weight moderation and policy-compliance classifier, typically self-hosted and recommended as a supporting model alongside a primary generation model in regulated use cases.",
     "is_primary_candidate": false
   }
 ]
