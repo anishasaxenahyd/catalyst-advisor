@@ -34,5 +34,14 @@
     "tags": ["integration-heavy", "structured", "high-scale", "retrieval"],
     "maturity": "stable",
     "reuse_count": 3
+  },
+  {
+    "id": "asset-mcp-claims-lookup",
+    "asset_type": "mcp_server",
+    "name": "Claims Lookup MCP Server",
+    "description": "Read access to claims records by member, provider, or claim ID - status, procedure/diagnosis codes, and payment history.",
+    "tags": ["integration-heavy", "structured", "retrieval"],
+    "maturity": "stable",
+    "reuse_count": 2
   }
 ]

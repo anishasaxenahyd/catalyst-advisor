@@ -589,5 +589,31 @@
       "100% coverage surfaced upstream process issues that sampling had never revealed"
     ],
     "tags": ["batch", "classification", "high-scale", "image"]
+  },
+  {
+    "id": "solution-healthcare-payment-integrity-batch",
+    "title": "Claims Payment Integrity Advisor for a National Health Payer",
+    "industry": "Healthcare",
+    "business_problem": "Claims investigators reviewed a large volume of paid and pending claims for duplicate billing, coding anomalies, and overpayment risk with limited ability to prioritize which claims to investigate first.",
+    "architecture_pattern_id": "pattern-batch-classification",
+    "architecture_pattern_name": "Batch Classification Pipeline",
+    "ai_models": ["Amazon Fraud Detector", "Azure OpenAI GPT-4o"],
+    "cloud_provider": "AWS",
+    "reused_catalog_assets": [
+      "asset-agent-fraud-detection",
+      "asset-mcp-claims-lookup",
+      "asset-skill-currency-unit-normalization"
+    ],
+    "security_considerations": [
+      "Risk-scoring pipeline is read-only against claims history; no automatic payment holds without investigator sign-off",
+      "Every risk score stored with its contributing factors for explainability during appeals",
+      "Access to member and provider payment history scoped to assigned investigators only"
+    ],
+    "business_outcome": "Investigators shifted from broad manual sampling to a prioritized high-risk queue, increasing dollars protected per investigator-hour and shortening average investigation turnaround.",
+    "lessons_learned": [
+      "Explaining *why* a claim was flagged mattered more to investigator adoption than the risk score itself",
+      "False-positive tuning required close collaboration with the payment integrity team over several iterations"
+    ],
+    "tags": ["batch", "classification", "high-scale", "structured"]
   }
 ]

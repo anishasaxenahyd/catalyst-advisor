@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { IconArrowRight, IconDiagram, IconLightbulb, IconSparkles } from "../components/icons";
+import { IconArrowRight, IconBarChart, IconDiagram, IconLightbulb, IconSparkles } from "../components/icons";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -32,6 +32,14 @@ export default function Landing() {
           <p>Paste or upload a Draw.io / Mermaid diagram for a review against the Catalyst Catalog.</p>
           <span className="cta">
             Get started <IconArrowRight width={14} height={14} />
+          </span>
+        </button>
+        <button className="mode-card" onClick={() => navigate("/scenarios/claims-payment-integrity")}>
+          <IconBarChart width={26} height={26} className="icon" />
+          <h2>Explore a demo scenario</h2>
+          <p>Walk through a full payer-industry business case, synthetic data, and KPIs before running the Advisor.</p>
+          <span className="cta">
+            Explore <IconArrowRight width={14} height={14} />
           </span>
         </button>
       </div>

@@ -5,6 +5,7 @@ import Landing from "./pages/Landing";
 import IdeaInput from "./pages/IdeaInput";
 import DesignUpload from "./pages/DesignUpload";
 import Analyzing from "./pages/Analyzing";
+import ScenarioBrief from "./pages/ScenarioBrief";
 import { IconSparkles } from "./components/icons";
 
 // The report view pulls in its own design system (report.css) and the
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/idea" element={<IdeaInput />} />
           <Route path="/design" element={<DesignUpload />} />
           <Route path="/analyzing" element={<Analyzing />} />
+          <Route path="/scenarios/:id" element={<ScenarioBrief />} />
           <Route
             path="/report"
             element={

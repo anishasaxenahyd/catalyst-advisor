@@ -98,5 +98,19 @@
     },
     "control_family": "Data Protection",
     "frameworks": ["SOC 2", "ISO 27001"]
+  },
+  {
+    "id": "control-phi-minimum-necessary-access",
+    "name": "Minimum Necessary PHI Access Scoping",
+    "summary": "Scope any AI workload's access to protected health information to the minimum fields and records needed for its specific task - never broad record access by default - consistent with the HIPAA minimum-necessary standard.",
+    "tags": ["phi", "healthcare", "regulated-industry", "access-control", "data-protection"],
+    "source": {
+      "vendor": "vendor_neutral",
+      "title": "HIPAA minimum-necessary standard - common healthcare compliance guidance",
+      "reference": "Consistent guidance across HHS HIPAA Privacy Rule summaries and major cloud providers' healthcare compliance documentation.",
+      "published": "2023"
+    },
+    "control_family": "Data Protection",
+    "frameworks": ["HIPAA", "SOC 2"]
   }
 ]

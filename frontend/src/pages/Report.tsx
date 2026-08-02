@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   Cpu,
   Eye,
+  Library,
   ListChecks,
   Network,
   Puzzle,
@@ -39,6 +40,7 @@ const NAV_SECTIONS = [
   { id: "workbench", label: "Workbench" },
   { id: "evidence", label: "Evidence & Confidence" },
   { id: "alternatives", label: "Alternatives" },
+  { id: "precedent", label: "Enterprise Fit" },
   { id: "roadmap", label: "Roadmap" },
   { id: "risks", label: "Risks" },
   { id: "value", label: "Business Value" },
@@ -202,6 +204,102 @@ export default function ReportPage() {
         <p className="rpt-section-subtitle">Other AI models considered, with their trade-offs against the recommendation.</p>
         <AlternativeSolutionCard modelRecommendation={model_recommendation} />
       </div>
+
+      {/* ================================================================ */}
+      {/* Enterprise fit & precedent                                        */}
+      {/* ================================================================ */}
+      {hasEnrichment &&
+        (enrichment!.similar_solutions.length > 0 ||
+          enrichment!.reusable_assets.length > 0 ||
+          enrichment!.best_practices.length > 0) && (
+          <div className="rpt-section" id="precedent">
+            <div className="rpt-section-head">
+              <Library width={18} height={18} className="icon" />
+              <h2>Enterprise fit &amp; precedent</h2>
+            </div>
+            <p className="rpt-section-subtitle">
+              Comparable implementations, reusable AI Catalog assets, and industry guidance behind this recommendation.
+            </p>
+
+            {enrichment!.similar_solutions.length > 0 && (
+              <div className="rpt-component-grid" style={{ marginBottom: "0.9rem" }}>
+                {enrichment!.similar_solutions.map((sol) => (
+                  <div className="rpt-card" key={sol.id}>
+                    <p style={{ fontWeight: 700, fontSize: "0.92rem", margin: "0 0 0.3rem" }}>{sol.title}</p>
+                    <span className="rpt-badge neutral" style={{ marginBottom: "0.5rem" }}>
+                      {sol.industry}
+                    </span>
+                    <p style={{ fontSize: "0.85rem", color: "var(--rpt-ink-soft)", margin: "0.4rem 0" }}>
+                      {sol.business_outcome}
+                    </p>
+                    {sol.lessons_learned[0] && (
+                      <p style={{ fontSize: "0.82rem", color: "var(--rpt-ink-muted)", fontStyle: "italic", margin: 0 }}>
+                        Lesson learned: {sol.lessons_learned[0]}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {enrichment!.reusable_assets.length > 0 && (
+              <div className="rpt-card" style={{ marginBottom: "0.9rem" }}>
+                <p style={{ fontWeight: 700, fontSize: "0.88rem", margin: "0 0 0.5rem" }}>Reusable AI Catalog assets</p>
+                <ul className="rpt-bullet-list">
+                  {enrichment!.reusable_assets.map((a) => (
+                    <li key={a.id}>
+                      <strong>{a.name}</strong> ({a.asset_type.replace(/_/g, " ")}) — {a.rationale}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {(enrichment!.security_summary.considerations.length > 0 ||
+              enrichment!.security_summary.relevant_controls.length > 0) && (
+              <div className="rpt-card" style={{ marginBottom: "0.9rem" }}>
+                <p style={{ fontWeight: 700, fontSize: "0.88rem", margin: "0 0 0.5rem" }}>Security considerations</p>
+                <div className="rpt-chip-row" style={{ marginBottom: "0.6rem" }}>
+                  <span className="rpt-badge neutral">{enrichment!.security_summary.security_profile_name} profile</span>
+                  {enrichment!.security_summary.compliance_flags.map((f) => (
+                    <span className="rpt-badge accent" key={f}>
+                      {f}
+                    </span>
+                  ))}
+                </div>
+                {enrichment!.security_summary.considerations.length > 0 && (
+                  <ul className="rpt-bullet-list">
+                    {enrichment!.security_summary.considerations.map((c) => (
+                      <li key={c}>{c}</li>
+                    ))}
+                  </ul>
+                )}
+                {enrichment!.security_summary.relevant_controls.length > 0 && (
+                  <ul className="rpt-bullet-list" style={{ marginTop: "0.5rem" }}>
+                    {enrichment!.security_summary.relevant_controls.map((c) => (
+                      <li key={c.id}>
+                        <strong>{c.title}</strong> — {c.summary}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+
+            {enrichment!.best_practices.length > 0 && (
+              <div className="rpt-card">
+                <p style={{ fontWeight: 700, fontSize: "0.88rem", margin: "0 0 0.5rem" }}>Industry best practices consulted</p>
+                <ul className="rpt-bullet-list">
+                  {enrichment!.best_practices.map((bp) => (
+                    <li key={bp.id}>
+                      <strong>{bp.title}</strong> — {bp.summary}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
 
       {/* ================================================================ */}
       {/* Roadmap                                                          */}
