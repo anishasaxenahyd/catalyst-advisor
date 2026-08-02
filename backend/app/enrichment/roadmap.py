@@ -11,12 +11,14 @@ def build_implementation_roadmap(
     pattern: ArchitecturePattern, timeline_estimate: str, rules: dict
 ) -> ImplementationRoadmap:
     phase_templates = rules["roadmap_phases_by_complexity_tier"][str(pattern.complexity_tier)]
+    phase_risks = rules.get("roadmap_phase_risks", {})
     phases = [
         RoadmapPhase(
             name=template["name"],
             duration=template["duration"],
             goals=template["goals"],
             deliverables=template["deliverables"],
+            risks=phase_risks.get(template["name"], []),
         )
         for template in phase_templates
     ]

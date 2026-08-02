@@ -3,11 +3,79 @@ import json
 import httpx
 import pytest
 
-from app.models.schemas import RawInput, StructuredHints
+from app.engine.workbench_selector import select_workbench
+from app.models.schemas import (
+    ArchitectureRecommendation,
+    BusinessUnderstanding,
+    ConfidenceScores,
+    DecisionTrace,
+    EngineOutput,
+    FeasibilityScore,
+    ModelRecommendation,
+    RawInput,
+    SignalVector,
+    StructuredHints,
+)
+from app.providers.knowledge.factory import get_knowledge_provider
 from app.providers.llm.exceptions import LLMProviderError
 from app.providers.llm.groq_provider import GROQ_API_BASE, GroqProvider
 
 _RAW_INPUT = RawInput(mode="idea", text="a support copilot", hints=StructuredHints())
+
+
+def _engine_output() -> EngineOutput:
+    kp = get_knowledge_provider()
+    pattern = kp.list_architecture_templates()[0]
+    model = next(m for m in kp.list_models() if m.is_primary_candidate)
+    trace = DecisionTrace(selected=pattern.id, why_selected="Best fit.", confidence=80.0)
+    signal_vector = SignalVector(
+        use_case_type="Support copilot",
+        industry="Retail",
+        data_sensitivity="none",
+        data_modality="text",
+        latency_requirement="realtime",
+        expected_scale="department",
+        automation_level="copilot",
+    )
+    workbench = select_workbench(
+        signal_vector,
+        model,
+        kp.list_security_profiles(),
+        kp.list_workspace_tiers(),
+        kp.list_compute_profiles(),
+        kp.list_deployment_targets(),
+    )
+    return EngineOutput(
+        signal_vector=signal_vector,
+        business_understanding=BusinessUnderstanding(
+            stated_need="A support copilot.",
+            problem_narrative="Support agents need faster, consistent replies.",
+            industry="Retail",
+            use_case_type="Support copilot",
+            data_sensitivity="none",
+            data_modality="text",
+            latency_requirement="realtime",
+            expected_scale="department",
+            automation_level="copilot",
+        ),
+        architecture_recommendation=ArchitectureRecommendation(
+            pattern=pattern, rationale="Best fit.", decision_trace=trace
+        ),
+        enterprise_reuse=[],
+        model_recommendation=ModelRecommendation(
+            primary=model,
+            primary_rationale="Best fit.",
+            relative_cost="low",
+            relative_latency="medium",
+            suitability_rationale="Fits.",
+            decision_trace=trace,
+        ),
+        workbench_recommendation=workbench,
+        feasibility=FeasibilityScore(technical=80, business=80),
+        effort_estimate="3-5 weeks",
+        timeline_estimate="4-7 weeks incl. governance review",
+        confidence_scores=ConfidenceScores(overall=80, architecture=80, model=80, workbench=80),
+    )
 
 _VALID_SIGNAL_JSON = (
     '{"use_case_type": "support copilot", "industry": "cross-industry", '
@@ -91,6 +159,40 @@ def test_markdown_fenced_json_is_stripped(monkeypatch):
     result = provider.extract_signal_vector(_RAW_INPUT)
 
     assert result.data_modality == "text"
+
+
+def test_generate_executive_report_parses_the_new_narrative_shape(monkeypatch):
+    narrative_json = json.dumps(
+        {
+            "report_title": "AI Solution Blueprint: Support Copilot",
+            "one_line_summary": "A copilot to speed up support replies.",
+            "executive_cards": {
+                "problem": "Agents are slow to respond.",
+                "opportunity": "AI can draft replies for review.",
+                "recommended_pattern": "Real-time copilot pattern fits best.",
+                "expected_outcome": "Faster response times.",
+            },
+            "risks": [
+                {
+                    "risk": "Draft quality may vary early on.",
+                    "impact": "medium",
+                    "likelihood": "medium",
+                    "mitigation": "Human review before send.",
+                }
+            ],
+            "assumptions": ["Scale assumed department-wide."],
+            "next_best_actions": ["Run a two-week pilot."],
+        }
+    )
+    responses = [_FakeResponse(200, _chat_body(narrative_json))]
+    provider = _provider(monkeypatch, responses, max_retries=1)
+
+    result = provider.generate_executive_report(_engine_output())
+
+    assert result.report_title == "AI Solution Blueprint: Support Copilot"
+    assert result.executive_cards.recommended_pattern == "Real-time copilot pattern fits best."
+    assert result.risks[0].impact == "medium"
+    assert result.risks[0].mitigation == "Human review before send."
 
 
 def test_optimize_prompt_parses_and_normalizes_response(monkeypatch):

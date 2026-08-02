@@ -28,6 +28,7 @@ import httpx
 from pydantic import ValidationError
 
 from app.models.schemas import (
+    BusinessUnderstanding,
     EngineOutput,
     ExecutiveNarrative,
     PromptOptimizationResult,
@@ -132,7 +133,10 @@ class GroqProvider(LLMProvider):
             raise LLMProviderError(f"Groq unavailable after retries (extract_signal_vector): {exc}") from exc
 
     def generate_executive_report(self, engine_output: EngineOutput) -> ExecutiveNarrative:
-        prompt = NARRATIVE_PROMPT.format(engine_output=engine_output.model_dump_json(indent=2))
+        prompt = NARRATIVE_PROMPT.format(
+            business_context=_format_business_context(engine_output.business_understanding),
+            engine_output=engine_output.model_dump_json(indent=2),
+        )
 
         def attempt() -> ExecutiveNarrative:
             raw = self._post(prompt)
@@ -182,3 +186,8 @@ def _format_prior_answers(prior_answers: list[QAExchange]) -> str:
     if not prior_answers:
         return "(none)"
     return "\n".join(f"- Q: {qa.question}\n  A: {qa.answer}" for qa in prior_answers)
+
+
+def _format_business_context(business_understanding: BusinessUnderstanding) -> str:
+    signals = ", ".join(business_understanding.key_signals) or "(none)"
+    return f"{business_understanding.problem_narrative}\nKey signals: {signals}"

@@ -145,7 +145,7 @@ export function buildBlueprint(report: Report): Blueprint {
   });
 
   // --- Column 1: Identity + API Gateway ---
-  addNode("auth", "auth", "Identity Provider (SSO)", 1, {
+  addNode("auth", "auth", "Identity (SSO)", 1, {
     purpose: "Confirms who is making the request before anything else happens.",
     componentType: "Authentication",
     authentication: "Enterprise SSO (e.g. Azure AD, Okta, Entra ID)",
@@ -221,7 +221,7 @@ export function buildBlueprint(report: Report): Blueprint {
   addEdge(upstream, "model", ["primary"], "reasons via");
 
   if (isRetrievalPattern) {
-    addNode("vector_store", "vector_store", "Vector Store (Knowledge Index)", 4, {
+    addNode("vector_store", "vector_store", "Vector Store", 4, {
       purpose: "Holds embedded enterprise documents so the model retrieves relevant context instead of relying on memory alone.",
       componentType: "Knowledge Store",
       consumes: ["Indexed enterprise documents"],
@@ -305,7 +305,7 @@ export function buildBlueprint(report: Report): Blueprint {
   // --- Human approval + outcome ---
   const finalColumn = 8;
   if (humanInLoop) {
-    addNode("human", "human", "Human Review & Approval", finalColumn, {
+    addNode("human", "human", "Human Review", finalColumn, {
       purpose: "A person reviews the AI's output before it's finalized or acted on — required because this workflow is not fully autonomous.",
       componentType: "Human-in-the-loop Control",
       authorization: "Only authorized reviewers may approve, per the Workbench's access policy.",
@@ -314,7 +314,7 @@ export function buildBlueprint(report: Report): Blueprint {
       dependencies: [],
     }, { security: true });
     addEdge("model", "human", ["primary", "security"], "drafts for", sensitiveData);
-    addNode("output", "output", "Response / Action", finalColumn + 1, {
+    addNode("output", "output", "Response", finalColumn + 1, {
       purpose: "The final result reaches the user or system that requested it.",
       componentType: "Outcome",
       consumes: ["Approved result"],
@@ -323,7 +323,7 @@ export function buildBlueprint(report: Report): Blueprint {
     });
     addEdge("human", "output", ["primary", "security"], "approves");
   } else {
-    addNode("output", "output", "Automated Action", finalColumn, {
+    addNode("output", "output", "Automated", finalColumn, {
       purpose: "The result is delivered or acted on automatically — no human checkpoint in this workflow.",
       componentType: "Outcome",
       consumes: ["Model result"],
@@ -373,12 +373,12 @@ export interface LayoutBox {
   height: number;
 }
 
-export const NODE_WIDTH = 168;
-export const NODE_HEIGHT = 56;
-const COLUMN_WIDTH = 210;
-const ROW_HEIGHT = 80;
-const LANE_GAP = 56;
-const MARGIN = 24;
+export const NODE_WIDTH = 148;
+export const NODE_HEIGHT = 52;
+const COLUMN_WIDTH = 184;
+const ROW_HEIGHT = 72;
+const LANE_GAP = 48;
+const MARGIN = 20;
 
 export interface LayoutResult {
   boxes: Map<string, LayoutBox>;

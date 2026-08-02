@@ -174,6 +174,7 @@ export interface ModelAlternative {
   model: AIModel;
   rationale: string;
   trade_off: string;
+  relative_cost: RelativeLevel;
 }
 
 export interface ModelRecommendation {
@@ -276,6 +277,7 @@ export interface RoadmapPhase {
   duration: string;
   goals: string[];
   deliverables: string[];
+  risks: string[];
 }
 
 export interface ImplementationRoadmap {
@@ -306,20 +308,57 @@ export interface RecommendationEnrichment {
   evidence_confidence_summary: EvidenceConfidenceSummary;
 }
 
+// Report-level executive metrics — deterministic, always present regardless
+// of whether `enrichment` is populated.
+export interface RiskItem {
+  risk: string;
+  impact: RelativeLevel;
+  likelihood: RelativeLevel;
+  mitigation: string;
+}
+
+export interface Risk extends RiskItem {
+  status: string;
+}
+
+export interface ExecutiveCards {
+  problem: string;
+  opportunity: string;
+  recommended_pattern: string;
+  expected_outcome: string;
+}
+
+export interface ImplementationReadiness {
+  score: number;
+  label: string;
+}
+
+export interface BusinessValueSummary {
+  cost_savings_estimate: string;
+  productivity_estimate: string;
+  accuracy_confidence_label: string;
+  timeline_estimate: string;
+  roi_estimate: string;
+}
+
 export interface Report {
   mode: SubmissionMode;
   signal_vector: SignalVector;
-  executive_summary: string;
+  report_title: string;
+  one_line_summary: string;
+  executive_cards: ExecutiveCards;
   feasibility: FeasibilityScore;
+  implementation_readiness: ImplementationReadiness;
   architecture_recommendation: ArchitectureRecommendation;
   enterprise_reuse: EnterpriseReuseItem[];
   model_recommendation: ModelRecommendation;
   workbench_recommendation: WorkbenchRecommendation;
   effort_estimate: string;
   timeline_estimate: string;
-  risks: string[];
+  risks: Risk[];
   assumptions: string[];
   confidence_scores: ConfidenceScores;
   next_best_actions: string[];
+  business_value: BusinessValueSummary;
   enrichment?: RecommendationEnrichment | null;
 }

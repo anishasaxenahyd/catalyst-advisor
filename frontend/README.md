@@ -20,24 +20,39 @@ Requires the backend running at `VITE_API_BASE_URL` (defaults to
 
 ## Structure
 
-- `pages/Report.tsx` — the executive dashboard: exec summary, primary
-  recommendation strip, feasibility, recommendation quality, architecture
-  (with a rendered Mermaid diagram), enterprise reuse, model + alternatives,
-  Workbench, risks, confidence breakdown, next actions.
+- `pages/Report.tsx` — the executive report: header (title, one-line summary,
+  complexity/readiness), executive summary cards, architecture (with the
+  interactive `SolutionBlueprint` diagram), solution components, AI model
+  comparison, Workbench configuration, evidence & confidence, alternative
+  solutions, roadmap, risks, business value, and next steps. Uses its own
+  design system (`report.css`) and Lucide icons, isolated from the rest of
+  the app's warm/terracotta brand and hand-rolled icon set.
+- `components/report/*.tsx` — report-only presentational components
+  (`ReportHeader`, `ExecutiveCardsGrid`, `SolutionComponentCard`,
+  `ModelComparisonTable`, `WorkbenchGroup`, `EvidenceConfidenceGrid`,
+  `AlternativeSolutionCard`, `RoadmapTimeline`, `RiskTable`,
+  `BusinessValueKpis`), each driven entirely by props off the `Report` type.
+- `components/SolutionBlueprint.tsx` + `lib/blueprint.ts` — a hand-built,
+  interactive architecture diagram (not Mermaid — there's no Mermaid
+  dependency in this app): swimlanes, click-to-inspect nodes, tabbed
+  solution/security/AI/data-flow views, and a scale-to-fit canvas (via
+  `ResizeObserver` + CSS `transform: scale`) so it never needs horizontal
+  scroll.
 - `components/DecisionTraceCard.tsx` — Decision Trace as five independently
   expandable sections (why selected / alternatives / assumptions / evidence
   / confidence); evidence renders as score-bar meters when it's dimension
   data, or plain facts otherwise (see `lib/decisionTrace.ts`).
 - `components/RecommendationQualityPanel.tsx` — confidence, confidence
   rationale, missing information, validation warnings, and a corrected/
-  discarded-values table, all sourced from fields the API already returned
-  in Phase 2 but the frontend never displayed.
-- `components/{ScoreBar,ConfidenceBadge,StatTile,MermaidDiagram}.tsx` —
-  small reusable primitives; `components/icons.tsx` is a hand-rolled SVG
-  icon set (no icon library dependency).
-- `lib/severity.ts` — shared 0-100 → good/warning/critical banding, used by
-  every score/confidence display for a consistent palette.
+  discarded-values table, all sourced from fields the API already returns.
+- `components/{ScoreBar,ConfidenceBadge}.tsx` — small reusable primitives;
+  `components/icons.tsx` is the app-wide hand-rolled SVG icon set (used by
+  every page except the report, which uses `lucide-react` instead).
+- `lib/severity.ts` — shared 0-100 → good/warning/critical banding used
+  elsewhere in the app; `lib/confidenceLabel.ts` is the report's own
+  Very High/High/Good/Needs More Information banding (mirrors
+  `backend/app/engine/confidence_bands.py` exactly).
 
-Mermaid is dynamically imported (`components/MermaidDiagram.tsx`) and the
-whole Report route is lazy-loaded (`App.tsx`) so its cost is paid only when
-a report is actually viewed — Landing/forms/Analyzing never download it.
+The whole Report route is lazy-loaded (`App.tsx`) so its design system and
+components are only downloaded when a report is actually viewed —
+Landing/forms/Analyzing never pay for it.

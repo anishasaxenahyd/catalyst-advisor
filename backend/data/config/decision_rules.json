@@ -52,39 +52,63 @@
   "roadmap_phases_by_complexity_tier": {
     "1": [
       {
-        "name": "Foundation & Data Readiness",
-        "duration": "1-2 weeks",
-        "goals": ["Confirm data sources and access", "Provision the minimum compute footprint", "Validate the security profile"],
-        "deliverables": ["Data source inventory", "Provisioned workbench environment"]
+        "name": "Discovery",
+        "duration": "3-4 days",
+        "goals": ["Confirm data sources and access", "Define success criteria and a validation sample"],
+        "deliverables": ["Data source inventory", "Success criteria document"]
       },
       {
-        "name": "Pilot Build & Validation",
-        "duration": "1-2 weeks",
-        "goals": ["Implement the pipeline against a representative sample", "Validate output quality against a labeled set"],
-        "deliverables": ["Working pilot pipeline", "Quality validation report"]
+        "name": "Prototype",
+        "duration": "3-5 days",
+        "goals": ["Build a thin-slice pipeline against a representative sample", "Validate technical feasibility"],
+        "deliverables": ["Working prototype", "Feasibility notes"]
       },
       {
-        "name": "Production Rollout",
-        "duration": "0.5-1 week",
-        "goals": ["Scale to full data volume", "Stand up monitoring for output drift"],
-        "deliverables": ["Production pipeline live", "Drift monitoring in place"]
+        "name": "Build",
+        "duration": "1 week",
+        "goals": ["Harden the pipeline for production data volumes", "Add validation and error handling"],
+        "deliverables": ["Production-ready pipeline", "Quality validation report"]
+      },
+      {
+        "name": "Pilot",
+        "duration": "3-5 days",
+        "goals": ["Run against a limited real-world batch", "Gather stakeholder feedback"],
+        "deliverables": ["Pilot results summary", "Stakeholder sign-off"]
+      },
+      {
+        "name": "Rollout",
+        "duration": "3-5 days",
+        "goals": ["Scale to full data volume", "Enable drift monitoring"],
+        "deliverables": ["Production release", "Drift monitoring dashboard"]
       }
     ],
     "2": [
       {
-        "name": "Foundation & Knowledge Ingestion",
-        "duration": "1-2 weeks",
+        "name": "Discovery",
+        "duration": "1 week",
         "goals": ["Index the target document corpus", "Confirm access controls and data classification"],
         "deliverables": ["Indexed knowledge source", "Access control mapping"]
       },
       {
-        "name": "Pilot Build & Retrieval Tuning",
-        "duration": "1-2 weeks",
-        "goals": ["Build the retrieval + generation pipeline", "Tune retrieval precision against representative questions"],
-        "deliverables": ["Working RAG pilot", "Retrieval quality benchmark"]
+        "name": "Prototype",
+        "duration": "1 week",
+        "goals": ["Build the retrieval + generation pipeline against a sample corpus", "Validate answer quality on representative questions"],
+        "deliverables": ["Working RAG prototype", "Initial quality benchmark"]
       },
       {
-        "name": "Production Rollout",
+        "name": "Build",
+        "duration": "1-2 weeks",
+        "goals": ["Tune retrieval precision and citation accuracy", "Harden for the full document corpus"],
+        "deliverables": ["Production-ready RAG pipeline", "Retrieval quality benchmark"]
+      },
+      {
+        "name": "Pilot",
+        "duration": "1 week",
+        "goals": ["Roll out to a pilot user group", "Collect usage and accuracy feedback"],
+        "deliverables": ["Pilot feedback report", "Refined prompt/retrieval configuration"]
+      },
+      {
+        "name": "Rollout",
         "duration": "1-2 weeks",
         "goals": ["Roll out to the target user group", "Establish a source re-indexing cadence"],
         "deliverables": ["Production deployment", "Re-indexing schedule"]
@@ -92,25 +116,31 @@
     ],
     "3": [
       {
-        "name": "Foundation & Integration Design",
+        "name": "Discovery",
         "duration": "1-2 weeks",
-        "goals": ["Confirm host-application integration points", "Provision low-latency serving infrastructure"],
-        "deliverables": ["Integration design", "Serving environment provisioned"]
+        "goals": ["Confirm host-application integration points", "Define the target latency SLA"],
+        "deliverables": ["Integration design", "Latency SLA document"]
       },
       {
-        "name": "Pilot Build",
-        "duration": "2-3 weeks",
-        "goals": ["Build the sidecar/copilot experience", "Tune latency against the target SLA"],
-        "deliverables": ["Working pilot integrated into the host application", "Latency benchmark"]
+        "name": "Prototype",
+        "duration": "1-2 weeks",
+        "goals": ["Build a thin-slice copilot experience", "Validate integration feasibility"],
+        "deliverables": ["Working prototype", "Integration feasibility notes"]
       },
       {
-        "name": "UX Validation",
+        "name": "Build",
+        "duration": "2 weeks",
+        "goals": ["Build the full sidecar/copilot experience", "Tune latency against the target SLA"],
+        "deliverables": ["Production-ready copilot", "Latency benchmark"]
+      },
+      {
+        "name": "Pilot",
         "duration": "1-2 weeks",
         "goals": ["Validate suggestions with real end users", "Refine tone and format based on feedback"],
         "deliverables": ["User feedback report", "Refined prompt/response formatting"]
       },
       {
-        "name": "Production Rollout",
+        "name": "Rollout",
         "duration": "1-2 weeks",
         "goals": ["Roll out to the full user base", "Monitor adoption and suggestion acceptance rate"],
         "deliverables": ["Production rollout", "Adoption dashboard"]
@@ -118,25 +148,31 @@
     ],
     "4": [
       {
-        "name": "Foundation & Checkpoint Design",
-        "duration": "2-3 weeks",
+        "name": "Discovery",
+        "duration": "2 weeks",
         "goals": ["Map the multi-step workflow and system integrations", "Define human-approval checkpoints"],
         "deliverables": ["Workflow map", "Checkpoint design document"]
       },
       {
-        "name": "Pilot Build",
-        "duration": "3-4 weeks",
-        "goals": ["Build the agent and its tool integrations", "Implement approval checkpoints end-to-end"],
+        "name": "Prototype",
+        "duration": "2 weeks",
+        "goals": ["Build the agent's core planning and tool-calling loop", "Validate against representative workflow steps"],
+        "deliverables": ["Working agent prototype", "Tool-integration feasibility notes"]
+      },
+      {
+        "name": "Build",
+        "duration": "2-3 weeks",
+        "goals": ["Build all tool integrations", "Implement approval checkpoints end-to-end"],
         "deliverables": ["Working agentic pilot", "Checkpoint audit log"]
       },
       {
-        "name": "Governance Review",
+        "name": "Pilot",
         "duration": "1-2 weeks",
-        "goals": ["Review agent permissions and action scope with governance stakeholders", "Confirm escalation paths"],
-        "deliverables": ["Governance sign-off", "Escalation runbook"]
+        "goals": ["Review agent permissions and action scope with governance stakeholders", "Run a supervised pilot with real workflows"],
+        "deliverables": ["Governance sign-off", "Pilot results summary"]
       },
       {
-        "name": "Production Rollout",
+        "name": "Rollout",
         "duration": "2-3 weeks",
         "goals": ["Roll out to the target team", "Monitor checkpoint approval rates and exceptions"],
         "deliverables": ["Production rollout", "Exception monitoring dashboard"]
@@ -144,36 +180,75 @@
     ],
     "5": [
       {
-        "name": "Foundation & Multi-Agent Design",
+        "name": "Discovery",
         "duration": "2-3 weeks",
         "goals": ["Define each sub-agent's scope and credentials", "Design the orchestration logic"],
         "deliverables": ["Sub-agent responsibility matrix", "Orchestration design"]
       },
       {
-        "name": "Pilot Build",
-        "duration": "4-5 weeks",
-        "goals": ["Build each sub-agent and the orchestrator", "Implement per-agent credential scoping"],
+        "name": "Prototype",
+        "duration": "2-3 weeks",
+        "goals": ["Build a minimal orchestrator with one sub-agent", "Validate the orchestration pattern end-to-end"],
+        "deliverables": ["Working orchestrator prototype", "Orchestration validation notes"]
+      },
+      {
+        "name": "Build",
+        "duration": "3-4 weeks",
+        "goals": ["Build each sub-agent and its credential scoping", "Implement the full orchestration and handoff logic"],
         "deliverables": ["Working multi-agent pilot", "Credential scoping audit"]
       },
       {
-        "name": "Autonomous Safety Validation",
+        "name": "Pilot",
         "duration": "2-3 weeks",
-        "goals": ["Test the system against edge cases and failure modes", "Validate the kill-switch and rollback path"],
+        "goals": ["Test against edge cases and failure modes", "Validate the kill-switch and rollback path"],
         "deliverables": ["Safety validation report", "Verified kill-switch"]
       },
       {
-        "name": "Governance Review",
-        "duration": "1-2 weeks",
-        "goals": ["Present the autonomy boundary and safety validation to the governance board", "Confirm the staged rollout plan"],
-        "deliverables": ["Governance board sign-off", "Staged rollout plan"]
-      },
-      {
-        "name": "Staged Production Rollout",
+        "name": "Rollout",
         "duration": "3-4 weeks",
-        "goals": ["Roll out behind a capped blast radius", "Progressively expand scope as confidence grows"],
-        "deliverables": ["Production rollout with capped autonomy", "Expansion criteria and schedule"]
+        "goals": ["Present the autonomy boundary and safety validation to the governance board", "Roll out behind a capped blast radius, expanding as confidence grows"],
+        "deliverables": ["Governance board sign-off", "Staged production rollout"]
       }
     ]
+  },
+  "roadmap_phase_risks": {
+    "Discovery": [
+      "Requirements or success criteria may be incomplete or contested across stakeholders",
+      "Data access approvals can take longer than the discovery window allows"
+    ],
+    "Prototype": [
+      "Early technical feasibility issues may surface that require a design change",
+      "Sample data may not be representative of full production variety"
+    ],
+    "Build": [
+      "Integration with legacy or third-party systems may be more complex than scoped",
+      "Model performance may vary once exposed to the full data distribution"
+    ],
+    "Pilot": [
+      "User adoption or trust may lag if outputs aren't clearly explainable",
+      "Pilot feedback may surface scope changes that extend the timeline"
+    ],
+    "Rollout": [
+      "Production scale may expose performance or cost issues not visible in the pilot",
+      "Change management and training needs may be underestimated"
+    ]
+  },
+  "cost_savings_estimate_by_relative_cost": {
+    "low": "20-30% (estimated)",
+    "medium": "10-20% (estimated)",
+    "high": "0-10% (estimated)"
+  },
+  "productivity_estimate_by_automation_level": {
+    "assist": "10-20% task-time reduction (estimated)",
+    "copilot": "25-40% task-time reduction (estimated)",
+    "autonomous": "40-60%+ task-time reduction (estimated)"
+  },
+  "roi_estimate_by_complexity_tier": {
+    "1": "Positive within 1-2 quarters (estimated)",
+    "2": "Positive within 2-3 quarters (estimated)",
+    "3": "Positive within 3-4 quarters (estimated)",
+    "4": "Positive within 4-5 quarters (estimated)",
+    "5": "Positive within 5-6 quarters (estimated)"
   },
   "governance_policies_by_automation_level": {
     "assist": [

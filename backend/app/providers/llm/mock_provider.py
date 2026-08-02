@@ -14,11 +14,13 @@ import re
 from app.models.schemas import (
     ClarifyingQuestion,
     EngineOutput,
+    ExecutiveCards,
     ExecutiveNarrative,
     PromptOptimizationResult,
     QAExchange,
     RawExtractedSignal,
     RawInput,
+    RiskItem,
     SignalVector,
 )
 from app.providers.llm.base import LLMProvider
@@ -142,26 +144,53 @@ class MockLLMProvider(LLMProvider):
         sv = engine_output.signal_vector
         pattern = engine_output.architecture_recommendation.pattern
         model = engine_output.model_recommendation.primary
-        workbench = engine_output.workbench_recommendation
         confidence = engine_output.confidence_scores.overall
+        use_case = sv.use_case_type.rstrip(".")[:70]
 
-        summary = (
-            f"For this {sv.use_case_type.lower()} use case, the deterministic engine recommends the "
-            f"\"{pattern.name}\" architecture pattern paired with {model.name} as the primary model, "
-            f"deployed on a {workbench.workspace_tier.name} workspace under the {workbench.security_profile.name} "
-            f"security profile. Overall confidence in this recommendation is {confidence}%, based on "
-            f"{'a fully' if confidence >= 75 else 'a partially'} specified signal vector."
+        report_title = f"AI Solution Blueprint: {use_case}"
+        one_line_summary = (
+            f"{pattern.name} paired with {model.name} is recommended to address: {use_case.lower()}."
+        )
+
+        executive_cards = ExecutiveCards(
+            problem=engine_output.business_understanding.problem_narrative,
+            opportunity=(
+                f"An AI-{sv.automation_level} approach can address this use case with "
+                f"{'a fully' if confidence >= 75 else 'a partially'} specified signal vector, "
+                f"{confidence}% overall confidence."
+            ),
+            recommended_pattern=(
+                f'The "{pattern.name}" pattern is recommended. {engine_output.architecture_recommendation.rationale}'
+            ),
+            expected_outcome=(
+                f"Deploying {model.name} under this pattern is expected to deliver "
+                f"{engine_output.feasibility.business}% business feasibility with "
+                f"{engine_output.feasibility.technical}% technical feasibility."
+            ),
         )
 
         risks = [
-            f"Signal vector was inferred with default assumptions where the input did not specify "
-            f"a value (see Decision Trace assumptions).",
-            f"Enterprise reuse is estimated from Catalog metadata, not a live audit of build-vs-buy cost.",
+            RiskItem(
+                risk="Signal vector was inferred with default assumptions where the input did not specify a value.",
+                impact="medium",
+                likelihood="medium",
+                mitigation="Validate the signal vector fields with the requesting team before finalizing scope.",
+            ),
+            RiskItem(
+                risk="Enterprise reuse is estimated from Catalog metadata, not a live audit of build-vs-buy cost.",
+                impact="low",
+                likelihood="medium",
+                mitigation="Confirm actual reuse feasibility with the owning team before committing effort estimates.",
+            ),
         ]
         if sv.data_sensitivity != "none":
             risks.append(
-                f"Data sensitivity was reported as '{sv.data_sensitivity}' — confirm the selected "
-                f"security profile with governance before proceeding past a pilot."
+                RiskItem(
+                    risk=f"Data sensitivity was reported as '{sv.data_sensitivity}'.",
+                    impact="high" if sv.data_sensitivity == "phi" else "medium",
+                    likelihood="medium",
+                    mitigation="Confirm the selected security profile with governance before proceeding past a pilot.",
+                )
             )
 
         assumptions = [
@@ -176,7 +205,9 @@ class MockLLMProvider(LLMProvider):
         ]
 
         return ExecutiveNarrative(
-            executive_summary=summary,
+            report_title=report_title,
+            one_line_summary=one_line_summary,
+            executive_cards=executive_cards,
             risks=risks,
             assumptions=assumptions,
             next_best_actions=next_best_actions,

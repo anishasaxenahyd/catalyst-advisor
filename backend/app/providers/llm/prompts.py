@@ -27,14 +27,24 @@ Input:
 \"\"\"{text}\"\"\"
 """
 
-NARRATIVE_PROMPT = """You are writing the prose sections of an enterprise AI executive report. A deterministic recommendation engine has already decided every fact below — you are NOT choosing or changing any recommendation, only explaining it in polished executive language. Respond with ONLY a JSON object matching this exact shape (no markdown fences, no commentary):
+NARRATIVE_PROMPT = """You are writing the executive-facing sections of an enterprise AI report for a business stakeholder, not an engineer. A deterministic recommendation engine has already decided every fact below — you are NOT choosing or changing any recommendation, only narrating it in clear, concise business language. Respond with ONLY a JSON object matching this exact shape (no markdown fences, no commentary):
 
 {{
-  "executive_summary": string (3-5 sentences),
-  "risks": string[],
+  "report_title": string (a short, specific title naming the actual use case — e.g. "AI-Powered Invoice Review Automation for Finance Operations" — never generic, never just restating raw input verbatim),
+  "one_line_summary": string (one sentence, plain business language, no jargon),
+  "executive_cards": {{
+    "problem": string (1-2 sentences: the business problem being solved),
+    "opportunity": string (1-2 sentences: why AI is the right lever here),
+    "recommended_pattern": string (1-2 sentences that explicitly name the decided architecture pattern below and why it fits),
+    "expected_outcome": string (1-2 sentences: the business outcome expected)
+  }},
+  "risks": [{{"risk": string, "impact": "low"|"medium"|"high", "likelihood": "low"|"medium"|"high", "mitigation": string}}] (2-4 items),
   "assumptions": string[],
   "next_best_actions": string[]
 }}
+
+Already-established business context (restate faithfully in the cards above, do not contradict):
+{business_context}
 
 Decided facts (do not contradict any of these):
 {engine_output}

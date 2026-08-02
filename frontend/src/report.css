@@ -1,0 +1,1461 @@
+/* Report-scoped enterprise design system. Isolated from index.css on
+   purpose — the report page's palette, layout, and card language stand
+   apart from the rest of the app's warm/terracotta brand (an intentional
+   choice: the report is a distinct, brand-neutral "deliverable" someone
+   might print or export, not app chrome). Every rule here is scoped under
+   .report-shell so nothing leaks onto other pages. */
+
+.report-shell {
+  --rpt-ink: #0f172a;
+  --rpt-ink-soft: #475569;
+  --rpt-ink-muted: #64748b;
+  --rpt-paper: #f8fafc;
+  --rpt-paper-raised: #ffffff;
+  --rpt-paper-sunken: #eef2f7;
+  --rpt-line: #e2e8f0;
+  --rpt-line-strong: #cbd5e1;
+  --rpt-accent: #1d4ed8;
+  --rpt-accent-deep: #1e3a8a;
+  --rpt-accent-soft: #dbeafe;
+
+  /* Status colors (good/warning/critical) are intentionally NOT redefined
+     here — they're universal semantics, reused as-is from the app's global
+     :root (index.css), so "warning" always means the same amber whether
+     you're looking at the report or anywhere else in the app. */
+
+  --rpt-cat-app: #64748b;
+  --rpt-cat-ai: #1d4ed8;
+  --rpt-cat-data: #0d9488;
+  --rpt-cat-security: #b45309;
+  --rpt-cat-external: #7c3aed;
+
+  --rpt-radius-sm: 6px;
+  --rpt-radius-md: 10px;
+  --rpt-radius-lg: 14px;
+  --rpt-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+  padding: 2rem clamp(1.25rem, 3vw, 3rem) 4rem;
+  color: var(--rpt-ink);
+  text-align: left;
+  animation: page-in 0.4s ease-out;
+}
+
+.report-shell * {
+  box-sizing: border-box;
+}
+
+.report-shell h1,
+.report-shell h2,
+.report-shell h3 {
+  text-align: left;
+}
+
+.report-shell a {
+  color: var(--rpt-accent);
+}
+
+/* ---------------------------------------------------------------- */
+/* Header                                                             */
+/* ---------------------------------------------------------------- */
+
+.rpt-back-link {
+  background: none;
+  border: none;
+  color: var(--rpt-ink-muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  transition: color 0.15s;
+}
+
+.rpt-back-link:hover {
+  color: var(--rpt-ink);
+}
+
+.rpt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.rpt-header-main {
+  min-width: 0;
+  flex: 1 1 480px;
+}
+
+.rpt-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rpt-accent-deep);
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.rpt-header h1 {
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.rpt-one-line-summary {
+  color: var(--rpt-ink-soft);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+  max-width: 70ch;
+}
+
+.rpt-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.rpt-meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.35em 0.85em;
+  border-radius: 999px;
+  background: var(--rpt-paper-sunken);
+  border: 1px solid var(--rpt-line);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--rpt-ink-soft);
+}
+
+.rpt-meta-pill .value {
+  color: var(--rpt-ink);
+}
+
+.rpt-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.rpt-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.55rem 1rem;
+  border-radius: var(--rpt-radius-sm);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: 1px solid var(--rpt-line);
+  background: var(--rpt-paper-raised);
+  color: var(--rpt-ink);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.rpt-btn:hover {
+  border-color: var(--rpt-line-strong);
+  background: var(--rpt-paper-sunken);
+}
+
+.rpt-btn.primary {
+  background: var(--rpt-accent);
+  border-color: var(--rpt-accent);
+  color: white;
+}
+
+.rpt-btn.primary:hover {
+  background: var(--rpt-accent-deep);
+  border-color: var(--rpt-accent-deep);
+}
+
+/* ---------------------------------------------------------------- */
+/* Nav                                                                 */
+/* ---------------------------------------------------------------- */
+
+.rpt-nav {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.6rem 0;
+  margin-bottom: 2rem;
+  background: var(--rpt-paper);
+  border-bottom: 1px solid var(--rpt-line);
+}
+
+.rpt-nav a {
+  padding: 0.4em 0.8em;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--rpt-ink-soft);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.rpt-nav a:hover {
+  background: var(--rpt-paper-sunken);
+  color: var(--rpt-ink);
+}
+
+/* ---------------------------------------------------------------- */
+/* Sections & cards                                                   */
+/* ---------------------------------------------------------------- */
+
+.rpt-section {
+  margin-bottom: 2.5rem;
+  scroll-margin-top: 70px;
+}
+
+.rpt-section-head {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  margin-bottom: 0.35rem;
+}
+
+.rpt-section-head .icon {
+  color: var(--rpt-accent);
+  flex-shrink: 0;
+}
+
+.rpt-section-head h2 {
+  font-size: 1.05rem;
+  margin: 0;
+}
+
+.rpt-section-subtitle {
+  color: var(--rpt-ink-muted);
+  font-size: 0.88rem;
+  margin: 0 0 1.25rem;
+  max-width: 70ch;
+}
+
+.rpt-card {
+  background: var(--rpt-paper-raised);
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-lg);
+  padding: 1.25rem 1.4rem;
+}
+
+.rpt-card + .rpt-card {
+  margin-top: 0.9rem;
+}
+
+.rpt-card.recommended {
+  border-color: var(--rpt-accent);
+  box-shadow: 0 0 0 1px var(--rpt-accent);
+}
+
+/* ---------------------------------------------------------------- */
+/* Executive cards (4-up)                                             */
+/* ---------------------------------------------------------------- */
+
+.rpt-exec-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.rpt-exec-card {
+  background: var(--rpt-paper-raised);
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-lg);
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rpt-exec-card .label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--rpt-accent-deep);
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.rpt-exec-card p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--rpt-ink-soft);
+}
+
+/* ---------------------------------------------------------------- */
+/* Solution component cards (2-col)                                   */
+/* ---------------------------------------------------------------- */
+
+.rpt-component-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 0.9rem;
+}
+
+.rpt-component-card {
+  background: var(--rpt-paper-raised);
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-md);
+  padding: 1rem 1.15rem;
+  display: flex;
+  gap: 0.85rem;
+}
+
+.rpt-component-card .icon-badge {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--rpt-radius-sm);
+  background: var(--rpt-accent-soft);
+  color: var(--rpt-accent-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rpt-component-card .body {
+  min-width: 0;
+}
+
+.rpt-component-card .name {
+  font-weight: 700;
+  font-size: 0.94rem;
+  margin: 0 0 0.15rem;
+}
+
+.rpt-component-card .tech {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--rpt-ink-muted);
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+}
+
+.rpt-component-card .purpose,
+.rpt-component-card .reason {
+  font-size: 0.85rem;
+  color: var(--rpt-ink-soft);
+  line-height: 1.5;
+  margin: 0 0 0.3rem;
+}
+
+.rpt-component-card .reason {
+  margin: 0;
+}
+
+.rpt-component-card .reason .field-label {
+  font-weight: 600;
+  color: var(--rpt-ink);
+}
+
+/* ---------------------------------------------------------------- */
+/* Tables (Model comparison, Risks) — collapse to stacked cards on     */
+/* narrow screens so nothing ever needs horizontal scroll.            */
+/* ---------------------------------------------------------------- */
+
+.rpt-table-wrap {
+  background: var(--rpt-paper-raised);
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-lg);
+  overflow: hidden;
+}
+
+.rpt-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rpt-table th,
+.rpt-table td {
+  text-align: left;
+  padding: 0.75rem 1.1rem;
+  border-bottom: 1px solid var(--rpt-line);
+  font-size: 0.85rem;
+  vertical-align: top;
+}
+
+.rpt-table thead th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rpt-ink-muted);
+  font-weight: 700;
+  background: var(--rpt-paper-sunken);
+}
+
+.rpt-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.rpt-table tbody tr.recommended {
+  background: var(--rpt-accent-soft);
+}
+
+.rpt-table .cell-title {
+  font-weight: 700;
+  color: var(--rpt-ink);
+}
+
+@media (max-width: 720px) {
+  .rpt-table thead {
+    display: none;
+  }
+  .rpt-table,
+  .rpt-table tbody,
+  .rpt-table tr,
+  .rpt-table td {
+    display: block;
+    width: 100%;
+  }
+  .rpt-table tr {
+    border-bottom: 1px solid var(--rpt-line);
+    padding: 0.75rem 0;
+  }
+  .rpt-table td {
+    border: none;
+    padding: 0.3rem 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    text-align: right;
+  }
+  .rpt-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--rpt-ink-muted);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: left;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Workbench groups                                                    */
+/* ---------------------------------------------------------------- */
+
+.rpt-workbench-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.9rem;
+}
+
+.rpt-workbench-card {
+  background: var(--rpt-paper-raised);
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-md);
+  padding: 1rem 1.15rem;
+}
+
+.rpt-workbench-card .label {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--rpt-ink-muted);
+  margin-bottom: 0.4rem;
+}
+
+.rpt-workbench-card .value {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 0 0 0.35rem;
+}
+
+.rpt-workbench-card .detail {
+  font-size: 0.82rem;
+  color: var(--rpt-ink-soft);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------- */
+/* Evidence & confidence                                              */
+/* ---------------------------------------------------------------- */
+
+.rpt-evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.9rem;
+}
+
+.rpt-evidence-card {
+  background: var(--rpt-paper-raised);
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-md);
+  padding: 1rem 1.15rem;
+}
+
+.rpt-evidence-card .heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.rpt-evidence-card .heading .kicker {
+  margin: 0;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rpt-ink-muted);
+  font-weight: 700;
+}
+
+.rpt-evidence-card .heading .name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin: 0.1rem 0 0;
+}
+
+.rpt-evidence-card .evidence,
+.rpt-evidence-card .meaning {
+  font-size: 0.82rem;
+  color: var(--rpt-ink-soft);
+  line-height: 1.5;
+  margin: 0.3rem 0 0;
+}
+
+.rpt-evidence-card .meaning {
+  color: var(--rpt-ink-muted);
+  font-style: italic;
+}
+
+/* ---------------------------------------------------------------- */
+/* Alternative solution cards                                         */
+/* ---------------------------------------------------------------- */
+
+.rpt-alt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.9rem;
+}
+
+.rpt-alt-card {
+  background: var(--rpt-paper-raised);
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-lg);
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.rpt-alt-card.recommended {
+  border-color: var(--rpt-accent);
+  box-shadow: 0 0 0 1px var(--rpt-accent);
+}
+
+.rpt-alt-card .heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.rpt-alt-card .heading .name {
+  font-weight: 700;
+  font-size: 0.98rem;
+}
+
+.rpt-alt-card .field {
+  font-size: 0.82rem;
+}
+
+.rpt-alt-card .field .field-label {
+  font-weight: 700;
+  color: var(--rpt-ink-muted);
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.rpt-alt-card .field p,
+.rpt-alt-card .field ul {
+  margin: 0;
+  color: var(--rpt-ink-soft);
+  line-height: 1.5;
+}
+
+.rpt-alt-card .field ul {
+  padding-left: 1.1rem;
+}
+
+/* ---------------------------------------------------------------- */
+/* Roadmap timeline                                                    */
+/* ---------------------------------------------------------------- */
+
+.rpt-roadmap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.rpt-roadmap-step {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 1rem;
+}
+
+.rpt-roadmap-step .marker-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rpt-roadmap-step .marker {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--rpt-accent);
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rpt-roadmap-step .connector {
+  flex: 1;
+  width: 2px;
+  background: var(--rpt-line-strong);
+  min-height: 24px;
+}
+
+.rpt-roadmap-step .content {
+  padding-bottom: 1.5rem;
+}
+
+.rpt-roadmap-step .content-inner {
+  background: var(--rpt-paper-raised);
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-md);
+  padding: 1rem 1.15rem;
+}
+
+.rpt-roadmap-step .title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.rpt-roadmap-step .title-row h3 {
+  margin: 0;
+  font-size: 0.98rem;
+}
+
+.rpt-roadmap-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.9rem;
+}
+
+.rpt-roadmap-columns .col-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--rpt-ink-muted);
+  margin: 0 0 0.35rem;
+}
+
+.rpt-roadmap-columns ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.82rem;
+  color: var(--rpt-ink-soft);
+  line-height: 1.55;
+}
+
+.rpt-roadmap-columns .risks-col ul {
+  color: var(--warning);
+}
+
+/* ---------------------------------------------------------------- */
+/* Business value KPIs                                                */
+/* ---------------------------------------------------------------- */
+
+.rpt-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 0.9rem;
+}
+
+.rpt-kpi-card {
+  background: var(--rpt-paper-raised);
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-md);
+  padding: 1rem 1.1rem;
+}
+
+.rpt-kpi-card .label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--rpt-ink-muted);
+  margin: 0 0 0.4rem;
+}
+
+.rpt-kpi-card .value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--rpt-ink);
+  line-height: 1.35;
+}
+
+/* ---------------------------------------------------------------- */
+/* Simple lists                                                       */
+/* ---------------------------------------------------------------- */
+
+.rpt-bullet-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--rpt-ink-soft);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.rpt-checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: rpt-step;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.rpt-checklist li {
+  counter-increment: rpt-step;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  font-size: 0.9rem;
+  color: var(--rpt-ink-soft);
+  line-height: 1.5;
+}
+
+.rpt-checklist li::before {
+  content: counter(rpt-step);
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--rpt-accent-soft);
+  color: var(--rpt-accent-deep);
+  font-weight: 700;
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------------- */
+/* Badges (confidence / impact / likelihood / status)                  */
+/* ---------------------------------------------------------------- */
+
+.rpt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.28em 0.7em;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.76rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.rpt-badge.good {
+  background: var(--good-soft);
+  color: var(--good);
+}
+
+.rpt-badge.warning {
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.rpt-badge.critical {
+  background: var(--critical-soft);
+  color: var(--critical);
+}
+
+.rpt-badge.neutral {
+  background: var(--rpt-paper-sunken);
+  color: var(--rpt-ink-soft);
+}
+
+.rpt-badge.accent {
+  background: var(--rpt-accent-soft);
+  color: var(--rpt-accent-deep);
+}
+
+/* ---------------------------------------------------------------- */
+/* Enterprise Solution Blueprint (architecture hero)                   */
+/* ---------------------------------------------------------------- */
+
+.blueprint-shell {
+  background: var(--rpt-paper-raised);
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-lg);
+  padding: 1.5rem;
+}
+
+.blueprint-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.blueprint-tab {
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--rpt-line);
+  background: var(--rpt-paper);
+  color: var(--rpt-ink-soft);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.blueprint-tab:hover {
+  border-color: var(--rpt-line-strong);
+}
+
+.blueprint-tab.active {
+  background: var(--rpt-accent);
+  border-color: var(--rpt-accent);
+  color: white;
+}
+
+.blueprint-view-help {
+  font-size: 0.85rem;
+  color: var(--rpt-ink-muted);
+  margin: 0 0 1.1rem;
+}
+
+.blueprint-body {
+  position: relative;
+}
+
+.blueprint-canvas-wrap {
+  overflow: hidden;
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-md);
+  background: var(--rpt-paper);
+  width: 100%;
+}
+
+.blueprint-canvas {
+  position: relative;
+  transform-origin: top left;
+  transition: transform 0.15s ease-out;
+}
+
+.blueprint-zones {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.blueprint-zone {
+  position: absolute;
+  top: 0;
+  border-right: 1px dashed var(--rpt-line);
+}
+
+.blueprint-zone:nth-child(odd) {
+  background: var(--rpt-paper-sunken);
+}
+
+.blueprint-oversight-band {
+  position: absolute;
+  left: 0;
+  border-top: 1px dashed var(--rpt-line-strong);
+  background: var(--rpt-paper-sunken);
+  opacity: 0.6;
+}
+
+.blueprint-zone .zone-label,
+.blueprint-oversight-band .zone-label {
+  position: sticky;
+  top: 6px;
+  left: 6px;
+  display: inline-block;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--rpt-ink-muted);
+  padding: 0.2rem 0.5rem;
+  margin: 6px;
+  background: var(--rpt-paper-raised);
+  border: 1px solid var(--rpt-line);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.blueprint-edges {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  overflow: visible;
+  color: var(--rpt-line-strong);
+}
+
+.blueprint-edge {
+  fill: none;
+  stroke: var(--rpt-line-strong);
+  stroke-width: 1.5px;
+  transition: opacity 0.2s, stroke 0.2s, stroke-width 0.2s;
+}
+
+.blueprint-edge[data-primary="true"] {
+  stroke: var(--rpt-ink-muted);
+  stroke-width: 1.75px;
+}
+
+.blueprint-edge[data-security="true"] {
+  stroke: var(--rpt-cat-security);
+}
+
+.blueprint-edge[data-audit="true"] {
+  stroke: var(--rpt-line-strong);
+  stroke-dasharray: 3 3;
+}
+
+.blueprint-edge[data-sensitive="true"] {
+  stroke: var(--critical);
+}
+
+.blueprint-edge[data-dim="true"] {
+  opacity: 0.15;
+}
+
+.blueprint-canvas[data-view="dataflow"] .blueprint-edge[data-primary="true"]:not([data-dim="true"]) {
+  stroke: var(--rpt-accent);
+  stroke-width: 2.25px;
+  stroke-dasharray: 7 5;
+  animation: bp-flow 1s linear infinite;
+}
+
+@keyframes bp-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.blueprint-node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--rpt-line-strong);
+  background: var(--rpt-paper-raised);
+  color: var(--rpt-ink);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.15;
+  padding: 0.3rem 0.4rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s, border-color 0.15s, background 0.15s;
+}
+
+.blueprint-node span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.blueprint-node:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--rpt-shadow-sm);
+  border-color: var(--rpt-accent);
+}
+
+.blueprint-node.selected {
+  border-color: var(--rpt-accent);
+  background: var(--rpt-accent-soft);
+  box-shadow: 0 0 0 2px var(--rpt-accent-soft);
+}
+
+.blueprint-node[data-dim="true"] {
+  opacity: 0.28;
+}
+
+.blueprint-node.cat-app svg {
+  color: var(--rpt-cat-app);
+}
+.blueprint-node.cat-ai svg {
+  color: var(--rpt-cat-ai);
+}
+.blueprint-node.cat-data svg {
+  color: var(--rpt-cat-data);
+}
+.blueprint-node.cat-security svg {
+  color: var(--rpt-cat-security);
+}
+.blueprint-node.cat-external svg {
+  color: var(--rpt-cat-external);
+}
+
+.blueprint-canvas[data-view="security"] .blueprint-node:not([data-dim="true"]),
+.blueprint-canvas[data-view="ai"] .blueprint-node:not([data-dim="true"]) {
+  border-color: var(--rpt-accent);
+  box-shadow: 0 0 0 1px var(--rpt-accent-soft);
+}
+
+.blueprint-hint {
+  font-size: 0.78rem;
+  color: var(--rpt-ink-muted);
+  margin: 0.85rem 0 0;
+}
+
+.blueprint-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rpt-line);
+  font-size: 0.78rem;
+  color: var(--rpt-ink-soft);
+}
+
+.blueprint-legend .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+.blueprint-legend .swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.blueprint-legend .swatch.cat-app {
+  background: var(--rpt-cat-app);
+}
+.blueprint-legend .swatch.cat-ai {
+  background: var(--rpt-cat-ai);
+}
+.blueprint-legend .swatch.cat-data {
+  background: var(--rpt-cat-data);
+}
+.blueprint-legend .swatch.cat-security {
+  background: var(--rpt-cat-security);
+}
+.blueprint-legend .swatch.cat-external {
+  background: var(--rpt-cat-external);
+}
+
+.blueprint-legend .line-sample {
+  width: 22px;
+  height: 0;
+  border-top: 2px solid var(--rpt-ink-muted);
+  flex-shrink: 0;
+}
+
+.blueprint-legend .line-sample.dashed {
+  border-top-style: dashed;
+}
+
+.blueprint-legend .line-sample.sensitive {
+  border-top-color: var(--critical);
+}
+
+/* Detail drawer */
+.blueprint-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  z-index: 40;
+  animation: bp-fade 0.15s ease-out;
+}
+
+.blueprint-detail {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 360px;
+  max-width: 90vw;
+  background: var(--rpt-paper-raised);
+  border-left: 1px solid var(--rpt-line);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+  z-index: 41;
+  padding: 1.75rem 1.5rem;
+  overflow-y: auto;
+  animation: bp-slide-in 0.2s ease-out;
+}
+
+@keyframes bp-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes bp-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.blueprint-detail-close {
+  background: none;
+  border: 1px solid var(--rpt-line);
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--rpt-ink-soft);
+  margin-bottom: 1.25rem;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.blueprint-detail-close:hover {
+  border-color: var(--rpt-line-strong);
+  color: var(--rpt-ink);
+}
+
+.blueprint-detail-type {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rpt-accent-deep);
+  font-weight: 700;
+  margin: 0 0 0.3rem;
+}
+
+.blueprint-detail h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.blueprint-detail-purpose {
+  font-size: 0.9rem;
+  color: var(--rpt-ink-soft);
+  line-height: 1.55;
+  margin: 0 0 1.25rem;
+}
+
+.blueprint-detail-list {
+  margin: 0;
+}
+
+.blueprint-detail-list dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rpt-ink-muted);
+  font-weight: 700;
+  margin-top: 1rem;
+}
+
+.blueprint-detail-list dt:first-child {
+  margin-top: 0;
+}
+
+.blueprint-detail-list dd {
+  margin: 0.3rem 0 0;
+  font-size: 0.88rem;
+  color: var(--rpt-ink);
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------- */
+/* Decision trace / quality panel / score bar — reused inside the      */
+/* report, retheme'd to the enterprise palette.                        */
+/* ---------------------------------------------------------------- */
+
+.rpt-trace-block {
+  border: 1px solid var(--rpt-line);
+  border-radius: var(--rpt-radius-md);
+  overflow: hidden;
+}
+
+.rpt-trace-block summary {
+  cursor: pointer;
+  padding: 0.85rem 1.1rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  background: var(--rpt-paper-sunken);
+}
+
+.rpt-trace-block summary::-webkit-details-marker {
+  display: none;
+}
+
+.rpt-trace-block .chevron {
+  transition: transform 0.15s;
+  color: var(--rpt-ink-muted);
+}
+
+.rpt-trace-block[open] > summary .chevron {
+  transform: rotate(90deg);
+}
+
+.rpt-trace-body {
+  padding: 1rem 1.1rem;
+}
+
+.rpt-trace-section {
+  border-top: 1px solid var(--rpt-line);
+}
+
+.rpt-trace-section summary {
+  padding: 0.7rem 1.1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  color: var(--rpt-ink-soft);
+}
+
+.rpt-trace-section summary::-webkit-details-marker {
+  display: none;
+}
+
+.rpt-trace-section[open] > summary .chevron {
+  transform: rotate(90deg);
+}
+
+.rpt-trace-section-body {
+  padding: 0 1.1rem 0.9rem;
+}
+
+.rpt-score-bar-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 160px) 1fr 42px;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.rpt-score-bar-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--rpt-paper-sunken);
+  overflow: hidden;
+}
+
+.rpt-score-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.rpt-score-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.rpt-dim-label {
+  font-size: 0.82rem;
+  color: var(--rpt-ink-soft);
+}
+
+.rpt-score-bar-value {
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--rpt-ink-soft);
+  text-align: right;
+}
+
+.rpt-evidence-code {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.78rem;
+  color: var(--rpt-ink-soft);
+  background: var(--rpt-paper-sunken);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+}
+
+.rpt-quality-panel {
+  padding: 1.5rem;
+}
+
+.rpt-quality-summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.rpt-confidence-value {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.rpt-quality-rationale {
+  font-size: 0.9rem;
+  color: var(--rpt-ink-soft);
+  line-height: 1.55;
+}
+
+.rpt-quality-panel h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--rpt-ink-muted);
+  margin: 1.35rem 0 0.65rem;
+  font-weight: 700;
+}
+
+.rpt-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.5rem 0;
+}
+
+.rpt-chip {
+  font-size: 0.75rem;
+  padding: 0.28em 0.7em;
+  border-radius: 999px;
+  border: 1px solid var(--rpt-line);
+  color: var(--rpt-ink-soft);
+  background: var(--rpt-paper);
+}
+
+.rpt-warning-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rpt-warning-item {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: var(--rpt-radius-sm);
+  background: var(--warning-soft);
+  font-size: 0.85rem;
+  color: var(--rpt-ink);
+  line-height: 1.5;
+}
+
+.rpt-warning-item svg {
+  color: var(--warning);
+  flex-shrink: 0;
+  margin-top: 0.1em;
+}
+
+/* ---------------------------------------------------------------- */
+/* Print                                                              */
+/* ---------------------------------------------------------------- */
+
+@media print {
+  .rpt-nav,
+  .rpt-actions,
+  .rpt-back-link,
+  .blueprint-tabs,
+  .blueprint-view-help,
+  .blueprint-hint {
+    display: none !important;
+  }
+
+  .report-shell {
+    max-width: 100%;
+    padding: 0;
+    background: white;
+  }
+
+  .rpt-section,
+  .rpt-card,
+  .rpt-exec-card,
+  .rpt-component-card,
+  .rpt-alt-card,
+  .rpt-kpi-card,
+  .rpt-roadmap-step {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .blueprint-canvas-wrap {
+    overflow: visible;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Responsive                                                         */
+/* ---------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .rpt-header {
+    flex-direction: column;
+  }
+  .rpt-actions {
+    width: 100%;
+  }
+  .rpt-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}

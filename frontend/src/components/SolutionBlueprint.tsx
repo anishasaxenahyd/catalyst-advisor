@@ -1,4 +1,4 @@
-import { useMemo, useState, type ComponentType, type SVGProps } from "react";
+import { useEffect, useMemo, useRef, useState, type ComponentType, type SVGProps } from "react";
 import type { Report } from "../types/report";
 import {
   buildBlueprint,
@@ -9,39 +9,71 @@ import {
   type NodeKind,
 } from "../lib/blueprint";
 import {
-  IconUser,
-  IconLock,
-  IconRoute,
-  IconSparkles,
-  IconLayers,
-  IconCpu,
-  IconFileText,
-  IconDatabase,
-  IconServer,
-  IconCloud,
-  IconCheckCircle,
-  IconEye,
-  IconChevron,
-} from "./icons";
+  User,
+  Lock,
+  Route,
+  Sparkles,
+  Layers,
+  Cpu,
+  FileText,
+  Database,
+  Server,
+  Cloud,
+  CheckCircle2,
+  Eye,
+  ChevronRight,
+} from "lucide-react";
 
 const KIND_ICON: Record<NodeKind, ComponentType<SVGProps<SVGSVGElement>>> = {
-  user: IconUser,
-  auth: IconLock,
-  api_gateway: IconRoute,
-  ai_gateway: IconRoute,
-  agent: IconSparkles,
-  skill: IconLayers,
-  model: IconCpu,
-  prompt: IconFileText,
-  vector_store: IconDatabase,
-  mcp_server: IconServer,
-  api: IconCloud,
-  database: IconDatabase,
-  system: IconCloud,
-  human: IconUser,
-  audit: IconEye,
-  monitoring: IconEye,
-  output: IconCheckCircle,
+  user: User,
+  auth: Lock,
+  api_gateway: Route,
+  ai_gateway: Route,
+  agent: Sparkles,
+  skill: Layers,
+  model: Cpu,
+  prompt: FileText,
+  vector_store: Database,
+  mcp_server: Server,
+  api: Cloud,
+  database: Database,
+  system: Cloud,
+  human: User,
+  audit: Eye,
+  monitoring: Eye,
+  output: CheckCircle2,
+};
+
+// Five legend categories the redesign asks for — every NodeKind maps to
+// exactly one, so the legend never has more entries than a reader can scan.
+type NodeCategory = "app" | "ai" | "data" | "security" | "external";
+
+const KIND_CATEGORY: Record<NodeKind, NodeCategory> = {
+  user: "app",
+  api_gateway: "app",
+  output: "app",
+  ai_gateway: "ai",
+  agent: "ai",
+  skill: "ai",
+  model: "ai",
+  prompt: "ai",
+  vector_store: "ai",
+  database: "data",
+  mcp_server: "data",
+  api: "data",
+  auth: "security",
+  audit: "security",
+  human: "security",
+  monitoring: "security",
+  system: "external",
+};
+
+const CATEGORY_LABEL: Record<NodeCategory, string> = {
+  app: "App",
+  ai: "AI",
+  data: "Data",
+  security: "Security",
+  external: "External Systems",
 };
 
 type ViewId = "solution" | "security" | "ai" | "dataflow";
@@ -58,6 +90,18 @@ function edgePath(from: { x: number; y: number; width: number; height: number },
   const y1 = from.y + from.height / 2;
   const x2 = to.x;
   const y2 = to.y + to.height / 2;
+
+  // Same-column edges (e.g. a bidirectional pair like Identity <-> API
+  // Gateway) have x2 < x1, which makes the default midpoint bezier loop
+  // back through the nodes themselves and cross a same-column reverse
+  // edge. Bow those out to the right instead of through the nodes, and
+  // give the upward/downward direction a different bow depth so the two
+  // arcs run parallel instead of crossing each other.
+  if (from.x === to.x) {
+    const bowX = x1 + (from.y > to.y ? 30 : 48);
+    return `M ${x1} ${y1} C ${bowX} ${y1}, ${bowX} ${y2}, ${x2} ${y2}`;
+  }
+
   const midX = (x1 + x2) / 2;
   return `M ${x1} ${y1} C ${midX} ${y1}, ${midX} ${y2}, ${x2} ${y2}`;
 }
@@ -81,6 +125,23 @@ export default function SolutionBlueprint({ report }: { report: Report }) {
   const [view, setView] = useState<ViewId>("solution");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = selectedId ? nodeById.get(selectedId) ?? null : null;
+
+  // Scale the whole canvas down to fit the available width instead of
+  // scrolling horizontally — CSS transform:scale preserves correct click
+  // hit-testing, so nodes stay clickable at any scale.
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver((entries) => {
+      const width = entries[0]?.contentRect.width;
+      if (width) setContainerWidth(width);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  const scale = containerWidth > 0 ? Math.min(1, containerWidth / layout.width) : 1;
 
   const isNodeRelevant = (node: BlueprintNode): boolean => {
     if (view === "security") return node.securityRelevant;
@@ -121,8 +182,12 @@ export default function SolutionBlueprint({ report }: { report: Report }) {
       <p className="blueprint-view-help">{activeView.help}</p>
 
       <div className="blueprint-body">
-        <div className="blueprint-canvas-scroll">
-          <div className="blueprint-canvas" data-view={view} style={{ width: layout.width, height: layout.height }}>
+        <div className="blueprint-canvas-wrap" ref={wrapRef} style={{ height: layout.height * scale }}>
+          <div
+            className="blueprint-canvas"
+            data-view={view}
+            style={{ width: layout.width, height: layout.height, transform: `scale(${scale})` }}
+          >
             <div className="blueprint-zones" aria-hidden="true">
               {zoneRects.map((zone) => (
                 <div
@@ -171,11 +236,12 @@ export default function SolutionBlueprint({ report }: { report: Report }) {
               const box = layout.boxes.get(node.id);
               if (!box) return null;
               const Icon = KIND_ICON[node.kind];
+              const category = KIND_CATEGORY[node.kind];
               return (
                 <button
                   key={node.id}
                   type="button"
-                  className={`blueprint-node kind-${node.kind} lane-${node.lane} ${selectedId === node.id ? "selected" : ""}`}
+                  className={`blueprint-node cat-${category} lane-${node.lane} ${selectedId === node.id ? "selected" : ""}`}
                   style={{ left: box.x, top: box.y, width: box.width, height: box.height }}
                   data-dim={!isNodeRelevant(node)}
                   onClick={() => setSelectedId(node.id)}
@@ -194,7 +260,7 @@ export default function SolutionBlueprint({ report }: { report: Report }) {
             <div className="blueprint-backdrop" onClick={() => setSelectedId(null)} />
             <aside className="blueprint-detail" aria-label={`${selected.label} details`}>
               <button type="button" className="blueprint-detail-close" onClick={() => setSelectedId(null)} aria-label="Close details">
-                <IconChevron width={16} height={16} />
+                <ChevronRight width={16} height={16} />
               </button>
               <p className="blueprint-detail-type">{selected.detail.componentType}</p>
               <h3>{selected.label}</h3>
@@ -245,15 +311,11 @@ export default function SolutionBlueprint({ report }: { report: Report }) {
       <p className="blueprint-hint">Click any component for details. Switch views above for security, AI-catalog, or data-flow emphasis.</p>
 
       <div className="blueprint-legend">
-        <span className="legend-item">
-          <span className="swatch" style={{ background: "var(--accent)" }} /> AI / catalog component
-        </span>
-        <span className="legend-item">
-          <span className="swatch" style={{ background: "var(--warning)" }} /> Security &amp; identity
-        </span>
-        <span className="legend-item">
-          <span className="swatch" style={{ background: "var(--ink-muted)" }} /> Enterprise / generic
-        </span>
+        {(Object.keys(CATEGORY_LABEL) as NodeCategory[]).map((category) => (
+          <span className="legend-item" key={category}>
+            <span className={`swatch cat-${category}`} /> {CATEGORY_LABEL[category]}
+          </span>
+        ))}
         <span className="legend-item">
           <span className="line-sample" /> Primary flow
         </span>
@@ -261,7 +323,7 @@ export default function SolutionBlueprint({ report }: { report: Report }) {
           <span className="line-sample dashed" /> Audit trail
         </span>
         <span className="legend-item">
-          <span className="line-sample" style={{ borderTopColor: "var(--critical)" }} /> Sensitive data
+          <span className="line-sample sensitive" /> Sensitive data
         </span>
       </div>
     </div>

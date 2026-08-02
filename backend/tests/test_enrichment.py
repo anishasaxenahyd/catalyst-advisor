@@ -149,10 +149,12 @@ def test_implementation_roadmap_matches_pattern_complexity_tier():
     assert all(p.name and p.duration and p.goals and p.deliverables for p in roadmap.phases)
 
 
-def test_implementation_roadmap_has_fewer_phases_for_simple_patterns():
+def test_implementation_roadmap_always_uses_the_canonical_five_phases():
     pattern = _pattern("pattern-batch-classification")
     enrichment = _build(_signal_vector(), pattern)
-    assert len(enrichment.implementation_roadmap.phases) == 3
+    phases = enrichment.implementation_roadmap.phases
+    assert [p.name for p in phases] == ["Discovery", "Prototype", "Build", "Pilot", "Rollout"]
+    assert all(p.risks for p in phases)
 
 
 def test_evidence_confidence_summary_aggregates_counts():
@@ -182,3 +184,12 @@ def test_build_report_attaches_full_enrichment_without_altering_existing_fields(
     assert report.enrichment.business_understanding.industry == "Legal Services"
     assert report.enrichment.implementation_roadmap.phases
     assert report.enrichment.evidence_confidence_summary.overall_confidence == report.confidence_scores.overall
+    assert report.report_title
+    assert report.one_line_summary
+    assert report.executive_cards.recommended_pattern
+    assert 0 <= report.implementation_readiness.score <= 100
+    assert report.implementation_readiness.label in ("Very High", "High", "Good", "Needs More Information")
+    assert report.business_value.cost_savings_estimate
+    assert report.business_value.roi_estimate
+    assert all(r.status == "Open" for r in report.risks)
+    assert report.model_recommendation.alternatives[0].relative_cost in ("low", "medium", "high")

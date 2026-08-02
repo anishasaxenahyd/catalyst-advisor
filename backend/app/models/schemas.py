@@ -293,6 +293,7 @@ class ModelAlternative(BaseModel):
     model: AIModel
     rationale: str
     trade_off: str
+    relative_cost: RelativeLevel
 
 
 class ModelRecommendation(BaseModel):
@@ -331,11 +332,40 @@ class ConfidenceScores(BaseModel):
     workbench: int
 
 
+class RiskItem(BaseModel):
+    """LLM-authored risk assessment. `status` is deliberately absent here —
+    it is stamped on deterministically (always "Open") when assembling the
+    final `Report`, never invented by the model."""
+
+    risk: str
+    impact: RelativeLevel
+    likelihood: RelativeLevel
+    mitigation: str
+
+
+class Risk(RiskItem):
+    status: str = "Open"
+
+
+class ExecutiveCards(BaseModel):
+    """Four short LLM-authored cards replacing the old prose executive
+    summary — same 'narrate, don't decide' contract as the rest of
+    ExecutiveNarrative. `recommended_pattern` is cross-checked by the UI
+    against the deterministic pattern name so it can't silently drift."""
+
+    problem: str
+    opportunity: str
+    recommended_pattern: str
+    expected_outcome: str
+
+
 class ExecutiveNarrative(BaseModel):
     """The only part of a Report an LLMProvider is allowed to author."""
 
-    executive_summary: str
-    risks: list[str]
+    report_title: str
+    one_line_summary: str
+    executive_cards: ExecutiveCards
+    risks: list[RiskItem]
     assumptions: list[str]
     next_best_actions: list[str]
 
@@ -348,6 +378,7 @@ class EngineOutput(BaseModel):
     """
 
     signal_vector: SignalVector
+    business_understanding: "BusinessUnderstanding"
     architecture_recommendation: ArchitectureRecommendation
     enterprise_reuse: list[EnterpriseReuseItem]
     model_recommendation: ModelRecommendation
@@ -432,6 +463,7 @@ class RoadmapPhase(BaseModel):
     duration: str
     goals: list[str] = Field(default_factory=list)
     deliverables: list[str] = Field(default_factory=list)
+    risks: list[str] = Field(default_factory=list)
 
 
 class ImplementationRoadmap(BaseModel):
@@ -462,19 +494,47 @@ class RecommendationEnrichment(BaseModel):
     evidence_confidence_summary: EvidenceConfidenceSummary
 
 
+# --------------------------------------------------------------------------
+# Report-level executive metrics — deterministic, core (not gated behind
+# optional `enrichment`), so the header/Business Value sections always have
+# something to render regardless of enrichment availability.
+# --------------------------------------------------------------------------
+
+
+class ImplementationReadiness(BaseModel):
+    score: int
+    label: str
+
+
+class BusinessValueSummary(BaseModel):
+    """Every field here is a grounded estimate — traced to a config table
+    or an existing scoring value, never free-invented by an LLM. Ranges are
+    directional, not precise forecasts; the UI labels them "(estimated)"."""
+
+    cost_savings_estimate: str
+    productivity_estimate: str
+    accuracy_confidence_label: str
+    timeline_estimate: str
+    roi_estimate: str
+
+
 class Report(BaseModel):
     mode: SubmissionMode
     signal_vector: SignalVector
-    executive_summary: str
+    report_title: str
+    one_line_summary: str
+    executive_cards: ExecutiveCards
     feasibility: FeasibilityScore
+    implementation_readiness: ImplementationReadiness
     architecture_recommendation: ArchitectureRecommendation
     enterprise_reuse: list[EnterpriseReuseItem]
     model_recommendation: ModelRecommendation
     workbench_recommendation: WorkbenchRecommendation
     effort_estimate: str
     timeline_estimate: str
-    risks: list[str]
+    risks: list[Risk]
     assumptions: list[str]
     confidence_scores: ConfidenceScores
     next_best_actions: list[str]
+    business_value: BusinessValueSummary
     enrichment: Optional[RecommendationEnrichment] = None

@@ -7,8 +7,9 @@ import DesignUpload from "./pages/DesignUpload";
 import Analyzing from "./pages/Analyzing";
 import { IconSparkles } from "./components/icons";
 
-// The report view pulls in Mermaid (a large, multi-diagram-type library) —
-// isolated to its own chunk so Landing/forms/Analyzing never pay for it.
+// The report view pulls in its own design system (report.css) and the
+// interactive SolutionBlueprint diagram — isolated to its own chunk so
+// Landing/forms/Analyzing never pay for it.
 const ReportPage = lazy(() => import("./pages/Report"));
 
 export default function App() {

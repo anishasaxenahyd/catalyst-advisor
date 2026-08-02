@@ -5,11 +5,14 @@ This is the one place that calls both a `KnowledgeProvider` and an
 and the very end (narrate). Every decision in between is engine code.
 """
 
+from app.engine.business_value import compute_business_value
 from app.engine.config_loader import get_decision_rules, get_scoring_weights
 from app.engine.estimator import estimate_effort, estimate_timeline
 from app.engine.matcher import rank_candidates
+from app.engine.readiness import compute_implementation_readiness
 from app.engine.trace import build_decision_trace
 from app.engine.workbench_selector import select_workbench
+from app.enrichment.business import build_business_understanding
 from app.enrichment.service import build_enrichment
 from app.models.schemas import (
     ArchitectureRecommendation,
@@ -21,6 +24,7 @@ from app.models.schemas import (
     ModelRecommendation,
     RawInput,
     Report,
+    Risk,
     StructuredHints,
     SubmissionMode,
 )
@@ -79,6 +83,7 @@ def build_report(
     # ---- understand (LLM) ----
     raw_input = RawInput(mode=mode, text=raw_text, hints=hints, known_tags=_known_tags(kp))
     signal_vector = llm.extract_signal_vector(raw_input)
+    business_understanding = build_business_understanding(signal_vector, raw_text)
 
     # Computed once from the Validation layer's output and stamped onto
     # every DecisionTrace below — architecture, model, and workbench all
@@ -113,6 +118,7 @@ def build_report(
             model=item,
             rationale=f"Ranked #{idx + 2} by weighted score ({score.weighted_total}/100).",
             trade_off=next(a.why_lower for a in model_trace.alternatives_considered if a.id == item.id),
+            relative_cost=_relative_band(item.cost_tier, rules["relative_cost_bands"]),
         )
         for idx, (item, score) in enumerate(ranked_models[1:3])
     ]
@@ -174,6 +180,7 @@ def build_report(
 
     engine_output = EngineOutput(
         signal_vector=signal_vector,
+        business_understanding=business_understanding,
         architecture_recommendation=architecture_recommendation,
         enterprise_reuse=enterprise_reuse,
         model_recommendation=model_recommendation,
@@ -186,6 +193,16 @@ def build_report(
 
     # ---- narrate (LLM) ----
     narrative = llm.generate_executive_report(engine_output)
+
+    # ---- executive metrics (deterministic; grounded in scores/tiers already
+    # computed above, banded through the shared confidence_label scale) ----
+    implementation_readiness = compute_implementation_readiness(
+        feasibility, confidence_scores, top_pattern.complexity_tier
+    )
+    business_value = compute_business_value(
+        model_recommendation, signal_vector, confidence_scores, top_pattern, timeline_estimate, rules
+    )
+    risks = [Risk(**risk_item.model_dump(), status="Open") for risk_item in narrative.risks]
 
     # ---- enrich (deterministic; AI Catalog + Solution Registry + Enterprise
     # Knowledge Platform + config-driven governance/roadmap rules) ----
@@ -206,17 +223,21 @@ def build_report(
     return Report(
         mode=mode,
         signal_vector=signal_vector,
-        executive_summary=narrative.executive_summary,
+        report_title=narrative.report_title,
+        one_line_summary=narrative.one_line_summary,
+        executive_cards=narrative.executive_cards,
         feasibility=feasibility,
+        implementation_readiness=implementation_readiness,
         architecture_recommendation=architecture_recommendation,
         enterprise_reuse=enterprise_reuse,
         model_recommendation=model_recommendation,
         workbench_recommendation=workbench_recommendation,
         effort_estimate=effort_estimate,
         timeline_estimate=timeline_estimate,
-        risks=narrative.risks,
+        risks=risks,
         assumptions=narrative.assumptions,
         confidence_scores=confidence_scores,
         next_best_actions=narrative.next_best_actions,
+        business_value=business_value,
         enrichment=enrichment,
     )

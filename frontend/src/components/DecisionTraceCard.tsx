@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
+import { ChevronRight } from "lucide-react";
 import type { DecisionTrace } from "../types/report";
 import { parseEvidence } from "../lib/decisionTrace";
 import ScoreBar from "./ScoreBar";
 import ConfidenceBadge from "./ConfidenceBadge";
-import { IconChevron } from "./icons";
 
 function TraceSection({
   title,
@@ -15,12 +15,12 @@ function TraceSection({
   children: ReactNode;
 }) {
   return (
-    <details className="trace-section" open={defaultOpen}>
+    <details className="rpt-trace-section" open={defaultOpen}>
       <summary>
-        <IconChevron className="chevron" width={14} height={14} />
         {title}
+        <ChevronRight className="chevron" width={14} height={14} />
       </summary>
-      <div className="trace-section-body">{children}</div>
+      <div className="rpt-trace-section-body">{children}</div>
     </details>
   );
 }
@@ -29,13 +29,13 @@ export default function DecisionTraceCard({ trace }: { trace: DecisionTrace }) {
   const { scores, facts } = parseEvidence(trace.evidence);
 
   return (
-    <details className="trace-block">
+    <details className="rpt-trace-block">
       <summary>
-        <IconChevron className="chevron" width={16} height={16} />
         Decision Trace
+        <ChevronRight className="chevron" width={16} height={16} />
       </summary>
 
-      <div className="trace-sections">
+      <div className="rpt-trace-body">
         <TraceSection title="Why selected" defaultOpen>
           <p style={{ margin: 0 }}>{trace.why_selected}</p>
         </TraceSection>
@@ -65,7 +65,7 @@ export default function DecisionTraceCard({ trace }: { trace: DecisionTrace }) {
         {(scores.length > 0 || facts.length > 0) && (
           <TraceSection title="Evidence">
             {scores.length > 0 && (
-              <div className="score-bars">
+              <div className="rpt-score-bars">
                 {scores.map((s) => (
                   <ScoreBar key={s.dimension} dimension={s.dimension} value={s.value} />
                 ))}
@@ -75,7 +75,7 @@ export default function DecisionTraceCard({ trace }: { trace: DecisionTrace }) {
               <ul style={{ marginTop: scores.length > 0 ? "0.75rem" : undefined }}>
                 {facts.map((f) => (
                   <li key={f}>
-                    <span className="evidence-code">{f}</span>
+                    <span className="rpt-evidence-code">{f}</span>
                   </li>
                 ))}
               </ul>
@@ -85,7 +85,7 @@ export default function DecisionTraceCard({ trace }: { trace: DecisionTrace }) {
 
         <TraceSection title="Confidence">
           <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-            <ConfidenceBadge value={trace.confidence} />
+            <ConfidenceBadge value={trace.confidence} scheme="confidence" />
           </div>
         </TraceSection>
       </div>
