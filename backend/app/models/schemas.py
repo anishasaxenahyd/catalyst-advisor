@@ -157,6 +157,55 @@ class RawExtractedSignal(BaseModel):
     tags: list[str] = Field(default_factory=list)
 
 
+# --------------------------------------------------------------------------
+# Prompt optimizer (pre-submission, advisory only — never touches scoring)
+# --------------------------------------------------------------------------
+
+
+class QAExchange(BaseModel):
+    """One clarifying question the optimizer asked and how the user
+    answered it (or skipped it), carried by the stateless frontend across
+    optimize_prompt() calls rather than persisted server-side."""
+
+    field: str
+    question: str
+    answer: str = ""
+
+
+class PromptOptimizationRequest(BaseModel):
+    mode: SubmissionMode
+    description: str = ""
+    diagram_text: Optional[str] = None
+    hints: StructuredHints = Field(default_factory=StructuredHints)
+    prior_answers: list[QAExchange] = Field(default_factory=list)
+
+
+class RawPromptOptimization(BaseModel):
+    """What an LLMProvider hands back before validation — untrusted, like
+    `RawExtractedSignal`. `app.validation.prompt_optimization_normalizer`
+    turns this into a `PromptOptimizationResult`; nothing else consumes it.
+    """
+
+    optimized_text: Optional[str] = None
+    gaps: list[str] = Field(default_factory=list)
+    questions: list[dict] = Field(default_factory=list)
+    notes: Optional[str] = None
+
+
+class ClarifyingQuestion(BaseModel):
+    field: str
+    question: str
+
+
+class PromptOptimizationResult(BaseModel):
+    optimized_text: str
+    original_token_estimate: int
+    optimized_token_estimate: int
+    gaps: list[str] = Field(default_factory=list)
+    clarifying_questions: list[ClarifyingQuestion] = Field(default_factory=list)
+    notes: str = ""
+
+
 FieldProvenance = Literal["user", "llm", "default"]
 
 

@@ -12,13 +12,18 @@ still exercises the same provenance/warning machinery.
 import re
 
 from app.models.schemas import (
+    ClarifyingQuestion,
     EngineOutput,
     ExecutiveNarrative,
+    PromptOptimizationResult,
+    QAExchange,
     RawExtractedSignal,
     RawInput,
     SignalVector,
 )
 from app.providers.llm.base import LLMProvider
+from app.providers.llm.token_utils import estimate_tokens
+from app.validation.prompt_optimization_normalizer import MAX_CLARIFYING_QUESTIONS
 from app.validation.signal_normalizer import normalize_signal
 
 _KEYWORD_TAGS: dict[str, list[str]] = {
@@ -46,6 +51,29 @@ _KEYWORD_TAGS: dict[str, list[str]] = {
 }
 
 _SYSTEM_KEYWORDS = ["salesforce", "sharepoint", "snowflake", "workday", "sap", "servicenow"]
+
+_SENSITIVITY_KEYWORDS = [
+    "pii", "phi", "personal data", "personally identifiable", "patient", "medical", "health record",
+    "ssn", "social security", "financial record", "credit card", "hipaa", "gdpr",
+]
+
+_CANNED_QUESTIONS: dict[str, str] = {
+    "data_sensitivity": "Does this involve PII or PHI data (e.g. customer, patient, or financial records)?",
+    "industry": "What industry or business domain is this for?",
+    "expected_scale": "Is this a pilot, a department-wide rollout, or an enterprise-wide rollout?",
+    "automation_level": "Should it just assist a human, draft for review (copilot), or act on its own (autonomous)?",
+    "data_modality": "What's the primary data type involved — text, images, or structured/tabular data?",
+    "latency_requirement": "Does this need to respond in real time, or can it run in scheduled batches?",
+}
+
+
+def _has_sensitivity_signal(lowered: str) -> bool:
+    return any(keyword in lowered for keyword in _SENSITIVITY_KEYWORDS)
+
+
+def _has_explicit_automation_signal(lowered: str) -> bool:
+    explicit_keywords = ("autonomous", "without human", "no human", "copilot", "suggest", "review before")
+    return any(keyword in lowered for keyword in explicit_keywords)
 
 
 def _tags_from_text(text: str) -> list[str]:
@@ -152,4 +180,54 @@ class MockLLMProvider(LLMProvider):
             risks=risks,
             assumptions=assumptions,
             next_best_actions=next_best_actions,
+        )
+
+    def optimize_prompt(self, raw_input: RawInput, prior_answers: list[QAExchange]) -> PromptOptimizationResult:
+        original_text = raw_input.text
+        hints = raw_input.hints
+        lowered = original_text.lower()
+        tags = _tags_from_text(original_text)
+        answered_fields = {qa.field for qa in prior_answers if qa.answer.strip()}
+
+        gaps: list[str] = []
+        if (
+            hints.data_sensitivity is None
+            and "data_sensitivity" not in answered_fields
+            and not _has_sensitivity_signal(lowered)
+        ):
+            gaps.append("data_sensitivity")
+        if hints.industry is None and "industry" not in answered_fields:
+            gaps.append("industry")
+        if hints.expected_scale is None and "expected_scale" not in answered_fields:
+            gaps.append("expected_scale")
+        if (
+            hints.automation_level is None
+            and "automation_level" not in answered_fields
+            and not _has_explicit_automation_signal(lowered)
+        ):
+            gaps.append("automation_level")
+        if "data_modality" not in answered_fields and "image" not in tags and "structured" not in tags:
+            gaps.append("data_modality")
+        if "latency_requirement" not in answered_fields and "realtime" not in tags and "batch" not in tags:
+            gaps.append("latency_requirement")
+
+        questions = [
+            ClarifyingQuestion(field=field, question=_CANNED_QUESTIONS[field])
+            for field in gaps[:MAX_CLARIFYING_QUESTIONS]
+        ]
+
+        optimized_text = " ".join(original_text.split())
+        answer_clauses = "; ".join(
+            f"{qa.field.replace('_', ' ')}: {qa.answer.strip()}" for qa in prior_answers if qa.answer.strip()
+        )
+        if answer_clauses:
+            optimized_text = f"{optimized_text} Additional context — {answer_clauses}."
+
+        return PromptOptimizationResult(
+            optimized_text=optimized_text,
+            original_token_estimate=estimate_tokens(original_text),
+            optimized_token_estimate=estimate_tokens(optimized_text),
+            gaps=gaps,
+            clarifying_questions=questions,
+            notes="Whitespace collapsed" + (" and prior answers folded in." if answer_clauses else "."),
         )

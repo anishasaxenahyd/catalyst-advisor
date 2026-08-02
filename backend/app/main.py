@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 load_dotenv()  # loads backend/.env if present; real env vars still take precedence
 
 from app.api.knowledge_routes import router as knowledge_router
+from app.api.prompt_optimizer_routes import router as prompt_optimizer_router
 from app.api.routes import router
 
 logging.basicConfig(
@@ -31,6 +32,7 @@ app.add_middleware(
 
 app.include_router(router, prefix="/api")
 app.include_router(knowledge_router, prefix="/api/knowledge")
+app.include_router(prompt_optimizer_router, prefix="/api")
 
 
 @app.get("/health")

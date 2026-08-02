@@ -8,7 +8,14 @@ but it would work identically pairing any two LLMProvider implementations.
 
 import logging
 
-from app.models.schemas import EngineOutput, ExecutiveNarrative, RawInput, SignalVector
+from app.models.schemas import (
+    EngineOutput,
+    ExecutiveNarrative,
+    PromptOptimizationResult,
+    QAExchange,
+    RawInput,
+    SignalVector,
+)
 from app.providers.llm.base import LLMProvider
 
 logger = logging.getLogger("catalyst.llm.fallback")
@@ -38,3 +45,13 @@ class FallbackLLMProvider(LLMProvider):
                 type(self.primary).__name__, type(exc).__name__, exc, type(self.fallback).__name__,
             )
             return self.fallback.generate_executive_report(engine_output)
+
+    def optimize_prompt(self, raw_input: RawInput, prior_answers: list[QAExchange]) -> PromptOptimizationResult:
+        try:
+            return self.primary.optimize_prompt(raw_input, prior_answers)
+        except Exception as exc:
+            logger.warning(
+                "%s.optimize_prompt failed (%s: %s) — falling back to %s.",
+                type(self.primary).__name__, type(exc).__name__, exc, type(self.fallback).__name__,
+            )
+            return self.fallback.optimize_prompt(raw_input, prior_answers)

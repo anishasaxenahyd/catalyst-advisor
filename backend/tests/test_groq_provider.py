@@ -91,3 +91,28 @@ def test_markdown_fenced_json_is_stripped(monkeypatch):
     result = provider.extract_signal_vector(_RAW_INPUT)
 
     assert result.data_modality == "text"
+
+
+def test_optimize_prompt_parses_and_normalizes_response(monkeypatch):
+    raw_optimization_json = json.dumps(
+        {
+            "optimized_text": "Automate invoice review for accounts payable.",
+            "gaps": ["industry", "not_a_real_field"],
+            "questions": [
+                {"field": "industry", "question": "What industry is this for?"},
+                {"field": "bogus_field", "question": "This should be dropped."},
+            ],
+            "notes": "Tightened the phrasing.",
+        }
+    )
+    responses = [_FakeResponse(200, _chat_body(raw_optimization_json))]
+    provider = _provider(monkeypatch, responses, max_retries=1)
+
+    result = provider.optimize_prompt(_RAW_INPUT, [])
+
+    assert result.optimized_text == "Automate invoice review for accounts payable."
+    assert result.gaps == ["industry"]  # unknown field name dropped
+    assert len(result.clarifying_questions) == 1
+    assert result.clarifying_questions[0].field == "industry"
+    assert result.original_token_estimate > 0
+    assert result.optimized_token_estimate > 0

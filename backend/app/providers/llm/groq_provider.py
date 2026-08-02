@@ -27,12 +27,22 @@ import os
 import httpx
 from pydantic import ValidationError
 
-from app.models.schemas import EngineOutput, ExecutiveNarrative, RawExtractedSignal, RawInput, SignalVector
+from app.models.schemas import (
+    EngineOutput,
+    ExecutiveNarrative,
+    PromptOptimizationResult,
+    QAExchange,
+    RawExtractedSignal,
+    RawInput,
+    RawPromptOptimization,
+    SignalVector,
+)
 from app.providers.llm.base import LLMProvider
 from app.providers.llm.exceptions import LLMProviderError
-from app.providers.llm.prompts import NARRATIVE_PROMPT, SIGNAL_VECTOR_PROMPT
+from app.providers.llm.prompts import NARRATIVE_PROMPT, PROMPT_OPTIMIZER_PROMPT, SIGNAL_VECTOR_PROMPT
 from app.providers.llm.retry import RetryConfig, call_with_retries
 from app.providers.llm.utils import strip_json_fences
+from app.validation.prompt_optimization_normalizer import format_tracked_fields, normalize_optimization
 from app.validation.signal_normalizer import normalize_signal
 
 logger = logging.getLogger("catalyst.llm.groq")
@@ -140,3 +150,35 @@ class GroqProvider(LLMProvider):
             )
         except _TransientGroqError as exc:
             raise LLMProviderError(f"Groq unavailable after retries (generate_executive_report): {exc}") from exc
+
+    def optimize_prompt(self, raw_input: RawInput, prior_answers: list[QAExchange]) -> PromptOptimizationResult:
+        prompt = PROMPT_OPTIMIZER_PROMPT.format(
+            text=raw_input.text,
+            hints=raw_input.hints.model_dump_json(),
+            tracked_fields=format_tracked_fields(),
+            prior_answers=_format_prior_answers(prior_answers),
+        )
+
+        def attempt() -> PromptOptimizationResult:
+            raw = self._post(prompt)
+            try:
+                extracted = RawPromptOptimization.model_validate_json(raw)
+            except (ValidationError, json.JSONDecodeError) as exc:
+                raise _TransientGroqError(f"Groq returned an unparseable prompt optimization: {exc}") from exc
+            return normalize_optimization(extracted, original_text=raw_input.text)
+
+        try:
+            return call_with_retries(
+                attempt,
+                retryable=(_TransientGroqError,),
+                config=self._retry_config,
+                op_name="groq.optimize_prompt",
+            )
+        except _TransientGroqError as exc:
+            raise LLMProviderError(f"Groq unavailable after retries (optimize_prompt): {exc}") from exc
+
+
+def _format_prior_answers(prior_answers: list[QAExchange]) -> str:
+    if not prior_answers:
+        return "(none)"
+    return "\n".join(f"- Q: {qa.question}\n  A: {qa.answer}" for qa in prior_answers)

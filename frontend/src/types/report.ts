@@ -24,6 +24,35 @@ export interface RecommendationRequest {
   hints: StructuredHints;
 }
 
+// Prompt optimizer (pre-submission, advisory only — never touches scoring)
+export interface QAExchange {
+  field: string;
+  question: string;
+  answer: string;
+}
+
+export interface PromptOptimizationRequest {
+  mode: SubmissionMode;
+  description: string;
+  diagram_text?: string | null;
+  hints: StructuredHints;
+  prior_answers: QAExchange[];
+}
+
+export interface ClarifyingQuestion {
+  field: string;
+  question: string;
+}
+
+export interface PromptOptimizationResult {
+  optimized_text: string;
+  original_token_estimate: number;
+  optimized_token_estimate: number;
+  gaps: string[];
+  clarifying_questions: ClarifyingQuestion[];
+  notes: string;
+}
+
 export type FieldProvenance = "user" | "llm" | "default";
 
 export interface ValidationWarning {
