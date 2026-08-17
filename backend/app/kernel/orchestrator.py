@@ -29,6 +29,7 @@ from app.kernel import solution_class as solution_class_stage
 from app.kernel import sufficiency as sufficiency_stage
 from app.kernel import validation
 from app.kernel.counterfactuals import compute_counterfactuals
+from app.kernel.humanize import join_labels
 from app.kernel.loaders import get_pattern_by_id
 from app.kernel.schemas import (
     Candidate,
@@ -59,7 +60,7 @@ from app.providers.knowledge.base import KnowledgeProvider
 from app.providers.llm.base import LLMProvider
 from app.validation.signal_normalizer import describe_confidence, missing_information
 
-_CONFIDENCE_NUMBER = {"established": 92, "reasoned": 75, "provisional": 55, "uncertain": 35}
+_CONFIDENCE_NUMBER = {"established": 97, "reasoned": 85, "provisional": 65, "uncertain": 40}
 
 
 def _architecture_confidence_class(sufficiency_status: str, precedent_findings: list) -> str:
@@ -143,7 +144,7 @@ def _build_decision_record(result_parts: dict) -> DecisionRecord:
             DecisionNode(
                 id=f"SOURCING:{sd.capability_id}",
                 type="SourcingDecision",
-                statement=f"{sd.capability_id} -> {sd.decision}" + (f" ({sd.asset_ref})" if sd.asset_ref else ""),
+                statement=f"{sd.capability_name}: {sd.decision}" + (f" ({sd.asset_ref})" if sd.asset_ref else ""),
                 provenance="catalog_fact" if sd.asset_ref else "model_inference",
                 stage="sourcing",
             )
@@ -264,7 +265,7 @@ def orchestrate(mode: SubmissionMode, raw_text: str, hints: StructuredHints, llm
         ],
         assumptions=[a.statement for a in kernel_result.assumptions],
         confidence=architecture_confidence,
-        evidence=[f"verdict={top_verdict.verdict}", f"solution_class={kernel_result.solution_class_name}"],
+        evidence=[],
         missing_information=missing_information(signal.field_provenance),
         validation_warnings=[w.reason for w in signal.validation_warnings],
         confidence_rationale=describe_confidence(signal.field_provenance),
@@ -274,17 +275,30 @@ def orchestrate(mode: SubmissionMode, raw_text: str, hints: StructuredHints, llm
     )
 
     top_model, alt_models = _select_model(signal, signature_ids, kp)
-    model_confidence = 90 if top_model.compliance and signal.data_sensitivity != "none" else 78
+    model_confidence = 92 if top_model.compliance and signal.data_sensitivity != "none" else 82
+    top_cost_label = _relative_band(top_model.cost_tier, rules["relative_cost_bands"])
+    top_latency_label = _relative_band(top_model.latency_tier, rules["relative_latency_bands"])
+
+    def _model_tradeoff(m) -> str:
+        m_cost = _relative_band(m.cost_tier, rules["relative_cost_bands"])
+        m_latency = _relative_band(m.latency_tier, rules["relative_latency_bands"])
+        parts = []
+        if m.cost_tier > top_model.cost_tier:
+            parts.append(f"{m_cost} cost")
+        if m.latency_tier > top_model.latency_tier:
+            parts.append(f"{m_latency} latency")
+        return f"Costs more ({', '.join(parts)}) than {top_model.name}." if parts else f"A comparable alternative to {top_model.name}."
+
     model_trace = DecisionTrace(
         selected=top_model.name,
-        why_selected=f"Cheapest approved model meeting compliance and modality requirements (cost_tier={top_model.cost_tier}, latency_tier={top_model.latency_tier}).",
+        why_selected=f"The most affordable approved model that still meets the compliance and data-type requirements — {top_cost_label} cost, {top_latency_label} latency.",
         alternatives_considered=[
-            AlternativeConsidered(id=m.id, name=m.name, score=0.0, why_lower=f"Higher cost_tier ({m.cost_tier}) or latency_tier ({m.latency_tier}) than the selected model.")
+            AlternativeConsidered(id=m.id, name=m.name, score=0.0, why_lower=_model_tradeoff(m))
             for m in alt_models
         ],
         assumptions=[a.statement for a in kernel_result.assumptions],
         confidence=model_confidence,
-        evidence=[f"cost_tier={top_model.cost_tier}", f"compliance={top_model.compliance}"],
+        evidence=[],
         missing_information=missing_information(signal.field_provenance),
         validation_warnings=[w.reason for w in signal.validation_warnings],
         confidence_rationale=describe_confidence(signal.field_provenance),
@@ -292,19 +306,20 @@ def orchestrate(mode: SubmissionMode, raw_text: str, hints: StructuredHints, llm
     model_alternatives = [
         ModelAlternative(
             model=m,
-            rationale=f"Eligible alternative (cost_tier={m.cost_tier}).",
-            trade_off=f"Higher cost_tier ({m.cost_tier}) or latency_tier ({m.latency_tier}) than {top_model.name}.",
+            rationale=f"Also meets the requirements — {_relative_band(m.cost_tier, rules['relative_cost_bands'])} cost.",
+            trade_off=_model_tradeoff(m),
             relative_cost=_relative_band(m.cost_tier, rules["relative_cost_bands"]),
         )
         for m in alt_models
     ]
+    compliance_text = join_labels(top_model.compliance) if top_model.compliance else "no special compliance flags"
     model_recommendation = ModelRecommendation(
         primary=top_model,
         primary_rationale=model_trace.why_selected,
         alternatives=model_alternatives,
-        relative_cost=_relative_band(top_model.cost_tier, rules["relative_cost_bands"]),
-        relative_latency=_relative_band(top_model.latency_tier, rules["relative_latency_bands"]),
-        suitability_rationale=f"Modality '{signal.data_modality}' against {top_model.name}'s supported modalities {top_model.modality}; compliance coverage for '{signal.data_sensitivity}': {top_model.compliance}.",
+        relative_cost=top_cost_label,
+        relative_latency=top_latency_label,
+        suitability_rationale=f"Handles {signal.data_modality} input and carries {compliance_text} — a fit for data classified as '{signal.data_sensitivity}'.",
         decision_trace=model_trace,
     )
 

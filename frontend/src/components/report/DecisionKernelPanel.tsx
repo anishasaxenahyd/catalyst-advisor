@@ -24,6 +24,10 @@ function Section({ title, defaultOpen = false, children }: { title: string; defa
   );
 }
 
+function titleCase(s: string): string {
+  return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 const VERDICT_BADGE: Record<PatternVerdict, string> = {
   REQUIRED: "good",
   CONDITIONAL: "accent",
@@ -33,11 +37,11 @@ const VERDICT_BADGE: Record<PatternVerdict, string> = {
 };
 
 const VERDICT_LABEL: Record<PatternVerdict, string> = {
-  REQUIRED: "Required",
-  CONDITIONAL: "Conditional",
-  APPLICABLE: "Applicable (subsumed)",
-  UNNECESSARY: "Unnecessary",
-  CONTRA_INDICATED: "Contra-indicated",
+  REQUIRED: "Included",
+  CONDITIONAL: "Planned for later",
+  APPLICABLE: "Covered by another option",
+  UNNECESSARY: "Not needed",
+  CONTRA_INDICATED: "Doesn't fit",
 };
 
 const SOURCING_BADGE: Record<SourcingOutcome, string> = {
@@ -47,6 +51,15 @@ const SOURCING_BADGE: Record<SourcingOutcome, string> = {
   buy: "neutral",
   build: "warning",
   defer: "neutral",
+};
+
+const SOURCING_LABEL: Record<SourcingOutcome, string> = {
+  reuse: "Reuse existing",
+  extend: "Extend existing",
+  compose: "Combine existing",
+  buy: "Buy",
+  build: "Build new",
+  defer: "Add later",
 };
 
 function PatternRow({ entry }: { entry: PatternVerdictEntry }) {
@@ -65,14 +78,14 @@ function SourcingRow({ decision }: { decision: SourcingDecision }) {
   return (
     <li>
       <span className={`rpt-badge ${SOURCING_BADGE[decision.decision]}`} style={{ marginRight: "0.5rem" }}>
-        {decision.decision}
+        {SOURCING_LABEL[decision.decision]}
       </span>
       <strong>{decision.capability_name}</strong>
-      {decision.asset_ref && <span style={{ color: "var(--rpt-ink-soft)" }}> via {decision.asset_ref}</span>}
+      {decision.asset_ref && <span style={{ color: "var(--rpt-ink-soft)" }}> — using {decision.asset_ref}</span>}
       <div style={{ fontSize: "0.85rem", color: "var(--rpt-ink-soft)", marginTop: "0.15rem" }}>{decision.justification}</div>
       {decision.rejected_alternatives.length > 0 && (
         <div style={{ fontSize: "0.8rem", color: "var(--rpt-ink-muted)", marginTop: "0.15rem" }}>
-          Rejected: {decision.rejected_alternatives.join("; ")}
+          Other options considered: {decision.rejected_alternatives.join("; ")}
         </div>
       )}
     </li>
@@ -85,7 +98,7 @@ function EliminationRow({ entry, candidates }: { entry: EliminationEntry; candid
     <li>
       <strong>{entry.candidate_label}</strong>
       <span className="rpt-badge critical" style={{ marginLeft: "0.5rem" }}>
-        eliminated — {entry.rule_id}
+        Ruled out
       </span>
       <div style={{ fontSize: "0.85rem", color: "var(--rpt-ink-soft)", marginTop: "0.15rem" }}>{entry.evidence}</div>
       {candidate && (
@@ -110,7 +123,7 @@ function AlternativeRow({ alt, narrative }: { alt: Alternative; narrative?: stri
           <em>Switching cost:</em> {alt.switching_cost}
         </li>
         <li>
-          <em>Revisit trigger:</em> {alt.revisit_trigger}
+          <em>Revisit if:</em> {alt.revisit_trigger}
         </li>
       </ul>
       {narrative && <p style={{ fontSize: "0.85rem", color: "var(--rpt-ink-soft)", marginTop: "0.35rem" }}>{narrative}</p>}
@@ -125,9 +138,9 @@ const EVIDENCE_BADGE: Record<string, string> = {
 };
 
 const EVIDENCE_LABEL: Record<string, string> = {
-  transferable_decision_evidence: "Transferable decision evidence",
-  feasibility_evidence: "Feasibility evidence only",
-  hazard_evidence: "Hazard evidence",
+  transferable_decision_evidence: "Proven approach",
+  feasibility_evidence: "Tried, not yet at scale",
+  hazard_evidence: "Didn't work out",
 };
 
 function PrecedentRow({ finding }: { finding: PrecedentFinding }) {
@@ -137,15 +150,15 @@ function PrecedentRow({ finding }: { finding: PrecedentFinding }) {
         {EVIDENCE_LABEL[finding.usage] ?? finding.usage}
       </span>
       <strong>{finding.title}</strong>
-      <span style={{ color: "var(--rpt-ink-soft)" }}> ({finding.evidence_class.replace(/_/g, " ")})</span>
+      <span style={{ color: "var(--rpt-ink-soft)" }}> ({titleCase(finding.evidence_class)})</span>
       {finding.lesson_summary && (
         <div style={{ fontSize: "0.85rem", color: "var(--rpt-ink-soft)", marginTop: "0.15rem", fontStyle: "italic" }}>
-          Lesson: {finding.lesson_summary}
+          Lesson learned: {finding.lesson_summary}
         </div>
       )}
       {finding.divergences.length > 0 && (
         <div style={{ fontSize: "0.8rem", color: "var(--rpt-ink-muted)", marginTop: "0.15rem" }}>
-          Divergence: {finding.divergences.join(" ")}
+          How this differs: {finding.divergences.join(" ")}
         </div>
       )}
     </li>
@@ -154,8 +167,9 @@ function PrecedentRow({ finding }: { finding: PrecedentFinding }) {
 
 // The Decision Kernel's staged trail, rendered as a projection of the
 // kernel's own output — every line here traces to a stage in
-// backend/app/kernel/, never regenerated for display (Part 10.3 of the
-// architecture redesign: explanation is projection, never regeneration).
+// backend/app/kernel/, never regenerated for display. Copy here is
+// deliberately plain-language: badges and labels are the reader-facing
+// translation of internal verdicts/IDs, never the raw values themselves.
 export default function DecisionKernelPanel({ kernel }: { kernel: KernelReport }) {
   const rejected = kernel.pattern_verdicts.filter((v) => v.verdict === "UNNECESSARY" || v.verdict === "CONTRA_INDICATED");
   const admissible = kernel.pattern_verdicts.filter((v) => v.verdict !== "UNNECESSARY" && v.verdict !== "CONTRA_INDICATED");
@@ -170,10 +184,10 @@ export default function DecisionKernelPanel({ kernel }: { kernel: KernelReport }
 
       <div className="rpt-trace-body">
         <div className="rpt-chip-row" style={{ marginBottom: "0.75rem" }}>
-          <span className="rpt-badge accent">Solution class: {kernel.solution_class_name}</span>
+          <span className="rpt-badge accent">Type of solution: {kernel.solution_class_name}</span>
         </div>
 
-        <Section title={`Pattern admissibility (${admissible.length} admissible, ${rejected.length} rejected)`} defaultOpen>
+        <Section title={`What was considered (${admissible.length} used, ${rejected.length} ruled out)`} defaultOpen>
           <ul className="rpt-bullet-list">
             {admissible.map((v) => (
               <PatternRow key={v.pattern_id} entry={v} />
@@ -181,7 +195,7 @@ export default function DecisionKernelPanel({ kernel }: { kernel: KernelReport }
           </ul>
         </Section>
 
-        <Section title={`Rejected options (${rejected.length})`}>
+        <Section title={`What was ruled out and why (${rejected.length})`}>
           {kernel.narrative_extras.rejected_options_narrative && (
             <p style={{ margin: "0 0 0.6rem", color: "var(--rpt-ink-soft)" }}>{kernel.narrative_extras.rejected_options_narrative}</p>
           )}
@@ -192,7 +206,7 @@ export default function DecisionKernelPanel({ kernel }: { kernel: KernelReport }
           </ul>
         </Section>
 
-        <Section title={`Sourcing decisions (${kernel.sourcing_decisions.length})`}>
+        <Section title={`How each piece will be delivered (${kernel.sourcing_decisions.length})`}>
           {kernel.narrative_extras.sourcing_narrative && (
             <p style={{ margin: "0 0 0.6rem", color: "var(--rpt-ink-soft)" }}>{kernel.narrative_extras.sourcing_narrative}</p>
           )}
@@ -204,7 +218,7 @@ export default function DecisionKernelPanel({ kernel }: { kernel: KernelReport }
         </Section>
 
         {kernel.elimination_record.length > 0 && (
-          <Section title={`Elimination record (${kernel.elimination_record.length})`}>
+          <Section title={`Other full approaches we ruled out (${kernel.elimination_record.length})`}>
             <ul className="rpt-bullet-list">
               {kernel.elimination_record.map((e) => (
                 <EliminationRow key={e.candidate_id} entry={e} candidates={kernel.candidates} />
@@ -214,7 +228,7 @@ export default function DecisionKernelPanel({ kernel }: { kernel: KernelReport }
         )}
 
         {kernel.alternatives.length > 0 && (
-          <Section title={`Alternatives (${kernel.alternatives.length})`}>
+          <Section title={`Other viable approaches (${kernel.alternatives.length})`}>
             <ul className="rpt-bullet-list">
               {kernel.alternatives.map((a) => (
                 <AlternativeRow key={a.candidate_id} alt={a} narrative={narrativeById[a.candidate_id]} />
@@ -224,7 +238,7 @@ export default function DecisionKernelPanel({ kernel }: { kernel: KernelReport }
         )}
 
         {kernel.precedent_findings.length > 0 && (
-          <Section title={`Precedent findings (${kernel.precedent_findings.length})`}>
+          <Section title={`Similar projects we've seen before (${kernel.precedent_findings.length})`}>
             <ul className="rpt-bullet-list">
               {kernel.precedent_findings.map((f) => (
                 <PrecedentRow key={f.solution_id} finding={f} />

@@ -117,9 +117,76 @@ def _guess_automation_level(text: str) -> str:
     return "assist"
 
 
+_DOMAIN_PHRASE_PATTERNS = [
+    re.compile(r"\banswers?\s+(.+?)\s+questions?\b", re.IGNORECASE),
+    re.compile(r"\bquestions?\s+about\s+(.+?)(?:[,.;]|$)", re.IGNORECASE),
+    re.compile(r"\bhelps?\s+(?:with\s+)?(.+?)(?:[,.;]|$)", re.IGNORECASE),
+    re.compile(r"\bautomat(?:es?|ing)\s+(.+?)(?:[,.;]|$)", re.IGNORECASE),
+    re.compile(r"\bmanages?\s+(.+?)(?:[,.;]|$)", re.IGNORECASE),
+    re.compile(r"\breviews?\s+(.+?)(?:[,.;]|$)", re.IGNORECASE),
+    re.compile(r"\bprocess(?:es|ing)?\s+(.+?)(?:[,.;]|$)", re.IGNORECASE),
+    re.compile(r"\btriag(?:e|es|ing)\s+(.+?)(?:[,.;]|$)", re.IGNORECASE),
+    re.compile(r"\bclassif(?:y|ies|ying)\s+(.+?)(?:[,.;]|$)", re.IGNORECASE),
+]
+_LEADING_BOILERPLATE = re.compile(
+    r"^(?:build|create|develop|design|make|i want to build|we need|we want)\s+"
+    r"(?:an?\s+)?(?:ai\s+)?(?:assistant|agent|tool|system|solution|pipeline|bot|copilot)?\s*"
+    r"(?:that|to|which)?\s*",
+    re.IGNORECASE,
+)
+_STOPWORDS = {"a", "an", "the", "of", "for", "and", "or", "to", "in", "on", "with", "using"}
+
+
+def _smart_title_case(phrase: str) -> str:
+    words = phrase.split()
+    out = []
+    for i, w in enumerate(words):
+        if w.isupper() and len(w) <= 5:  # preserve acronyms: PHI, PII, CRM, KYC
+            out.append(w)
+        elif i > 0 and w.lower() in _STOPWORDS:
+            out.append(w.lower())
+        else:
+            out.append(w[:1].upper() + w[1:])
+    return " ".join(out)
+
+
+def _domain_phrase(text: str, *, max_words: int = 6) -> str:
+    """A short, non-restated noun phrase naming what the request is about —
+    used for the report title and summary instead of echoing the raw input
+    sentence back at the reader."""
+    stripped = text.strip()
+    for pattern in _DOMAIN_PHRASE_PATTERNS:
+        match = pattern.search(stripped)
+        if match:
+            candidate = match.group(1).strip()
+            words = candidate.split()[:max_words]
+            if words:
+                return _smart_title_case(" ".join(words))
+
+    first_clause = re.split(r"[,.;]", stripped)[0] if stripped else "This use case"
+    without_boilerplate = _LEADING_BOILERPLATE.sub("", first_clause).strip()
+    words = (without_boilerplate or first_clause).split()[:max_words]
+    return _smart_title_case(" ".join(words)) if words else "This use case"
+
+
+_SHAPE_NOUN_BY_PATTERN_ID = {
+    "pattern-batch-classification": "Pipeline",
+    "pattern-agentic-hitl": "Workflow Assistant",
+    "pattern-autonomous-multi-agent": "Automation",
+    "pattern-realtime-copilot": "Copilot",
+    "pattern-fine-tuning-knowledge-injection": "Assistant",
+}
+
+
+def _solution_shape_noun(pattern_id: str) -> str:
+    return _SHAPE_NOUN_BY_PATTERN_ID.get(pattern_id, "Assistant")
+
+
 def _use_case_summary(text: str) -> str:
-    first_sentence = re.split(r"(?<=[.!?])\s", text.strip())[0] if text.strip() else "Unspecified use case"
-    return first_sentence[:120]
+    """Kept short and generic — feeds SignalVector.use_case_type, which
+    reads into several downstream sentences ("The stated need is a {this}
+    capability..."), so it stays a plain phrase rather than a full title."""
+    return _domain_phrase(text)
 
 
 class MockLLMProvider(LLMProvider):
@@ -150,19 +217,18 @@ class MockLLMProvider(LLMProvider):
         pattern = engine_output.architecture_recommendation.pattern
         model = engine_output.model_recommendation.primary
         confidence = engine_output.confidence_scores.overall
-        use_case = sv.use_case_type.rstrip(".")[:70]
+        domain_phrase = sv.use_case_type or "This Use Case"
 
-        report_title = f"AI Solution Blueprint: {use_case}"
+        report_title = f"{domain_phrase} {_solution_shape_noun(pattern.id)}"
         one_line_summary = (
-            f"{pattern.name} paired with {model.name} is recommended to address: {use_case.lower()}."
+            f"Recommended approach: {pattern.name}, powered by {model.name}, built to support {domain_phrase.lower()}."
         )
 
         executive_cards = ExecutiveCards(
             problem=engine_output.business_understanding.problem_narrative,
             opportunity=(
-                f"An AI-{sv.automation_level} approach can address this use case with "
-                f"{'a fully' if confidence >= 75 else 'a partially'} specified signal vector, "
-                f"{confidence}% overall confidence."
+                f"An AI {sv.automation_level} solution fits well here — the request was "
+                f"{'fully' if confidence >= 75 else 'partially'} specified, giving {confidence}% overall confidence."
             ),
             recommended_pattern=(
                 f'The "{pattern.name}" pattern is recommended. {engine_output.architecture_recommendation.rationale}'
@@ -176,13 +242,13 @@ class MockLLMProvider(LLMProvider):
 
         risks = [
             RiskItem(
-                risk="Signal vector was inferred with default assumptions where the input did not specify a value.",
+                risk="Some requirements weren't stated explicitly and were filled in with reasonable defaults.",
                 impact="medium",
                 likelihood="medium",
-                mitigation="Validate the signal vector fields with the requesting team before finalizing scope.",
+                mitigation="Confirm the assumed details with the requesting team before finalizing scope.",
             ),
             RiskItem(
-                risk="Enterprise reuse is estimated from Catalog metadata, not a live audit of build-vs-buy cost.",
+                risk="Reuse recommendations are based on catalog metadata, not a live audit of build-vs-buy cost.",
                 impact="low",
                 likelihood="medium",
                 mitigation="Confirm actual reuse feasibility with the owning team before committing effort estimates.",
@@ -204,9 +270,9 @@ class MockLLMProvider(LLMProvider):
         ]
 
         next_best_actions = [
-            "Validate the signal vector fields above with the requesting team.",
-            f"Review the {pattern.name} pattern's Decision Trace for the specific alternatives it beat.",
-            "Confirm data sensitivity classification with governance before selecting a Workbench security profile.",
+            "Validate the assumed details above with the requesting team.",
+            f"Review 'How this was decided' for why {pattern.name} was chosen over the alternatives.",
+            "Confirm data sensitivity classification with governance before selecting a security profile.",
         ]
 
         return ExecutiveNarrative(

@@ -36,6 +36,7 @@ class RequirementSignatureDef(BaseModel):
     id: str
     category: str
     description: str
+    label: str = ""
     legacy_tags: list[str] = Field(default_factory=list)
 
 

@@ -13,6 +13,7 @@ This is the module that replaces `app.engine.matcher` + the weighted
 over a closed signature vocabulary, not tag-overlap scoring.
 """
 
+from app.kernel.humanize import capability_label, join_labels, signature_label, signature_labels
 from app.kernel.loaders import get_capability_ids, get_pattern_by_id, get_patterns
 from app.kernel.schemas import CapabilityRequirement, PatternRecord, PatternVerdict, PatternVerdictEntry
 
@@ -22,7 +23,7 @@ def _solution_pattern_verdict(pattern: PatternRecord, signature_ids: set[str]) -
     if matched_contra:
         return (
             "CONTRA_INDICATED",
-            f"Disqualifying signature(s) present: {', '.join(matched_contra)}.",
+            f"Doesn't fit because: {join_labels(signature_labels(matched_contra))}.",
             [],
             matched_contra,
         )
@@ -32,8 +33,8 @@ def _solution_pattern_verdict(pattern: PatternRecord, signature_ids: set[str]) -
     if "ACTION_REQUIRED_DEFERRED" in signature_ids and "ACTION_REQUIRED" in pattern.indications:
         return (
             "CONDITIONAL",
-            "Action capability is explicitly deferred to a later increment (ACTION_REQUIRED_DEFERRED) — "
-            "not required in the current increment, but the seam should be designed in now.",
+            "The requester wants this later, not now — not needed in the first release, but worth "
+            "designing the interface so it can be added without a rework.",
             matched_indications,
             [],
         )
@@ -41,15 +42,15 @@ def _solution_pattern_verdict(pattern: PatternRecord, signature_ids: set[str]) -
     if matched_indications:
         return (
             "REQUIRED",
-            f"Triggered by requirement signature(s): {', '.join(matched_indications)}.",
+            f"Needed because: {join_labels(signature_labels(matched_indications))}.",
             matched_indications,
             [],
         )
 
-    trigger_note = f" Escalation trigger: {pattern.escalation_trigger}" if pattern.escalation_trigger else ""
+    trigger_note = f" Would apply if: {pattern.escalation_trigger}" if pattern.escalation_trigger else ""
     return (
         "UNNECESSARY",
-        f"No requirement signature in the Requirement Set triggers this pattern.{trigger_note}",
+        f"Nothing in this request calls for it.{trigger_note}",
         [],
         [],
     )
@@ -58,8 +59,8 @@ def _solution_pattern_verdict(pattern: PatternRecord, signature_ids: set[str]) -
 def _assurance_pattern_verdict(pattern: PatternRecord, mandatory_capability_ids: set[str]) -> tuple[PatternVerdict, str]:
     matched = sorted(set(pattern.fulfills_capabilities) & mandatory_capability_ids)
     if matched:
-        return "REQUIRED", f"Fulfills obligation-mandated capability requirement(s): {', '.join(matched)}."
-    return "UNNECESSARY", "No current obligation mandates the capability this assurance pattern provides."
+        return "REQUIRED", f"Required by policy: {join_labels([capability_label(c) for c in matched])}."
+    return "UNNECESSARY", "No policy currently requires this for the request as described."
 
 
 def _apply_subsumption(verdicts: list[PatternVerdictEntry]) -> None:
@@ -120,7 +121,7 @@ def evaluate_patterns(
                 capability_requirements[cap_id].derived_from.append(entry.pattern_id)
                 continue
             capability_requirements[cap_id] = CapabilityRequirement(
-                id=cap_id, name=cap_id, status=status, derived_from=[entry.pattern_id]
+                id=cap_id, name=capability_label(cap_id), status=status, derived_from=[entry.pattern_id]
             )
 
     return verdicts, list(capability_requirements.values())

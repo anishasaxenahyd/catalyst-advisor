@@ -45,7 +45,8 @@ export default function DecisionTraceCard({ trace }: { trace: DecisionTrace }) {
             <ul>
               {trace.alternatives_considered.map((alt) => (
                 <li key={alt.id}>
-                  <strong>{alt.name}</strong> ({Math.round(alt.score)}/100) — {alt.why_lower}
+                  <strong>{alt.name}</strong>
+                  {alt.score > 0 && ` (${Math.round(alt.score)}/100)`} — {alt.why_lower}
                 </li>
               ))}
             </ul>

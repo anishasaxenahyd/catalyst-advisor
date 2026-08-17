@@ -16,6 +16,7 @@ stop being placeholders without touching any other kernel stage.
 """
 
 from app.engine.config_loader import get_decision_rules
+from app.kernel.humanize import capability_label
 from app.kernel.schemas import AssetFit, AssetResolution, CapabilityRequirement
 from app.models.schemas import AIModel, EnterpriseAsset, SignalVector
 from app.providers.knowledge.base import KnowledgeProvider
@@ -86,7 +87,7 @@ def resolve_capabilities(
         best_rank = -1
         for asset_id, name, compliance, lifecycle_status, sort_key in candidates:
             fit = [
-                AssetFit(dimension="functional", status="pass", detail=f"Provides capability {req.id} directly."),
+                AssetFit(dimension="functional", status="pass", detail=f"Provides {capability_label(req.id)} directly."),
                 _compliance_fit(signal, compliance),
                 _lifecycle_fit(lifecycle_status),
                 *[AssetFit(dimension=d, status="pass", detail=note) for d, note in _PLACEHOLDER_DIMENSIONS],

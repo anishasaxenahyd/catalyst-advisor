@@ -11,6 +11,7 @@ obligation's `mandates_capabilities` fails closed rather than inventing a
 capability nothing can resolve.
 """
 
+from app.kernel.humanize import capability_label
 from app.kernel.loaders import get_capability_ids
 from app.kernel.schemas import CapabilityRequirement, ObligationInstance
 
@@ -26,6 +27,6 @@ def derive_from_obligations(obligations: list[ObligationInstance]) -> list[Capab
                 requirements[cap_id].derived_from.append(obligation.id)
                 continue
             requirements[cap_id] = CapabilityRequirement(
-                id=cap_id, name=cap_id, status="mandatory", derived_from=[obligation.id]
+                id=cap_id, name=capability_label(cap_id), status="mandatory", derived_from=[obligation.id]
             )
     return list(requirements.values())

@@ -5,6 +5,7 @@ about the Decision Kernel's own output, not a judgement call, so it stays
 deterministic like the rest of the load-bearing stages.
 """
 
+from app.kernel.humanize import join_labels, signature_labels
 from app.kernel.loaders import get_pattern_by_id
 from app.kernel.schemas import ObligationInstance, PatternVerdictEntry
 
@@ -19,13 +20,12 @@ def compute_counterfactuals(
     for entry in unnecessary[:2]:
         pattern = by_id.get(entry.pattern_id)
         if pattern and pattern.escalation_trigger:
-            counterfactuals.append(f"{pattern.escalation_trigger.rstrip('.')} — currently absent, which is why '{pattern.name}' is not part of the recommendation.")
+            counterfactuals.append(f"'{pattern.name}' isn't needed yet — it would be worth adding if {pattern.escalation_trigger}.")
 
     contra = [v for v in verdicts if v.verdict == "CONTRA_INDICATED"]
     for entry in contra[:1]:
-        counterfactuals.append(
-            f"If {', '.join(entry.matched_contra_indications)} were not present, '{entry.pattern_name}' would become admissible for reconsideration."
-        )
+        reasons = join_labels(signature_labels(entry.matched_contra_indications))
+        counterfactuals.append(f"'{entry.pattern_name}' was ruled out because of: {reasons}. If that changed, it would be worth reconsidering.")
 
     phi_obligation = next((o for o in obligations if o.id == "OBL-PHI-BOUNDARY"), None)
     if phi_obligation:

@@ -13,8 +13,9 @@ _LATENCY_PHRASES = {
 
 
 def _problem_narrative(sv: SignalVector) -> str:
+    article = "an" if sv.use_case_type[:1].lower() in "aeiou" else "a"
     return (
-        f"The stated need is a {sv.use_case_type} capability for the {sv.industry} sector, "
+        f"The stated need is {article} {sv.use_case_type} capability for the {sv.industry} sector, "
         f"operating on {sv.data_modality} data classified as '{sv.data_sensitivity}' sensitivity. "
         f"It requires {_LATENCY_PHRASES.get(sv.latency_requirement, sv.latency_requirement)} "
         f"responses at {sv.expected_scale} scale, with a {sv.automation_level} level of automation."

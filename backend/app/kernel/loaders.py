@@ -43,6 +43,16 @@ def get_signature_ids() -> set[str]:
 
 
 @lru_cache(maxsize=1)
+def get_signature_by_id() -> dict[str, RequirementSignatureDef]:
+    return {s.id: s for s in get_requirement_signatures()}
+
+
+@lru_cache(maxsize=1)
+def get_capability_by_id() -> dict[str, CapabilityDef]:
+    return {c.id: c for c in get_capabilities()}
+
+
+@lru_cache(maxsize=1)
 def get_solution_classes() -> list[SolutionClassDef]:
     return [SolutionClassDef(**row) for row in _load(DATA_DIR / "taxonomy" / "solution_classes.json")]
 
