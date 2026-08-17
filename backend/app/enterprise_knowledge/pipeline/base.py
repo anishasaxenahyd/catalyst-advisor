@@ -3,8 +3,10 @@ augmented recommendation pipeline over the Enterprise Knowledge Platform.
 
 This module defines the *interface* and *output shape* only, per this
 phase's brief — "do not implement full reasoning yet". Nothing here is
-wired into `/api/recommendations`; the existing deterministic engine
-(`app/engine/recommend.py`) is untouched and keeps serving that route.
+wired into `/api/recommendations`; that route is served by the Decision
+Kernel (`app/kernel/orchestrator.py`), which supersedes the older
+deterministic weighted-scoring engine (`app/engine/recommend.py`, now
+unused by any route).
 
 Why a separate pipeline at all, rather than extending the existing one:
 the existing engine reasons over the fictional Catalyst Catalog with

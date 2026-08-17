@@ -11,6 +11,20 @@ from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
 
+from app.kernel.schemas import (
+    Alternative,
+    Assumption,
+    Candidate,
+    DecisionRecord,
+    EliminationEntry,
+    KernelNarrativeExtras,
+    ObligationInstance,
+    PatternVerdictEntry,
+    PrecedentFinding,
+    SourcingDecision,
+    SufficiencyOutcome,
+)
+
 DataSensitivity = Literal["none", "pii", "phi"]
 DataModality = Literal["text", "image", "structured", "mixed"]
 LatencyRequirement = Literal["batch", "near_realtime", "realtime"]
@@ -43,6 +57,10 @@ class AIModel(BaseModel):
         default=True,
         description="False for support-only models (embeddings, moderation) that should never be picked as the primary recommendation.",
     )
+    capabilities: list[str] = Field(
+        default_factory=list,
+        description="Capability taxonomy IDs this model provides (see data/taxonomy/capabilities.json).",
+    )
 
 
 class ArchitecturePattern(BaseModel):
@@ -63,6 +81,13 @@ class EnterpriseAsset(BaseModel):
     tags: list[str] = Field(default_factory=list)
     reuse_score: int = Field(ge=0, le=100)
     compliance: list[str] = Field(default_factory=list)
+    capabilities: list[str] = Field(
+        default_factory=list,
+        description="Capability taxonomy IDs this asset provides (see data/taxonomy/capabilities.json). "
+        "The Catalog Resolution stage matches on this, never on tags.",
+    )
+    lifecycle_status: Literal["supported", "deprecated", "sunsetting"] = "supported"
+    owning_team: str = "Unassigned"
 
 
 class SecurityProfile(BaseModel):
@@ -538,3 +563,33 @@ class Report(BaseModel):
     next_best_actions: list[str]
     business_value: BusinessValueSummary
     enrichment: Optional[RecommendationEnrichment] = None
+    decision_kernel: Optional["KernelReport"] = None
+
+
+# --------------------------------------------------------------------------
+# Decision Kernel projection — additive, optional so any caller/test that
+# builds a Report without it (or against an older shape) is unaffected.
+# Populated by app.kernel.orchestrator; see that module for how each field
+# is derived. Kept as one nested object rather than flattened onto Report
+# so the "new reasoning surface" is clearly delineated from the legacy
+# fields above, which remain populated for the existing UI.
+# --------------------------------------------------------------------------
+
+
+class KernelReport(BaseModel):
+    solution_class_id: str
+    solution_class_name: str
+    sufficiency: SufficiencyOutcome
+    obligations: list[ObligationInstance]
+    pattern_verdicts: list[PatternVerdictEntry]
+    rejected_patterns: list[PatternVerdictEntry]
+    precedent_findings: list[PrecedentFinding]
+    sourcing_decisions: list[SourcingDecision]
+    candidates: list[Candidate]
+    elimination_record: list[EliminationEntry]
+    recommended_candidate_id: str
+    alternatives: list[Alternative]
+    kernel_assumptions: list[Assumption]
+    counterfactuals: list[str]
+    narrative_extras: KernelNarrativeExtras
+    decision_record: DecisionRecord

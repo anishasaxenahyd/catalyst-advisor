@@ -1,8 +1,10 @@
-"""Loads scoring weights and decision rules from config JSON.
+"""Loads decision rules from config JSON.
 
-No scoring weight or threshold is hardcoded anywhere in `engine/` — every
-number that shapes a recommendation lives in `data/config/*.json` and comes
-through here. Retuning the engine's behavior means editing JSON, not code.
+No threshold or band is hardcoded anywhere in `engine/` — every number that
+shapes an estimate lives in `data/config/decision_rules.json` and comes
+through here. Retuning behavior means editing JSON, not code. (The old
+`get_scoring_weights()` was removed with the weighted-scoring engine it
+served — see `app.kernel` for the elimination-based reasoning that replaced it.)
 """
 
 import json
@@ -10,12 +12,6 @@ from functools import lru_cache
 from pathlib import Path
 
 CONFIG_DIR = Path(__file__).resolve().parents[2] / "data" / "config"
-
-
-@lru_cache(maxsize=1)
-def get_scoring_weights() -> dict[str, float]:
-    with (CONFIG_DIR / "scoring_weights.json").open("r", encoding="utf-8") as f:
-        return json.load(f)
 
 
 @lru_cache(maxsize=1)

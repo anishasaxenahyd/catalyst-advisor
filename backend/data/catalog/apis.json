@@ -6,7 +6,10 @@
     "description": "Standard identity and entitlement lookups, used whenever a pattern needs to know who a user is and what they're allowed to see.",
     "tags": ["integration-heavy", "safety"],
     "reuse_score": 90,
-    "compliance": ["SOC2", "HIPAA-eligible", "GDPR"]
+    "compliance": ["SOC2", "HIPAA-eligible", "GDPR"],
+    "capabilities": ["CAP-IDENTITY-PROPAGATION"],
+    "lifecycle_status": "supported",
+    "owning_team": "Identity & Access Team"
   },
   {
     "id": "api-document-store",
@@ -15,6 +18,33 @@
     "description": "Versioned storage and retrieval for source documents, used as the backing store behind document-heavy and retrieval patterns.",
     "tags": ["document-heavy", "retrieval", "integration-heavy"],
     "reuse_score": 84,
-    "compliance": ["SOC2", "GDPR"]
+    "compliance": ["SOC2", "GDPR"],
+    "capabilities": ["CAP-CHUNK-INDEX", "CAP-RETRIEVAL-BASIC"],
+    "lifecycle_status": "supported",
+    "owning_team": "Platform Data Team"
+  },
+  {
+    "id": "api-observability-platform",
+    "category": "api",
+    "name": "Enterprise Observability Platform",
+    "description": "Central trace, cost, latency and token logging for AI workloads, with a PHI-safe redaction profile available.",
+    "tags": ["safety", "integration-heavy"],
+    "reuse_score": 88,
+    "compliance": ["SOC2", "HIPAA-eligible", "GDPR"],
+    "capabilities": ["CAP-OBSERVABILITY-TRACE", "CAP-PHI-SAFE-LOGGING"],
+    "lifecycle_status": "supported",
+    "owning_team": "AI Platform Team"
+  },
+  {
+    "id": "api-audit-log-platform",
+    "category": "api",
+    "name": "Enterprise Audit Log Platform",
+    "description": "Subject-traceable, tamper-evident audit logging with configurable retention, used for regulated access and action trails.",
+    "tags": ["safety", "compliance"],
+    "reuse_score": 86,
+    "compliance": ["SOC2", "HIPAA-eligible", "GDPR"],
+    "capabilities": ["CAP-AUDIT-SUBJECT-TRACE"],
+    "lifecycle_status": "supported",
+    "owning_team": "AI Governance Team"
   }
 ]

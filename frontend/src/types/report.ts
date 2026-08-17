@@ -361,4 +361,124 @@ export interface Report {
   next_best_actions: string[];
   business_value: BusinessValueSummary;
   enrichment?: RecommendationEnrichment | null;
+  decision_kernel?: KernelReport | null;
+}
+
+// ---------------------------------------------------------------------
+// Decision Kernel — the staged reasoning trail (see backend app/kernel/).
+// Additive and optional: an older/mock Report is still fully renderable
+// without this section.
+// ---------------------------------------------------------------------
+
+export type SufficiencyStatus = "PROCEED" | "PROCEED_WITH_QUESTIONS" | "HALT_CLARIFY";
+
+export interface Clarification {
+  field_or_signature: string;
+  question: string;
+  decision_critical: boolean;
+}
+
+export interface SufficiencyOutcome {
+  status: SufficiencyStatus;
+  blocking_questions: Clarification[];
+  advisory_questions: Clarification[];
+  rationale: string;
+}
+
+export interface ObligationInstance {
+  id: string;
+  title: string;
+  source: string;
+  mandates_capabilities: string[];
+  rationale: string;
+}
+
+export type PatternVerdict = "REQUIRED" | "APPLICABLE" | "CONDITIONAL" | "UNNECESSARY" | "CONTRA_INDICATED";
+
+export interface PatternVerdictEntry {
+  pattern_id: string;
+  pattern_name: string;
+  pattern_type: "solution" | "assurance";
+  verdict: PatternVerdict;
+  reason: string;
+  matched_indications: string[];
+  matched_contra_indications: string[];
+}
+
+export interface PrecedentFinding {
+  solution_id: string;
+  title: string;
+  evidence_class: string;
+  similarity_basis: string[];
+  transferable: boolean;
+  conditions: string[];
+  divergences: string[];
+  lesson_summary: string;
+  usage: "transferable_decision_evidence" | "feasibility_evidence" | "hazard_evidence";
+}
+
+export type SourcingOutcome = "reuse" | "compose" | "extend" | "buy" | "build" | "defer";
+
+export interface SourcingDecision {
+  capability_id: string;
+  capability_name: string;
+  decision: SourcingOutcome;
+  justification: string;
+  rejected_alternatives: string[];
+  asset_ref?: string | null;
+}
+
+export interface Candidate {
+  id: string;
+  label: string;
+  description: string;
+  pattern_ids: string[];
+  complexity_score: number;
+}
+
+export interface EliminationEntry {
+  candidate_id: string;
+  candidate_label: string;
+  gate: string;
+  rule_id: string;
+  evidence: string;
+}
+
+export interface Alternative {
+  candidate_id: string;
+  label: string;
+  governing_priority: string;
+  what_is_given_up: string;
+  switching_cost: string;
+  revisit_trigger: string;
+}
+
+export interface AlternativeNarrative {
+  candidate_id: string;
+  narrative: string;
+}
+
+export interface KernelNarrativeExtras {
+  rejected_options_narrative: string;
+  sourcing_narrative: string;
+  alternatives_narrative: AlternativeNarrative[];
+  counterfactuals: string[];
+}
+
+export interface KernelReport {
+  solution_class_id: string;
+  solution_class_name: string;
+  sufficiency: SufficiencyOutcome;
+  obligations: ObligationInstance[];
+  pattern_verdicts: PatternVerdictEntry[];
+  rejected_patterns: PatternVerdictEntry[];
+  precedent_findings: PrecedentFinding[];
+  sourcing_decisions: SourcingDecision[];
+  candidates: Candidate[];
+  elimination_record: EliminationEntry[];
+  recommended_candidate_id: string;
+  alternatives: Alternative[];
+  kernel_assumptions: { id: string; statement: string; field: string }[];
+  counterfactuals: string[];
+  narrative_extras: KernelNarrativeExtras;
 }

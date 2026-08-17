@@ -6,8 +6,8 @@ id, because there's nothing to fetch after the response is sent.
 
 from fastapi import APIRouter, HTTPException
 
-from app.engine.recommend import build_report
 from app.intake.diagram_text_parser import diagram_text_to_description
+from app.kernel.orchestrator import orchestrate
 from app.models.schemas import RecommendationRequest, Report
 from app.providers.knowledge.factory import get_knowledge_provider
 from app.providers.llm.factory import get_llm_provider
@@ -29,7 +29,7 @@ def create_recommendation(request: RecommendationRequest) -> Report:
             detail="Describe the idea, or upload/paste a diagram, before requesting a recommendation.",
         )
 
-    return build_report(
+    return orchestrate(
         mode=request.mode,
         raw_text=raw_text,
         hints=request.hints,

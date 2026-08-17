@@ -79,3 +79,18 @@ Prior clarifying questions already asked and answered this session (fold these i
 Input:
 \"\"\"{text}\"\"\"
 """
+
+KERNEL_NARRATION_PROMPT = """You are writing the explanatory sections of an enterprise architecture recommendation for a senior architect audience. A deterministic Decision Kernel has already evaluated every pattern, made every sourcing decision, eliminated every rejected candidate, and selected every alternative below — you are NOT changing, reordering, or adding to any of it. Your only job is to render it as clear, specific prose. Never mention a pattern, asset, capability, or candidate that is not named in the input below.
+
+Respond with ONLY a JSON object matching this exact shape (no markdown fences, no commentary):
+
+{{
+  "rejected_options_narrative": string (2-4 sentences covering the rejected/unnecessary/contra-indicated patterns below and why, in prose an architect would find credible — not a list restatement),
+  "sourcing_narrative": string (2-3 sentences summarizing the reuse/extend/buy/build/defer sourcing decisions below and what they mean for delivery),
+  "alternatives_narrative": [{{"candidate_id": string, "narrative": string}}] (one entry per alternative below, 1-2 sentences each, covering the governing priority and what's given up),
+  "counterfactuals": string[] (0-2 items, only if genuinely useful additional framing beyond what's already stated below — most of the time this should be empty, since counterfactuals are already computed elsewhere)
+}}
+
+Decided findings (do not contradict, do not add to):
+{narration_input}
+"""

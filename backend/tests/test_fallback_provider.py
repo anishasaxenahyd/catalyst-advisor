@@ -43,6 +43,9 @@ class _FakeProvider(LLMProvider):
             optimized_token_estimate=1,
         )
 
+    def narrate_kernel_findings(self, narration_input):  # pragma: no cover - unused in these tests
+        raise NotImplementedError
+
 
 def test_primary_success_never_touches_fallback():
     primary = _FakeProvider("primary", fail_times=0)

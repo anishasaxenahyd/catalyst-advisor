@@ -1,10 +1,8 @@
 from app.engine.config_loader import get_decision_rules
-from app.engine.recommend import build_report
 from app.engine.workbench_selector import select_workbench
 from app.enrichment.service import build_enrichment
-from app.models.schemas import ConfidenceScores, SignalVector, StructuredHints
+from app.models.schemas import ConfidenceScores, SignalVector
 from app.providers.knowledge.factory import get_knowledge_provider
-from app.providers.llm.mock_provider import MockLLMProvider
 
 
 def _signal_vector(**overrides) -> SignalVector:
@@ -166,30 +164,3 @@ def test_evidence_confidence_summary_aggregates_counts():
     assert summary.similar_solution_count == len(enrichment.similar_solutions)
     assert summary.reusable_asset_count == len(enrichment.reusable_assets)
     assert str(summary.best_practice_count) in summary.evidence_strength_summary
-
-
-def test_build_report_attaches_full_enrichment_without_altering_existing_fields():
-    kp = get_knowledge_provider()
-    llm = MockLLMProvider()
-    report = build_report(
-        mode="idea",
-        raw_text="An agentic workflow that pulls CRM data and routes contract redlines for human approval.",
-        hints=StructuredHints(industry="Legal Services"),
-        llm=llm,
-        kp=kp,
-    )
-    assert report.enrichment is not None
-    assert report.architecture_recommendation.pattern.id
-    assert report.model_recommendation.primary.id
-    assert report.enrichment.business_understanding.industry == "Legal Services"
-    assert report.enrichment.implementation_roadmap.phases
-    assert report.enrichment.evidence_confidence_summary.overall_confidence == report.confidence_scores.overall
-    assert report.report_title
-    assert report.one_line_summary
-    assert report.executive_cards.recommended_pattern
-    assert 0 <= report.implementation_readiness.score <= 100
-    assert report.implementation_readiness.label in ("Very High", "High", "Good", "Needs More Information")
-    assert report.business_value.cost_savings_estimate
-    assert report.business_value.roi_estimate
-    assert all(r.status == "Open" for r in report.risks)
-    assert report.model_recommendation.alternatives[0].relative_cost in ("low", "medium", "high")

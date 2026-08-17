@@ -6,7 +6,10 @@
     "description": "Pulls structured fields (dates, parties, amounts, clauses) out of unstructured documents such as contracts, invoices, and forms.",
     "tags": ["document-heavy", "structured", "retrieval"],
     "reuse_score": 85,
-    "compliance": ["SOC2", "GDPR"]
+    "compliance": ["SOC2", "GDPR"],
+    "capabilities": ["CAP-CHUNK-INDEX", "CAP-CITATION-DOCUMENT"],
+    "lifecycle_status": "supported",
+    "owning_team": "Platform Data Team"
   },
   {
     "id": "skill-sql-generation",
@@ -15,7 +18,10 @@
     "description": "Translates a natural-language question into a parameterized SQL query against a registered enterprise schema.",
     "tags": ["structured", "assist", "reasoning"],
     "reuse_score": 78,
-    "compliance": ["SOC2"]
+    "compliance": ["SOC2"],
+    "capabilities": ["CAP-STRUCTURED-OUTPUT"],
+    "lifecycle_status": "supported",
+    "owning_team": "Analytics Platform Team"
   },
   {
     "id": "skill-policy-compliance-checker",
@@ -24,6 +30,21 @@
     "description": "Checks generated or retrieved content against a configurable rulebook (e.g. internal policy, regulatory clause) before it reaches a user.",
     "tags": ["safety", "document-heavy", "workflow"],
     "reuse_score": 72,
-    "compliance": ["SOC2", "HIPAA-eligible", "GDPR"]
+    "compliance": ["SOC2", "HIPAA-eligible", "GDPR"],
+    "capabilities": ["CAP-INPUT-OUTPUT-GUARDRAILS"],
+    "lifecycle_status": "supported",
+    "owning_team": "AI Governance Team"
+  },
+  {
+    "id": "skill-eval-harness-basic",
+    "category": "skill",
+    "name": "Grounded-Answer Eval Harness (Basic)",
+    "description": "A lightweight rubric-based evaluation harness for grounded Q&A output — checks answer relevance and citation presence against a labelled sample set. Does not yet cover multi-hop or agentic traces.",
+    "tags": ["assist", "document-heavy"],
+    "reuse_score": 55,
+    "compliance": ["SOC2"],
+    "capabilities": ["CAP-EVAL-HARNESS"],
+    "lifecycle_status": "supported",
+    "owning_team": "AI Platform Team"
   }
 ]

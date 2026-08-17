@@ -6,16 +6,22 @@
     "description": "Read/write access to Accounts, Opportunities, and Cases via the Catalyst-managed Salesforce MCP server.",
     "tags": ["integration-heavy", "structured", "workflow"],
     "reuse_score": 80,
-    "compliance": ["SOC2"]
+    "compliance": ["SOC2"],
+    "capabilities": ["CAP-TOOL-INVOCATION-GATEWAY", "CAP-IDENTITY-PROPAGATION"],
+    "lifecycle_status": "supported",
+    "owning_team": "Integration Platform Team"
   },
   {
     "id": "mcp-sharepoint",
     "category": "mcp_server",
     "name": "SharePoint MCP Connector",
-    "description": "Indexed access to SharePoint document libraries, used as a retrieval source for document-heavy patterns.",
+    "description": "Indexed access to SharePoint document libraries, used as a retrieval source for document-heavy patterns. Enforces caller-identity filtering, not a shared service account.",
     "tags": ["document-heavy", "integration-heavy", "retrieval"],
     "reuse_score": 82,
-    "compliance": ["SOC2", "GDPR"]
+    "compliance": ["SOC2", "GDPR"],
+    "capabilities": ["CAP-RETRIEVAL-PERMISSION-AWARE", "CAP-CHUNK-INDEX"],
+    "lifecycle_status": "supported",
+    "owning_team": "Integration Platform Team"
   },
   {
     "id": "mcp-snowflake",
@@ -24,6 +30,9 @@
     "description": "Query access to governed Snowflake warehouses, exposing approved schemas for structured-data use cases.",
     "tags": ["structured", "integration-heavy", "high-scale"],
     "reuse_score": 75,
-    "compliance": ["SOC2", "GDPR"]
+    "compliance": ["SOC2", "GDPR"],
+    "capabilities": ["CAP-RETRIEVAL-BASIC", "CAP-CLASSIFICATION-SCORING"],
+    "lifecycle_status": "supported",
+    "owning_team": "Data Platform Team"
   }
 ]

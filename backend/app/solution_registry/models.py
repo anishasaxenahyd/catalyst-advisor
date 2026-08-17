@@ -14,6 +14,10 @@ from pydantic import BaseModel, Field
 
 CloudProvider = Literal["Azure", "AWS", "GCP"]
 
+EvidenceClass = Literal[
+    "proven_in_production", "production_limited", "pilot", "prototype_poc", "abandoned", "superseded"
+]
+
 
 class SolutionRecord(BaseModel):
     id: str
@@ -29,3 +33,23 @@ class SolutionRecord(BaseModel):
     business_outcome: str
     lessons_learned: list[str] = Field(default_factory=list)
     tags: list[str] = Field(default_factory=list)
+
+    # -- decision-situation fields (Knowledge Plane / precedent dossier) --
+    obligation_profile: list[str] = Field(
+        default_factory=list,
+        description="Obligation IDs (data/policy/obligations.json) that governed this solution — the primary precedent-matching key.",
+    )
+    requirement_signatures: list[str] = Field(
+        default_factory=list,
+        description="Requirement signature IDs this solution satisfied, in the same closed vocabulary Stage 3 extracts into.",
+    )
+    evidence_class: EvidenceClass = Field(
+        default="proven_in_production",
+        description="Derived-from-signals evidence strength — only proven_in_production may support a transferable decision; "
+        "abandoned/superseded are retained deliberately as hazard evidence.",
+    )
+    conditions: list[str] = Field(
+        default_factory=list,
+        description="What had to be true for this solution's decisions to be correct — the condition a precedent match must "
+        "re-verify before transferring the decision to a new problem.",
+    )

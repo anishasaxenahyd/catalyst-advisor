@@ -11,6 +11,7 @@ still exercises the same provenance/warning machinery.
 
 import re
 
+from app.kernel.schemas import AlternativeNarrative, KernelNarrationInput, KernelNarrativeExtras
 from app.models.schemas import (
     ClarifyingQuestion,
     EngineOutput,
@@ -31,6 +32,10 @@ from app.validation.signal_normalizer import normalize_signal
 _KEYWORD_TAGS: dict[str, list[str]] = {
     "document": ["document-heavy"], "contract": ["document-heavy"], "invoice": ["document-heavy"],
     "pdf": ["document-heavy"], "scan": ["document-heavy"],
+    "enterprise data": ["document-heavy"], "private data": ["document-heavy"], "internal data": ["document-heavy"],
+    "company data": ["document-heavy"], "knowledge base": ["document-heavy", "retrieval"],
+    "citation": ["retrieval"], "citations": ["retrieval"], "cite": ["retrieval"], "cited": ["retrieval"],
+    "grounded": ["retrieval"], "source document": ["retrieval"],
     "real-time": ["realtime", "low-latency"], "real time": ["realtime", "low-latency"],
     "realtime": ["realtime", "low-latency"], "live": ["realtime"], "instant": ["realtime", "low-latency"],
     "agent": ["agentic"], "autonomous": ["agentic", "autonomous"], "automatically": ["agentic"],
@@ -261,4 +266,33 @@ class MockLLMProvider(LLMProvider):
             gaps=gaps,
             clarifying_questions=questions,
             notes="Whitespace collapsed" + (" and prior answers folded in." if answer_clauses else "."),
+        )
+
+    def narrate_kernel_findings(self, narration_input: KernelNarrationInput) -> KernelNarrativeExtras:
+        rejected = [v for v in narration_input.pattern_verdicts if v.verdict in ("UNNECESSARY", "CONTRA_INDICATED")]
+        rejected_narrative = (
+            "; ".join(f"{v.pattern_name} ({v.verdict.replace('_', ' ').lower()}) — {v.reason}" for v in rejected)
+            or "No patterns in the library were ruled out for this problem."
+        )
+
+        sourcing_narrative = "; ".join(
+            f"{sd.capability_name}: {sd.decision}" + (f" via {sd.asset_ref}" if sd.asset_ref else "")
+            for sd in narration_input.sourcing_decisions
+        ) or "No capability requirements to source."
+
+        alternatives_narrative = [
+            AlternativeNarrative(
+                candidate_id=alt.candidate_id,
+                narrative=f"{alt.label}: {alt.governing_priority} You give up: {alt.what_is_given_up} Revisit if: {alt.revisit_trigger}",
+            )
+            for alt in narration_input.alternatives
+        ]
+
+        eliminated = [f"{e.candidate_label} — eliminated ({e.rule_id}): {e.evidence}" for e in narration_input.elimination_record]
+
+        return KernelNarrativeExtras(
+            rejected_options_narrative=rejected_narrative,
+            sourcing_narrative=sourcing_narrative,
+            alternatives_narrative=alternatives_narrative,
+            counterfactuals=eliminated[:2],
         )

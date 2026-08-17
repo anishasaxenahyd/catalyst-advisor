@@ -6,9 +6,16 @@
     "business_problem": "Adjusters spent 20-30 minutes per claim manually searching policy documents, prior correspondence, and inspection reports to answer coverage questions, slowing claim cycle time.",
     "architecture_pattern_id": "pattern-rag-enterprise-docs",
     "architecture_pattern_name": "RAG over Enterprise Docs",
-    "ai_models": ["Azure OpenAI GPT-4o", "Azure AI Document Intelligence"],
+    "ai_models": [
+      "Azure OpenAI GPT-4o",
+      "Azure AI Document Intelligence"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-api-document-repository", "asset-prompt-claims-summary", "asset-skill-pii-redaction"],
+    "reused_catalog_assets": [
+      "asset-api-document-repository",
+      "asset-prompt-claims-summary",
+      "asset-skill-pii-redaction"
+    ],
     "security_considerations": [
       "PII in claim narratives redacted before indexing",
       "Row-level access control so adjusters only retrieve claims in their assigned region",
@@ -19,7 +26,32 @@
       "Citation-backed answers were essential to get adjuster trust, not just answer accuracy",
       "Chunking policy documents by clause (not fixed token windows) meaningfully improved retrieval precision"
     ],
-    "tags": ["document-heavy", "retrieval", "assist", "structured"]
+    "tags": [
+      "document-heavy",
+      "retrieval",
+      "assist",
+      "structured"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "ATTRIBUTION_REQUIRED",
+      "ENTERPRISE_PRIVATE_DATA",
+      "INTERACTION_CONVERSATIONAL",
+      "SENSITIVE_DATA_PII",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'RAG over Enterprise Docs'."
+    ]
   },
   {
     "id": "solution-healthcare-clinical-notes-rag",
@@ -28,9 +60,16 @@
     "business_problem": "Clinicians needed fast, trustworthy answers to guideline and formulary questions during patient visits, without leaving the EHR workflow.",
     "architecture_pattern_id": "pattern-rag-enterprise-docs",
     "architecture_pattern_name": "RAG over Enterprise Docs",
-    "ai_models": ["Anthropic Claude 3.5 Sonnet", "Amazon Comprehend Medical"],
+    "ai_models": [
+      "Anthropic Claude 3.5 Sonnet",
+      "Amazon Comprehend Medical"
+    ],
     "cloud_provider": "AWS",
-    "reused_catalog_assets": ["asset-api-document-repository", "asset-skill-citation-formatting", "asset-skill-pii-redaction"],
+    "reused_catalog_assets": [
+      "asset-api-document-repository",
+      "asset-skill-citation-formatting",
+      "asset-skill-pii-redaction"
+    ],
     "security_considerations": [
       "PHI-regulated data classification with encryption at rest and in transit",
       "No PHI persisted in model provider logs; zero-retention API configuration",
@@ -41,7 +80,33 @@
       "Zero-retention contractual terms with the model vendor were a hard prerequisite for clinical sign-off",
       "Clinicians preferred short, sourced answers over long generated summaries"
     ],
-    "tags": ["document-heavy", "retrieval", "structured", "assist"]
+    "tags": [
+      "document-heavy",
+      "retrieval",
+      "structured",
+      "assist"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PHI-BOUNDARY",
+      "OBL-PHI-SAFE-LOGGING",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "ATTRIBUTION_REQUIRED",
+      "ENTERPRISE_PRIVATE_DATA",
+      "INTERACTION_CONVERSATIONAL",
+      "SENSITIVE_DATA_PHI",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PHI-BOUNDARY, OBL-PHI-SAFE-LOGGING, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'RAG over Enterprise Docs'."
+    ]
   },
   {
     "id": "solution-banking-kyc-rag",
@@ -50,9 +115,15 @@
     "business_problem": "Onboarding analysts referenced a constantly-changing set of KYC and AML policy documents, leading to inconsistent account-opening decisions across branches.",
     "architecture_pattern_id": "pattern-rag-enterprise-docs",
     "architecture_pattern_name": "RAG over Enterprise Docs",
-    "ai_models": ["Azure OpenAI GPT-4o", "Azure AI Search"],
+    "ai_models": [
+      "Azure OpenAI GPT-4o",
+      "Azure AI Search"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-api-document-repository", "asset-mcp-crm"],
+    "reused_catalog_assets": [
+      "asset-api-document-repository",
+      "asset-mcp-crm"
+    ],
     "security_considerations": [
       "Full audit trail of every retrieved passage tied to the resulting onboarding decision",
       "Policy index rebuilt automatically whenever compliance publishes an update, with old versions retained for audit"
@@ -62,7 +133,31 @@
       "Versioning the knowledge index mattered as much as the retrieval quality itself",
       "Analysts needed a way to flag an answer as outdated, which fed back into re-indexing priority"
     ],
-    "tags": ["document-heavy", "retrieval", "structured", "compliance"]
+    "tags": [
+      "document-heavy",
+      "retrieval",
+      "structured",
+      "compliance"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "ATTRIBUTION_REQUIRED",
+      "ENTERPRISE_PRIVATE_DATA",
+      "SENSITIVE_DATA_PII",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'RAG over Enterprise Docs'."
+    ]
   },
   {
     "id": "solution-legal-contract-rag",
@@ -71,9 +166,15 @@
     "business_problem": "In-house counsel needed to quickly find precedent language and prior negotiated positions across thousands of historical contracts.",
     "architecture_pattern_id": "pattern-rag-enterprise-docs",
     "architecture_pattern_name": "RAG over Enterprise Docs",
-    "ai_models": ["Anthropic Claude 3.5 Sonnet"],
+    "ai_models": [
+      "Anthropic Claude 3.5 Sonnet"
+    ],
     "cloud_provider": "AWS",
-    "reused_catalog_assets": ["asset-api-document-repository", "asset-prompt-contract-clause-review", "asset-skill-citation-formatting"],
+    "reused_catalog_assets": [
+      "asset-api-document-repository",
+      "asset-prompt-contract-clause-review",
+      "asset-skill-citation-formatting"
+    ],
     "security_considerations": [
       "Contract corpus segmented by client/matter to prevent cross-matter leakage",
       "Outside counsel access scoped separately from internal legal staff"
@@ -83,7 +184,26 @@
       "Matter-level access segmentation had to be enforced at the retrieval layer, not just the UI",
       "Lawyers trusted the tool far more once every suggested clause linked to its source contract"
     ],
-    "tags": ["document-heavy", "retrieval", "assist"]
+    "tags": [
+      "document-heavy",
+      "retrieval",
+      "assist"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST"
+    ],
+    "requirement_signatures": [
+      "ATTRIBUTION_REQUIRED",
+      "ENTERPRISE_PRIVATE_DATA",
+      "INTERACTION_CONVERSATIONAL"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST) and the solution class matches 'RAG over Enterprise Docs'."
+    ]
   },
   {
     "id": "solution-insurance-fraud-hitl",
@@ -92,9 +212,17 @@
     "business_problem": "Fraud investigators manually cross-referenced claims, policyholder history, and external databases, a multi-system process that took days per suspicious claim.",
     "architecture_pattern_id": "pattern-agentic-hitl",
     "architecture_pattern_name": "Agentic Workflow with Human-in-the-loop",
-    "ai_models": ["Azure OpenAI GPT-4o", "Amazon Fraud Detector"],
+    "ai_models": [
+      "Azure OpenAI GPT-4o",
+      "Amazon Fraud Detector"
+    ],
     "cloud_provider": "AWS",
-    "reused_catalog_assets": ["asset-agent-fraud-detection", "asset-mcp-crm", "asset-mcp-data-warehouse", "asset-api-notification"],
+    "reused_catalog_assets": [
+      "asset-agent-fraud-detection",
+      "asset-mcp-crm",
+      "asset-mcp-data-warehouse",
+      "asset-api-notification"
+    ],
     "security_considerations": [
       "Agent actions limited to read + draft-recommendation; no autonomous claim denial",
       "Every agent step logged to an immutable audit trail for regulatory review",
@@ -105,7 +233,32 @@
       "Defining clear checkpoint boundaries up front avoided scope creep into fully autonomous decisioning",
       "Investigators wanted to see the agent's evidence trail, not just its conclusion"
     ],
-    "tags": ["agentic", "workflow", "integration-heavy", "copilot"]
+    "tags": [
+      "agentic",
+      "workflow",
+      "integration-heavy",
+      "copilot"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-ACTION-APPROVAL"
+    ],
+    "requirement_signatures": [
+      "ACTION_REQUIRED",
+      "INTERACTION_CONVERSATIONAL",
+      "LOW_LATENCY_REQUIRED",
+      "SENSITIVE_DATA_PII",
+      "TASK_DECOMPOSITION_REQUIRED"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-ACTION-APPROVAL) and the solution class matches 'Agentic Workflow with Human-in-the-loop'."
+    ]
   },
   {
     "id": "solution-hr-onboarding-hitl",
@@ -114,9 +267,16 @@
     "business_problem": "Onboarding required coordinating IT provisioning, badge issuance, benefits enrollment, and manager tasks across five disconnected systems, frequently missing steps.",
     "architecture_pattern_id": "pattern-agentic-hitl",
     "architecture_pattern_name": "Agentic Workflow with Human-in-the-loop",
-    "ai_models": ["Azure OpenAI GPT-4o mini"],
+    "ai_models": [
+      "Azure OpenAI GPT-4o mini"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-agent-it-helpdesk", "asset-mcp-erp", "asset-mcp-ticketing", "asset-connector-email"],
+    "reused_catalog_assets": [
+      "asset-agent-it-helpdesk",
+      "asset-mcp-erp",
+      "asset-mcp-ticketing",
+      "asset-connector-email"
+    ],
     "security_considerations": [
       "Agent scoped to provisioning workflows only, no access to compensation data",
       "HR manager approval checkpoint before account creation for contractor roles"
@@ -126,7 +286,29 @@
       "The highest-value checkpoint was approval before account creation, not after",
       "Connecting five legacy systems took longer than building the agent logic itself"
     ],
-    "tags": ["agentic", "workflow", "integration-heavy"]
+    "tags": [
+      "agentic",
+      "workflow",
+      "integration-heavy"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-ACTION-APPROVAL"
+    ],
+    "requirement_signatures": [
+      "ACTION_REQUIRED",
+      "SENSITIVE_DATA_PII",
+      "TASK_DECOMPOSITION_REQUIRED"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-ACTION-APPROVAL) and the solution class matches 'Agentic Workflow with Human-in-the-loop'."
+    ]
   },
   {
     "id": "solution-manufacturing-procurement-hitl",
@@ -135,9 +317,16 @@
     "business_problem": "Procurement analysts manually resolved purchase-order mismatches (price, quantity, delivery date) against supplier invoices, a high-volume repetitive task prone to backlog.",
     "architecture_pattern_id": "pattern-agentic-hitl",
     "architecture_pattern_name": "Agentic Workflow with Human-in-the-loop",
-    "ai_models": ["Azure OpenAI GPT-4o", "Azure AI Document Intelligence"],
+    "ai_models": [
+      "Azure OpenAI GPT-4o",
+      "Azure AI Document Intelligence"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-mcp-erp", "asset-api-document-repository", "asset-skill-currency-unit-normalization"],
+    "reused_catalog_assets": [
+      "asset-mcp-erp",
+      "asset-api-document-repository",
+      "asset-skill-currency-unit-normalization"
+    ],
     "security_considerations": [
       "Agent cannot approve payments; only drafts a resolution for finance sign-off",
       "Full ERP write access logged and reviewed weekly"
@@ -147,7 +336,29 @@
       "Currency and unit normalization across supplier formats was the single biggest source of false-positive mismatches",
       "Giving the agent a 'propose, don't post' boundary made finance stakeholders comfortable approving the rollout"
     ],
-    "tags": ["agentic", "workflow", "integration-heavy", "structured"]
+    "tags": [
+      "agentic",
+      "workflow",
+      "integration-heavy",
+      "structured"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-ACTION-APPROVAL"
+    ],
+    "requirement_signatures": [
+      "ACTION_REQUIRED",
+      "STRUCTURED_DATA_SOURCE",
+      "TASK_DECOMPOSITION_REQUIRED"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-AUDIT-SUBJECT-TRACE, OBL-ACTION-APPROVAL) and the solution class matches 'Agentic Workflow with Human-in-the-loop'."
+    ]
   },
   {
     "id": "solution-telecom-support-hitl",
@@ -156,9 +367,15 @@
     "business_problem": "Tier-2 support engineers spent significant time correlating alarms across monitoring systems before even starting root-cause diagnosis.",
     "architecture_pattern_id": "pattern-agentic-hitl",
     "architecture_pattern_name": "Agentic Workflow with Human-in-the-loop",
-    "ai_models": ["Google Gemini 1.5 Pro"],
+    "ai_models": [
+      "Google Gemini 1.5 Pro"
+    ],
     "cloud_provider": "GCP",
-    "reused_catalog_assets": ["asset-mcp-ticketing", "asset-mcp-data-warehouse", "asset-connector-slack"],
+    "reused_catalog_assets": [
+      "asset-mcp-ticketing",
+      "asset-mcp-data-warehouse",
+      "asset-connector-slack"
+    ],
     "security_considerations": [
       "Agent restricted to read-only access on production network telemetry",
       "All proposed remediation steps require on-call engineer approval before execution"
@@ -168,7 +385,32 @@
       "Read-only scoping for the agent was non-negotiable for the network operations team",
       "Posting agent findings directly into the existing Slack incident channel drove adoption more than a separate UI"
     ],
-    "tags": ["agentic", "workflow", "integration-heavy", "copilot"]
+    "tags": [
+      "agentic",
+      "workflow",
+      "integration-heavy",
+      "copilot"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-ACTION-APPROVAL"
+    ],
+    "requirement_signatures": [
+      "ACTION_REQUIRED",
+      "INTERACTION_CONVERSATIONAL",
+      "LOW_LATENCY_REQUIRED",
+      "SENSITIVE_DATA_PII",
+      "TASK_DECOMPOSITION_REQUIRED"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-ACTION-APPROVAL) and the solution class matches 'Agentic Workflow with Human-in-the-loop'."
+    ]
   },
   {
     "id": "solution-retail-support-copilot",
@@ -177,9 +419,15 @@
     "business_problem": "Support agents needed to look up order status, return policy, and product details across multiple systems mid-conversation, extending average handle time.",
     "architecture_pattern_id": "pattern-realtime-copilot",
     "architecture_pattern_name": "Real-time Copilot Sidecar",
-    "ai_models": ["Azure OpenAI GPT-4o mini"],
+    "ai_models": [
+      "Azure OpenAI GPT-4o mini"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-prompt-support-reply", "asset-mcp-crm", "asset-api-notification"],
+    "reused_catalog_assets": [
+      "asset-prompt-support-reply",
+      "asset-mcp-crm",
+      "asset-api-notification"
+    ],
     "security_considerations": [
       "Copilot suggestions require agent confirmation before sending to a customer",
       "Payment details masked in any context passed to the model"
@@ -189,7 +437,30 @@
       "Sub-second suggestion latency was necessary for agents to actually use the tool mid-call",
       "Agents ignored suggestions that didn't match the brand's tone, so tone-tuning the prompt mattered more than raw accuracy"
     ],
-    "tags": ["realtime", "copilot", "assist", "low-latency"]
+    "tags": [
+      "realtime",
+      "copilot",
+      "assist",
+      "low-latency"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "INTERACTION_CONVERSATIONAL",
+      "LOW_LATENCY_REQUIRED",
+      "SENSITIVE_DATA_PII"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'Real-time Copilot Sidecar'."
+    ]
   },
   {
     "id": "solution-banking-advisor-copilot",
@@ -198,9 +469,14 @@
     "business_problem": "Relationship managers needed real-time talking points and portfolio context pulled up during live client calls without breaking conversation flow.",
     "architecture_pattern_id": "pattern-realtime-copilot",
     "architecture_pattern_name": "Real-time Copilot Sidecar",
-    "ai_models": ["Anthropic Claude 3.5 Sonnet"],
+    "ai_models": [
+      "Anthropic Claude 3.5 Sonnet"
+    ],
     "cloud_provider": "AWS",
-    "reused_catalog_assets": ["asset-mcp-crm", "asset-model-enterprise-fast-classifier"],
+    "reused_catalog_assets": [
+      "asset-mcp-crm",
+      "asset-model-enterprise-fast-classifier"
+    ],
     "security_considerations": [
       "Suggestions never sent directly to the client; advisor-facing only",
       "Portfolio data scoped to the advisor's assigned client list"
@@ -210,7 +486,30 @@
       "Keeping the sidecar strictly advisor-facing (never client-facing) simplified compliance review significantly",
       "Advisors wanted the copilot to surface caveats, not just opportunities"
     ],
-    "tags": ["realtime", "copilot", "assist", "low-latency"]
+    "tags": [
+      "realtime",
+      "copilot",
+      "assist",
+      "low-latency"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "INTERACTION_CONVERSATIONAL",
+      "LOW_LATENCY_REQUIRED",
+      "SENSITIVE_DATA_PII"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'Real-time Copilot Sidecar'."
+    ]
   },
   {
     "id": "solution-travel-agent-copilot",
@@ -219,9 +518,14 @@
     "business_problem": "Booking agents juggled fare rules, loyalty status, and change-fee policies across systems while customers waited on the line.",
     "architecture_pattern_id": "pattern-realtime-copilot",
     "architecture_pattern_name": "Real-time Copilot Sidecar",
-    "ai_models": ["Google Gemini 1.5 Flash"],
+    "ai_models": [
+      "Google Gemini 1.5 Flash"
+    ],
     "cloud_provider": "GCP",
-    "reused_catalog_assets": ["asset-prompt-support-reply", "asset-mcp-crm"],
+    "reused_catalog_assets": [
+      "asset-prompt-support-reply",
+      "asset-mcp-crm"
+    ],
     "security_considerations": [
       "No autonomous rebooking; copilot only surfaces options for the agent to execute",
       "Loyalty tier and payment data excluded from prompt context by default"
@@ -231,7 +535,30 @@
       "Fare-rule content changed often enough that a stale cache became the main failure mode, requiring a shorter refresh interval",
       "Agents most valued the copilot for exceptions, not for routine bookings they already knew well"
     ],
-    "tags": ["realtime", "copilot", "assist", "low-latency"]
+    "tags": [
+      "realtime",
+      "copilot",
+      "assist",
+      "low-latency"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "INTERACTION_CONVERSATIONAL",
+      "LOW_LATENCY_REQUIRED",
+      "SENSITIVE_DATA_PII"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'Real-time Copilot Sidecar'."
+    ]
   },
   {
     "id": "solution-it-helpdesk-copilot",
@@ -240,9 +567,15 @@
     "business_problem": "Level-1 IT support handled a high volume of repetitive password, access, and software-install requests, creating long queue times for more complex issues.",
     "architecture_pattern_id": "pattern-realtime-copilot",
     "architecture_pattern_name": "Real-time Copilot Sidecar",
-    "ai_models": ["Azure OpenAI GPT-4o mini"],
+    "ai_models": [
+      "Azure OpenAI GPT-4o mini"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-agent-it-helpdesk", "asset-mcp-ticketing", "asset-api-identity-access"],
+    "reused_catalog_assets": [
+      "asset-agent-it-helpdesk",
+      "asset-mcp-ticketing",
+      "asset-api-identity-access"
+    ],
     "security_considerations": [
       "Identity verification required before any account-related suggestion is actioned",
       "Copilot cannot reset credentials directly; hands off to the identity API under agent supervision"
@@ -252,7 +585,30 @@
       "Tight integration with the identity/access API was more valuable than broader knowledge coverage",
       "A narrow, well-scoped copilot outperformed an earlier broad 'ask IT anything' prototype"
     ],
-    "tags": ["realtime", "copilot", "assist", "low-latency"]
+    "tags": [
+      "realtime",
+      "copilot",
+      "assist",
+      "low-latency"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "INTERACTION_CONVERSATIONAL",
+      "LOW_LATENCY_REQUIRED",
+      "SENSITIVE_DATA_PII"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'Real-time Copilot Sidecar'."
+    ]
   },
   {
     "id": "solution-insurance-underwriting-batch",
@@ -261,9 +617,15 @@
     "business_problem": "Underwriters manually reviewed every inbound submission to classify risk category and completeness before detailed review, creating a queue bottleneck.",
     "architecture_pattern_id": "pattern-batch-classification",
     "architecture_pattern_name": "Batch Classification Pipeline",
-    "ai_models": ["Amazon Comprehend", "Azure AI Document Intelligence"],
+    "ai_models": [
+      "Amazon Comprehend",
+      "Azure AI Document Intelligence"
+    ],
     "cloud_provider": "AWS",
-    "reused_catalog_assets": ["asset-model-enterprise-fast-classifier", "asset-api-document-repository"],
+    "reused_catalog_assets": [
+      "asset-model-enterprise-fast-classifier",
+      "asset-api-document-repository"
+    ],
     "security_considerations": [
       "Classification pipeline runs in an isolated batch environment with no external network egress",
       "Incomplete-data flags reviewed by a human before any submission is declined"
@@ -273,7 +635,30 @@
       "Batch classification worked well precisely because no single decision needed to be real-time",
       "Clear escalation rules for low-confidence classifications prevented silent misrouting"
     ],
-    "tags": ["batch", "classification", "high-scale", "structured"]
+    "tags": [
+      "batch",
+      "classification",
+      "high-scale",
+      "structured"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE"
+    ],
+    "requirement_signatures": [
+      "HIGH_SCALE_VOLUME",
+      "INTERACTION_BATCH",
+      "SENSITIVE_DATA_PII",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE) and the solution class matches 'Batch Classification Pipeline'."
+    ]
   },
   {
     "id": "solution-retail-review-batch",
@@ -282,9 +667,15 @@
     "business_problem": "Millions of monthly product reviews needed moderation for policy violations and tagging by sentiment and topic, far beyond manual review capacity.",
     "architecture_pattern_id": "pattern-batch-classification",
     "architecture_pattern_name": "Batch Classification Pipeline",
-    "ai_models": ["Amazon Comprehend", "Amazon Rekognition"],
+    "ai_models": [
+      "Amazon Comprehend",
+      "Amazon Rekognition"
+    ],
     "cloud_provider": "AWS",
-    "reused_catalog_assets": ["asset-skill-sentiment-classification", "asset-model-enterprise-fast-classifier"],
+    "reused_catalog_assets": [
+      "asset-skill-sentiment-classification",
+      "asset-model-enterprise-fast-classifier"
+    ],
     "security_considerations": [
       "Automated removal limited to high-confidence policy violations; borderline cases queued for human moderators",
       "Image and text moderation logs retained for a fixed period to support appeals"
@@ -294,7 +685,30 @@
       "A conservative auto-removal confidence threshold reduced false positives that had previously frustrated sellers",
       "Appeals volume dropped once moderation reasons were shown to the reviewer"
     ],
-    "tags": ["batch", "classification", "high-scale", "structured"]
+    "tags": [
+      "batch",
+      "classification",
+      "high-scale",
+      "structured"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE"
+    ],
+    "requirement_signatures": [
+      "HIGH_SCALE_VOLUME",
+      "INTERACTION_BATCH",
+      "SENSITIVE_DATA_PII",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE) and the solution class matches 'Batch Classification Pipeline'."
+    ]
   },
   {
     "id": "solution-energy-inspection-batch",
@@ -303,9 +717,15 @@
     "business_problem": "Drone inspection footage of pipeline infrastructure required manual review to flag corrosion and defects, a slow process against a large and growing backlog of footage.",
     "architecture_pattern_id": "pattern-batch-classification",
     "architecture_pattern_name": "Batch Classification Pipeline",
-    "ai_models": ["Azure AI Custom Vision", "Amazon Rekognition"],
+    "ai_models": [
+      "Azure AI Custom Vision",
+      "Amazon Rekognition"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-model-enterprise-multimodal", "asset-connector-data-lake"],
+    "reused_catalog_assets": [
+      "asset-model-enterprise-multimodal",
+      "asset-connector-data-lake"
+    ],
     "security_considerations": [
       "Inspection imagery classified as critical-infrastructure data with restricted access",
       "Every flagged defect routed to a certified inspector for confirmation before work orders are issued"
@@ -315,7 +735,28 @@
       "Model performance varied significantly by camera angle and lighting, requiring a targeted fine-tuning pass on utility-specific footage",
       "The batch pipeline's value was throughput, not novel detection accuracy over the existing manual process"
     ],
-    "tags": ["batch", "classification", "high-scale", "image"]
+    "tags": [
+      "batch",
+      "classification",
+      "high-scale",
+      "image"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST"
+    ],
+    "requirement_signatures": [
+      "HIGH_SCALE_VOLUME",
+      "IMAGE_MODALITY",
+      "INTERACTION_BATCH",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST) and the solution class matches 'Batch Classification Pipeline'."
+    ]
   },
   {
     "id": "solution-logistics-routing-batch",
@@ -324,9 +765,14 @@
     "business_problem": "Thousands of nightly shipment exceptions (delays, address issues, customs holds) needed categorization each morning before regional teams could act on them.",
     "architecture_pattern_id": "pattern-batch-classification",
     "architecture_pattern_name": "Batch Classification Pipeline",
-    "ai_models": ["Google Gemini 1.5 Flash"],
+    "ai_models": [
+      "Google Gemini 1.5 Flash"
+    ],
     "cloud_provider": "GCP",
-    "reused_catalog_assets": ["asset-model-enterprise-fast-classifier", "asset-connector-data-lake"],
+    "reused_catalog_assets": [
+      "asset-model-enterprise-fast-classifier",
+      "asset-connector-data-lake"
+    ],
     "security_considerations": [
       "Customs-related exception data handled under the same controls as cross-border compliance records",
       "Pipeline outputs validated against a sample audit each morning before regional dispatch"
@@ -336,7 +782,27 @@
       "Running the pipeline overnight avoided any real-time latency requirement entirely, simplifying the architecture",
       "A small daily human audit sample caught drift in exception categories before it became a systemic issue"
     ],
-    "tags": ["batch", "classification", "high-scale", "structured"]
+    "tags": [
+      "batch",
+      "classification",
+      "high-scale",
+      "structured"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST"
+    ],
+    "requirement_signatures": [
+      "HIGH_SCALE_VOLUME",
+      "INTERACTION_BATCH",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST) and the solution class matches 'Batch Classification Pipeline'."
+    ]
   },
   {
     "id": "solution-pharma-adverse-event-batch",
@@ -345,9 +811,15 @@
     "business_problem": "Pharmacovigilance teams manually screened incoming adverse event reports for severity and regulatory reportability, a compliance-critical bottleneck as report volume grew.",
     "architecture_pattern_id": "pattern-batch-classification",
     "architecture_pattern_name": "Batch Classification Pipeline",
-    "ai_models": ["Amazon Comprehend Medical", "Azure OpenAI GPT-4o"],
+    "ai_models": [
+      "Amazon Comprehend Medical",
+      "Azure OpenAI GPT-4o"
+    ],
     "cloud_provider": "AWS",
-    "reused_catalog_assets": ["asset-model-enterprise-fast-classifier", "asset-skill-pii-redaction"],
+    "reused_catalog_assets": [
+      "asset-model-enterprise-fast-classifier",
+      "asset-skill-pii-redaction"
+    ],
     "security_considerations": [
       "PHI redaction applied before any report leaves the validated processing boundary",
       "Every automated severity classification independently reviewed by a qualified person, per regulatory requirement"
@@ -357,7 +829,31 @@
       "Regulatory requirements meant the model could accelerate triage but never replace the qualified-person review step",
       "Validation documentation for the pipeline took longer to produce than the pipeline itself"
     ],
-    "tags": ["batch", "classification", "structured", "compliance"]
+    "tags": [
+      "batch",
+      "classification",
+      "structured",
+      "compliance"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PHI-BOUNDARY",
+      "OBL-PHI-SAFE-LOGGING",
+      "OBL-AUDIT-SUBJECT-TRACE"
+    ],
+    "requirement_signatures": [
+      "INTERACTION_BATCH",
+      "SENSITIVE_DATA_PHI",
+      "SENSITIVE_DATA_PII",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PHI-BOUNDARY, OBL-PHI-SAFE-LOGGING, OBL-AUDIT-SUBJECT-TRACE) and the solution class matches 'Batch Classification Pipeline'."
+    ]
   },
   {
     "id": "solution-manufacturing-multiagent",
@@ -366,9 +862,16 @@
     "business_problem": "Production planning required continuously reconciling demand forecasts, supplier lead times, and factory capacity across regions, a coordination problem too complex for a single automated workflow.",
     "architecture_pattern_id": "pattern-autonomous-multi-agent",
     "architecture_pattern_name": "Autonomous Multi-Agent Orchestration",
-    "ai_models": ["Azure OpenAI GPT-4o", "Amazon Forecast"],
+    "ai_models": [
+      "Azure OpenAI GPT-4o",
+      "Amazon Forecast"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-mcp-erp", "asset-mcp-data-warehouse", "asset-model-enterprise-reasoning"],
+    "reused_catalog_assets": [
+      "asset-mcp-erp",
+      "asset-mcp-data-warehouse",
+      "asset-model-enterprise-reasoning"
+    ],
     "security_considerations": [
       "Each sub-agent scoped to a single system's write permissions, no shared over-privileged credential",
       "Orchestrator changes to production schedules require a planning-manager checkpoint above a defined cost threshold"
@@ -378,7 +881,30 @@
       "Per-agent credential scoping was the single most important control for stakeholder trust",
       "Coordination failures were easier to debug once each sub-agent's reasoning was logged separately rather than as one combined trace"
     ],
-    "tags": ["agentic", "autonomous", "integration-heavy", "high-scale"]
+    "tags": [
+      "agentic",
+      "autonomous",
+      "integration-heavy",
+      "high-scale"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-ACTION-APPROVAL"
+    ],
+    "requirement_signatures": [
+      "ACTION_REQUIRED",
+      "HIGH_SCALE_VOLUME",
+      "PARALLEL_INDEPENDENT_SUBTASKS",
+      "TASK_DECOMPOSITION_REQUIRED"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-AUDIT-SUBJECT-TRACE, OBL-ACTION-APPROVAL) and the solution class matches 'Autonomous Multi-Agent Orchestration'."
+    ]
   },
   {
     "id": "solution-financial-research-multiagent",
@@ -387,9 +913,15 @@
     "business_problem": "Analysts spent significant time assembling company research packets from earnings calls, filings, and market data before starting actual analysis.",
     "architecture_pattern_id": "pattern-autonomous-multi-agent",
     "architecture_pattern_name": "Autonomous Multi-Agent Orchestration",
-    "ai_models": ["Anthropic Claude 3.5 Sonnet"],
+    "ai_models": [
+      "Anthropic Claude 3.5 Sonnet"
+    ],
     "cloud_provider": "AWS",
-    "reused_catalog_assets": ["asset-model-enterprise-reasoning", "asset-api-document-repository", "asset-skill-citation-formatting"],
+    "reused_catalog_assets": [
+      "asset-model-enterprise-reasoning",
+      "asset-api-document-repository",
+      "asset-skill-citation-formatting"
+    ],
     "security_considerations": [
       "Research agents restricted to approved public and licensed data sources only, no open web access",
       "Every claim in the final packet must trace to a cited source before it reaches an analyst"
@@ -399,7 +931,32 @@
       "Restricting agents to a licensed data source allowlist avoided a major compliance concern early in the design",
       "Analysts still fully rewrote conclusions, but reused the assembled facts and citations directly"
     ],
-    "tags": ["agentic", "autonomous", "integration-heavy", "document-heavy"]
+    "tags": [
+      "agentic",
+      "autonomous",
+      "integration-heavy",
+      "document-heavy"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-ACTION-APPROVAL"
+    ],
+    "requirement_signatures": [
+      "ACTION_REQUIRED",
+      "ENTERPRISE_PRIVATE_DATA",
+      "PARALLEL_INDEPENDENT_SUBTASKS",
+      "SENSITIVE_DATA_PII",
+      "TASK_DECOMPOSITION_REQUIRED"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-ACTION-APPROVAL) and the solution class matches 'Autonomous Multi-Agent Orchestration'."
+    ]
   },
   {
     "id": "solution-telecom-network-multiagent",
@@ -408,9 +965,14 @@
     "business_problem": "Routine network remediation (capacity rebalancing, known-fault recovery) required manual coordination across multiple operations teams, delaying resolution for well-understood issues.",
     "architecture_pattern_id": "pattern-autonomous-multi-agent",
     "architecture_pattern_name": "Autonomous Multi-Agent Orchestration",
-    "ai_models": ["Google Gemini 1.5 Pro"],
+    "ai_models": [
+      "Google Gemini 1.5 Pro"
+    ],
     "cloud_provider": "GCP",
-    "reused_catalog_assets": ["asset-mcp-ticketing", "asset-model-enterprise-reasoning"],
+    "reused_catalog_assets": [
+      "asset-mcp-ticketing",
+      "asset-model-enterprise-reasoning"
+    ],
     "security_considerations": [
       "Autonomous remediation limited to a pre-approved playbook of low-risk actions; anything outside the playbook requires human approval",
       "Full action log streamed to the network operations center in real time for oversight"
@@ -420,7 +982,32 @@
       "Starting with a narrow, pre-approved playbook was what made an autonomous rollout acceptable to network operations leadership",
       "Real-time visibility into agent actions mattered more to stakeholders than the autonomy itself"
     ],
-    "tags": ["agentic", "autonomous", "integration-heavy", "high-scale"]
+    "tags": [
+      "agentic",
+      "autonomous",
+      "integration-heavy",
+      "high-scale"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-ACTION-APPROVAL"
+    ],
+    "requirement_signatures": [
+      "ACTION_REQUIRED",
+      "HIGH_SCALE_VOLUME",
+      "PARALLEL_INDEPENDENT_SUBTASKS",
+      "SENSITIVE_DATA_PII",
+      "TASK_DECOMPOSITION_REQUIRED"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-ACTION-APPROVAL) and the solution class matches 'Autonomous Multi-Agent Orchestration'."
+    ]
   },
   {
     "id": "solution-government-services-rag",
@@ -429,9 +1016,15 @@
     "business_problem": "Call center staff struggled to keep up with frequently changing benefits eligibility rules spread across dozens of policy documents.",
     "architecture_pattern_id": "pattern-rag-enterprise-docs",
     "architecture_pattern_name": "RAG over Enterprise Docs",
-    "ai_models": ["Azure OpenAI GPT-4o", "Azure AI Search"],
+    "ai_models": [
+      "Azure OpenAI GPT-4o",
+      "Azure AI Search"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-api-document-repository", "asset-skill-citation-formatting"],
+    "reused_catalog_assets": [
+      "asset-api-document-repository",
+      "asset-skill-citation-formatting"
+    ],
     "security_considerations": [
       "Deployment within a FedRAMP-authorized environment boundary",
       "No citizen PII included in any prompt; lookups keyed by case ID resolved server-side"
@@ -441,7 +1034,31 @@
       "FedRAMP authorization requirements shaped the deployment topology more than any modeling decision",
       "Staff needed plain-language answers with a link to the exact regulation, not regulation text verbatim"
     ],
-    "tags": ["document-heavy", "retrieval", "structured", "compliance"]
+    "tags": [
+      "document-heavy",
+      "retrieval",
+      "structured",
+      "compliance"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "ATTRIBUTION_REQUIRED",
+      "ENTERPRISE_PRIVATE_DATA",
+      "SENSITIVE_DATA_PII",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'RAG over Enterprise Docs'."
+    ]
   },
   {
     "id": "solution-education-advising-copilot",
@@ -450,9 +1067,14 @@
     "business_problem": "Academic advisors managed large student caseloads and needed fast access to degree requirements and prior advising notes during walk-in sessions.",
     "architecture_pattern_id": "pattern-realtime-copilot",
     "architecture_pattern_name": "Real-time Copilot Sidecar",
-    "ai_models": ["Google Gemini 1.5 Flash"],
+    "ai_models": [
+      "Google Gemini 1.5 Flash"
+    ],
     "cloud_provider": "GCP",
-    "reused_catalog_assets": ["asset-api-document-repository", "asset-mcp-crm"],
+    "reused_catalog_assets": [
+      "asset-api-document-repository",
+      "asset-mcp-crm"
+    ],
     "security_considerations": [
       "Student record access scoped under FERPA to the advisor's assigned caseload only",
       "Advising notes summarized for the advisor's own review, never sent to the student directly"
@@ -462,7 +1084,31 @@
       "FERPA scoping requirements were simplest to enforce at the data-access layer rather than in the prompt",
       "Advisors valued a concise session-prep summary far more than an open-ended chat interface"
     ],
-    "tags": ["realtime", "copilot", "assist", "structured"]
+    "tags": [
+      "realtime",
+      "copilot",
+      "assist",
+      "structured"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "INTERACTION_CONVERSATIONAL",
+      "LOW_LATENCY_REQUIRED",
+      "SENSITIVE_DATA_PII",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'Real-time Copilot Sidecar'."
+    ]
   },
   {
     "id": "solution-media-content-batch",
@@ -471,9 +1117,15 @@
     "business_problem": "A growing content library needed consistent metadata tagging (genre, mood, content warnings) for search and recommendation, far beyond the manual cataloging team's capacity.",
     "architecture_pattern_id": "pattern-batch-classification",
     "architecture_pattern_name": "Batch Classification Pipeline",
-    "ai_models": ["Google Gemini 1.5 Pro", "Amazon Rekognition"],
+    "ai_models": [
+      "Google Gemini 1.5 Pro",
+      "Amazon Rekognition"
+    ],
     "cloud_provider": "GCP",
-    "reused_catalog_assets": ["asset-model-enterprise-multimodal", "asset-connector-data-lake"],
+    "reused_catalog_assets": [
+      "asset-model-enterprise-multimodal",
+      "asset-connector-data-lake"
+    ],
     "security_considerations": [
       "Content-warning classifications reviewed by the catalog team before publishing to the live library",
       "Pipeline runs against a staging copy of the content library, never production streaming infrastructure directly"
@@ -483,7 +1135,28 @@
       "Multimodal classification of both video and audio track content was needed to catch content-warning cases text metadata alone missed",
       "A lightweight human spot-check step caught genre miscategorizations that materially affected recommendations"
     ],
-    "tags": ["batch", "classification", "high-scale", "multimodal"]
+    "tags": [
+      "batch",
+      "classification",
+      "high-scale",
+      "multimodal"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST"
+    ],
+    "requirement_signatures": [
+      "HIGH_SCALE_VOLUME",
+      "IMAGE_MODALITY",
+      "INTERACTION_BATCH",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST) and the solution class matches 'Batch Classification Pipeline'."
+    ]
   },
   {
     "id": "solution-automotive-diagnostics-copilot",
@@ -492,9 +1165,14 @@
     "business_problem": "Service technicians needed fast access to model-specific diagnostic procedures and technical service bulletins while working on a vehicle in the bay.",
     "architecture_pattern_id": "pattern-realtime-copilot",
     "architecture_pattern_name": "Real-time Copilot Sidecar",
-    "ai_models": ["Azure OpenAI GPT-4o mini"],
+    "ai_models": [
+      "Azure OpenAI GPT-4o mini"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-api-document-repository", "asset-model-enterprise-multimodal"],
+    "reused_catalog_assets": [
+      "asset-api-document-repository",
+      "asset-model-enterprise-multimodal"
+    ],
     "security_considerations": [
       "Diagnostic suggestions clearly labeled as advisory; technician retains final sign-off on any repair",
       "Vehicle identification data scoped to the active service order only"
@@ -504,7 +1182,31 @@
       "Technicians most valued fast access to the exact technical service bulletin over general troubleshooting advice",
       "Photo-based query support (technician photographs a component) drove adoption more than text search alone"
     ],
-    "tags": ["realtime", "copilot", "assist", "multimodal"]
+    "tags": [
+      "realtime",
+      "copilot",
+      "assist",
+      "multimodal"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "IMAGE_MODALITY",
+      "INTERACTION_CONVERSATIONAL",
+      "LOW_LATENCY_REQUIRED",
+      "SENSITIVE_DATA_PII"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'Real-time Copilot Sidecar'."
+    ]
   },
   {
     "id": "solution-utilities-outage-hitl",
@@ -513,9 +1215,16 @@
     "business_problem": "During major storm events, dispatch coordinators manually triaged thousands of outage reports and crew assignments under severe time pressure.",
     "architecture_pattern_id": "pattern-agentic-hitl",
     "architecture_pattern_name": "Agentic Workflow with Human-in-the-loop",
-    "ai_models": ["Azure OpenAI GPT-4o", "Amazon Forecast"],
+    "ai_models": [
+      "Azure OpenAI GPT-4o",
+      "Amazon Forecast"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-mcp-data-warehouse", "asset-connector-slack", "asset-api-notification"],
+    "reused_catalog_assets": [
+      "asset-mcp-data-warehouse",
+      "asset-connector-slack",
+      "asset-api-notification"
+    ],
     "security_considerations": [
       "Agent proposes crew assignments; dispatch supervisor retains final approval at all times",
       "System designed to degrade gracefully to fully manual dispatch if the agent's confidence drops during extreme load"
@@ -525,7 +1234,30 @@
       "Graceful degradation to manual mode under extreme load was as important a design requirement as the automation itself",
       "Dispatch coordinators wanted priority reasoning shown up front, not buried in a detail view"
     ],
-    "tags": ["agentic", "workflow", "integration-heavy", "copilot"]
+    "tags": [
+      "agentic",
+      "workflow",
+      "integration-heavy",
+      "copilot"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-ACTION-APPROVAL"
+    ],
+    "requirement_signatures": [
+      "ACTION_REQUIRED",
+      "INTERACTION_CONVERSATIONAL",
+      "LOW_LATENCY_REQUIRED",
+      "TASK_DECOMPOSITION_REQUIRED"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-AUDIT-SUBJECT-TRACE, OBL-ACTION-APPROVAL) and the solution class matches 'Agentic Workflow with Human-in-the-loop'."
+    ]
   },
   {
     "id": "solution-retail-inventory-multiagent",
@@ -534,9 +1266,16 @@
     "business_problem": "Regional inventory managers manually decided which stores should transfer stock to which, a decision that scaled poorly across hundreds of stores and thousands of SKUs.",
     "architecture_pattern_id": "pattern-autonomous-multi-agent",
     "architecture_pattern_name": "Autonomous Multi-Agent Orchestration",
-    "ai_models": ["Amazon Forecast", "Azure OpenAI GPT-4o"],
+    "ai_models": [
+      "Amazon Forecast",
+      "Azure OpenAI GPT-4o"
+    ],
     "cloud_provider": "AWS",
-    "reused_catalog_assets": ["asset-mcp-erp", "asset-model-enterprise-reasoning", "asset-connector-data-lake"],
+    "reused_catalog_assets": [
+      "asset-mcp-erp",
+      "asset-model-enterprise-reasoning",
+      "asset-connector-data-lake"
+    ],
     "security_considerations": [
       "Transfer-order agent capped to a pre-approved dollar threshold per transaction; larger transfers require manager approval",
       "All automated transfer decisions logged with the demand signal that triggered them, for post-hoc audit"
@@ -546,7 +1285,32 @@
       "A hard dollar cap on autonomous transfer decisions was what got the finance team comfortable with the rollout",
       "Regional managers needed an easy override, not just a dashboard, to keep trust in the system during edge cases"
     ],
-    "tags": ["agentic", "autonomous", "integration-heavy", "high-scale"]
+    "tags": [
+      "agentic",
+      "autonomous",
+      "integration-heavy",
+      "high-scale"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-ACTION-APPROVAL"
+    ],
+    "requirement_signatures": [
+      "ACTION_REQUIRED",
+      "HIGH_SCALE_VOLUME",
+      "PARALLEL_INDEPENDENT_SUBTASKS",
+      "SENSITIVE_DATA_PII",
+      "TASK_DECOMPOSITION_REQUIRED"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-ACTION-APPROVAL) and the solution class matches 'Autonomous Multi-Agent Orchestration'."
+    ]
   },
   {
     "id": "solution-insurance-policy-rag",
@@ -555,9 +1319,14 @@
     "business_problem": "Independent agents selling multiple carriers' products needed fast, accurate answers about product coverage differences without calling underwriting.",
     "architecture_pattern_id": "pattern-realtime-copilot",
     "architecture_pattern_name": "Real-time Copilot Sidecar",
-    "ai_models": ["Anthropic Claude 3.5 Haiku"],
+    "ai_models": [
+      "Anthropic Claude 3.5 Haiku"
+    ],
     "cloud_provider": "AWS",
-    "reused_catalog_assets": ["asset-api-document-repository", "asset-prompt-support-reply"],
+    "reused_catalog_assets": [
+      "asset-api-document-repository",
+      "asset-prompt-support-reply"
+    ],
     "security_considerations": [
       "Product guidance clearly disclaimed as informational, not binding coverage confirmation",
       "Underwriting escalation path preserved for any question outside the copilot's confidence threshold"
@@ -567,7 +1336,30 @@
       "A visible confidence threshold with an escalation path avoided the copilot overstating coverage guarantees",
       "Agents adopted the tool fastest when it was embedded directly in their existing quoting software"
     ],
-    "tags": ["realtime", "copilot", "assist", "low-latency"]
+    "tags": [
+      "realtime",
+      "copilot",
+      "assist",
+      "low-latency"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "INTERACTION_CONVERSATIONAL",
+      "LOW_LATENCY_REQUIRED",
+      "SENSITIVE_DATA_PII"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'Real-time Copilot Sidecar'."
+    ]
   },
   {
     "id": "solution-manufacturing-quality-batch",
@@ -576,9 +1368,13 @@
     "business_problem": "Quality inspectors manually reviewed sampled product images for surface defects, limiting inspection coverage to a small percentage of total production.",
     "architecture_pattern_id": "pattern-batch-classification",
     "architecture_pattern_name": "Batch Classification Pipeline",
-    "ai_models": ["Azure AI Custom Vision"],
+    "ai_models": [
+      "Azure AI Custom Vision"
+    ],
     "cloud_provider": "Azure",
-    "reused_catalog_assets": ["asset-model-enterprise-multimodal"],
+    "reused_catalog_assets": [
+      "asset-model-enterprise-multimodal"
+    ],
     "security_considerations": [
       "Inspection pipeline isolated on the factory network with no external connectivity",
       "Borderline defect classifications routed to a human inspector rather than auto-rejected"
@@ -588,7 +1384,28 @@
       "Line lighting variability required more image normalization work than the classification model itself",
       "100% coverage surfaced upstream process issues that sampling had never revealed"
     ],
-    "tags": ["batch", "classification", "high-scale", "image"]
+    "tags": [
+      "batch",
+      "classification",
+      "high-scale",
+      "image"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST"
+    ],
+    "requirement_signatures": [
+      "HIGH_SCALE_VOLUME",
+      "IMAGE_MODALITY",
+      "INTERACTION_BATCH",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST) and the solution class matches 'Batch Classification Pipeline'."
+    ]
   },
   {
     "id": "solution-healthcare-payment-integrity-batch",
@@ -597,7 +1414,10 @@
     "business_problem": "Claims investigators reviewed a large volume of paid and pending claims for duplicate billing, coding anomalies, and overpayment risk with limited ability to prioritize which claims to investigate first.",
     "architecture_pattern_id": "pattern-batch-classification",
     "architecture_pattern_name": "Batch Classification Pipeline",
-    "ai_models": ["Amazon Fraud Detector", "Azure OpenAI GPT-4o"],
+    "ai_models": [
+      "Amazon Fraud Detector",
+      "Azure OpenAI GPT-4o"
+    ],
     "cloud_provider": "AWS",
     "reused_catalog_assets": [
       "asset-agent-fraud-detection",
@@ -614,6 +1434,128 @@
       "Explaining *why* a claim was flagged mattered more to investigator adoption than the risk score itself",
       "False-positive tuning required close collaboration with the payment integrity team over several iterations"
     ],
-    "tags": ["batch", "classification", "high-scale", "structured"]
+    "tags": [
+      "batch",
+      "classification",
+      "high-scale",
+      "structured"
+    ],
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PHI-BOUNDARY",
+      "OBL-PHI-SAFE-LOGGING",
+      "OBL-AUDIT-SUBJECT-TRACE"
+    ],
+    "requirement_signatures": [
+      "HIGH_SCALE_VOLUME",
+      "INTERACTION_BATCH",
+      "SENSITIVE_DATA_PHI",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "evidence_class": "proven_in_production",
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PHI-BOUNDARY, OBL-PHI-SAFE-LOGGING, OBL-AUDIT-SUBJECT-TRACE) and the solution class matches 'Batch Classification Pipeline'."
+    ]
+  },
+  {
+    "id": "solution-claims-graphrag-abandoned",
+    "title": "Claims & Coverage Relationship Explorer (Abandoned)",
+    "industry": "Insurance",
+    "business_problem": "An attempt to answer cross-claim, cross-policy relationship questions (\"which other claims touch this same policyholder and property\") that single-pass retrieval couldn't resolve.",
+    "architecture_pattern_id": "pattern-graphrag",
+    "architecture_pattern_name": "GraphRAG",
+    "ai_models": [
+      "Azure OpenAI GPT-4o"
+    ],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": [
+      "asset-api-document-repository",
+      "asset-mcp-claims-lookup"
+    ],
+    "security_considerations": [
+      "Entity graph spanned multiple source systems, widening the effective data-access boundary beyond what was originally scoped for review"
+    ],
+    "business_outcome": "Discontinued after five months \u2014 entity resolution across claims/policy/property source systems was unreliable, and graph maintenance cost exceeded the retrieval benefit it delivered.",
+    "lessons_learned": [
+      "Entity resolution across systems that don't share a common key was the real blocker, not the retrieval or generation quality",
+      "The relationship-traversal questions that motivated the project turned out to be answerable by a much simpler join query against the claims warehouse"
+    ],
+    "tags": [
+      "document-heavy",
+      "retrieval",
+      "structured",
+      "integration-heavy"
+    ],
+    "evidence_class": "abandoned",
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE"
+    ],
+    "requirement_signatures": [
+      "ATTRIBUTION_REQUIRED",
+      "ENTERPRISE_PRIVATE_DATA",
+      "SENSITIVE_DATA_PII",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE) and the solution class matches 'GraphRAG'."
+    ]
+  },
+  {
+    "id": "solution-hr-benefits-rag-pilot",
+    "title": "Employee Benefits Q&A Pilot",
+    "industry": "Human Resources",
+    "business_problem": "A time-boxed pilot to let employees self-serve general benefits-plan questions instead of filing an HR ticket.",
+    "architecture_pattern_id": "pattern-rag-enterprise-docs",
+    "architecture_pattern_name": "RAG over Enterprise Docs",
+    "ai_models": [
+      "Azure OpenAI GPT-4o mini"
+    ],
+    "cloud_provider": "Azure",
+    "reused_catalog_assets": [
+      "asset-api-document-repository"
+    ],
+    "security_considerations": [
+      "Scoped to general plan documents only \u2014 no access to any individual employee's personal enrollment record",
+      "No production monitoring or eval harness stood up yet; pilot cohort was 40 employees over six weeks"
+    ],
+    "business_outcome": "Positive qualitative feedback from the pilot cohort; document-level citation only, no span-level extraction. Not yet operated at scale \u2014 no support commitment, no eval suite.",
+    "lessons_learned": [
+      "Employees repeatedly asked for the specific clause an answer came from, not just the document \u2014 a clear signal that document-level citation would not be sufficient for a production launch",
+      "Retrofitting span-level citation later is expected to be significant unplanned work; design it in from the start next time"
+    ],
+    "tags": [
+      "document-heavy",
+      "retrieval",
+      "assist",
+      "structured"
+    ],
+    "evidence_class": "pilot",
+    "obligation_profile": [
+      "OBL-GUARDRAILS-ALWAYS",
+      "OBL-EVAL-HARNESS-ALWAYS",
+      "OBL-OBSERVABILITY-ALWAYS",
+      "OBL-MODEL-APPROVED-LIST",
+      "OBL-PII-COMPLIANCE",
+      "OBL-AUDIT-SUBJECT-TRACE",
+      "OBL-PER-USER-AUTHZ"
+    ],
+    "requirement_signatures": [
+      "ATTRIBUTION_REQUIRED",
+      "ENTERPRISE_PRIVATE_DATA",
+      "INTERACTION_CONVERSATIONAL",
+      "SENSITIVE_DATA_PII",
+      "STRUCTURED_DATA_SOURCE"
+    ],
+    "conditions": [
+      "Applies when data sensitivity matches this precedent's obligation profile (OBL-GUARDRAILS-ALWAYS, OBL-EVAL-HARNESS-ALWAYS, OBL-OBSERVABILITY-ALWAYS, OBL-MODEL-APPROVED-LIST, OBL-PII-COMPLIANCE, OBL-AUDIT-SUBJECT-TRACE, OBL-PER-USER-AUTHZ) and the solution class matches 'RAG over Enterprise Docs'."
+    ]
   }
 ]

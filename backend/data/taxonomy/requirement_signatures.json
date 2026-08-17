@@ -1,0 +1,152 @@
+[
+  {
+    "id": "ENTERPRISE_PRIVATE_DATA",
+    "category": "informational",
+    "description": "The solution must ground on private enterprise data rather than model parametric knowledge alone.",
+    "legacy_tags": ["document-heavy", "retrieval", "structured", "integration-heavy"]
+  },
+  {
+    "id": "ATTRIBUTION_REQUIRED",
+    "category": "quality",
+    "description": "Responses must be traceable back to the source they were grounded in.",
+    "legacy_tags": ["document-heavy", "retrieval"]
+  },
+  {
+    "id": "CORPUS_SCALE_LARGE",
+    "category": "informational",
+    "description": "The corpus is larger than fits in a single model context window.",
+    "legacy_tags": ["high-scale", "document-heavy"]
+  },
+  {
+    "id": "CORPUS_VOLATILITY_HIGH",
+    "category": "informational",
+    "description": "The underlying source documents change frequently and must be kept fresh.",
+    "legacy_tags": ["realtime", "workflow"]
+  },
+  {
+    "id": "PER_USER_AUTHORISATION",
+    "category": "quality",
+    "description": "Different callers must see different subsets of the data based on their own entitlements.",
+    "legacy_tags": ["safety", "integration-heavy"]
+  },
+  {
+    "id": "SENSITIVE_DATA_PII",
+    "category": "informational",
+    "description": "The data involved includes personally identifiable information.",
+    "legacy_tags": []
+  },
+  {
+    "id": "SENSITIVE_DATA_PHI",
+    "category": "informational",
+    "description": "The data involved includes protected health information.",
+    "legacy_tags": []
+  },
+  {
+    "id": "ACTION_REQUIRED",
+    "category": "action",
+    "description": "The solution must mutate a system of record, not just inform a human.",
+    "legacy_tags": ["workflow", "agentic"]
+  },
+  {
+    "id": "ACTION_REQUIRED_DEFERRED",
+    "category": "evolution",
+    "description": "Action capability is explicitly planned for a later increment, not the current one.",
+    "legacy_tags": []
+  },
+  {
+    "id": "IRREVERSIBLE_ACTION",
+    "category": "action",
+    "description": "At least one action the solution can take cannot be trivially undone.",
+    "legacy_tags": []
+  },
+  {
+    "id": "FINANCIAL_MATERIALITY",
+    "category": "action",
+    "description": "Actions or decisions carry direct financial consequence.",
+    "legacy_tags": []
+  },
+  {
+    "id": "INTERACTION_CONVERSATIONAL",
+    "category": "interaction",
+    "description": "The primary interaction mode is synchronous, multi-turn conversation.",
+    "legacy_tags": ["copilot", "assist", "realtime"]
+  },
+  {
+    "id": "INTERACTION_BATCH",
+    "category": "interaction",
+    "description": "The primary interaction mode is scheduled or event-triggered, with no user waiting synchronously.",
+    "legacy_tags": ["batch"]
+  },
+  {
+    "id": "LOW_LATENCY_REQUIRED",
+    "category": "interaction",
+    "description": "Responses must return within a tight, human-perceptible latency budget.",
+    "legacy_tags": ["realtime", "low-latency"]
+  },
+  {
+    "id": "MULTI_HOP_QUERIES",
+    "category": "quality",
+    "description": "Answering typical questions requires combining evidence from more than one retrieval hop.",
+    "legacy_tags": ["reasoning", "multi-step"]
+  },
+  {
+    "id": "QUERY_AMBIGUITY_HIGH",
+    "category": "quality",
+    "description": "Incoming queries are frequently ambiguous and benefit from query planning or clarification before retrieval.",
+    "legacy_tags": []
+  },
+  {
+    "id": "RELATIONSHIP_TRAVERSAL_REQUIRED",
+    "category": "functional",
+    "description": "The domain has a rich entity/relationship structure that answers must traverse.",
+    "legacy_tags": []
+  },
+  {
+    "id": "TASK_DECOMPOSITION_REQUIRED",
+    "category": "functional",
+    "description": "The work required to satisfy a request is a variable, multi-step task rather than a single call.",
+    "legacy_tags": ["reasoning", "multi-step", "agentic"]
+  },
+  {
+    "id": "PARALLEL_INDEPENDENT_SUBTASKS",
+    "category": "functional",
+    "description": "The work decomposes into subtasks that are independent of one another and can run in parallel.",
+    "legacy_tags": []
+  },
+  {
+    "id": "SEPARATELY_OWNED_DOMAINS",
+    "category": "functional",
+    "description": "The work spans domains owned by different teams with different permission boundaries.",
+    "legacy_tags": []
+  },
+  {
+    "id": "HIGH_SCALE_VOLUME",
+    "category": "operational",
+    "description": "Expected request or record volume is high enough that per-unit cost and throughput matter.",
+    "legacy_tags": ["high-scale"]
+  },
+  {
+    "id": "IMAGE_MODALITY",
+    "category": "informational",
+    "description": "Inputs include images, scans, or diagrams the model must read.",
+    "legacy_tags": ["image", "multimodal"]
+  },
+  {
+    "id": "STRUCTURED_DATA_SOURCE",
+    "category": "informational",
+    "description": "The primary data source is structured/tabular rather than document text.",
+    "legacy_tags": ["structured"]
+  },
+  {
+    "id": "STYLE_FORMAT_UNACHIEVABLE_BY_PROMPTING",
+    "category": "quality",
+    "description": "A demonstrated, specific style/format/vocabulary requirement cannot be met by prompting or retrieval alone.",
+    "legacy_tags": []
+  },
+  {
+    "id": "REUSE_PREFERENCE_STRONG",
+    "category": "evolution",
+    "description": "The requester has explicitly expressed a strong preference to reuse existing enterprise capability.",
+    "legacy_tags": []
+  }
+]

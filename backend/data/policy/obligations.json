@@ -1,0 +1,117 @@
+[
+  {
+    "id": "OBL-PHI-BOUNDARY",
+    "title": "PHI-approved processing boundary required",
+    "source": "POL-DATA-014 (simulated data classification policy)",
+    "match": "any",
+    "conditions": [
+      { "field": "data_sensitivity", "op": "equals", "value": "phi" },
+      { "field": "signatures", "op": "contains", "value": "SENSITIVE_DATA_PHI" }
+    ],
+    "mandates_capabilities": ["CAP-MODEL-SERVING-APPROVED", "CAP-PHI-SAFE-LOGGING"],
+    "description": "Any component that touches PHI must run inside a PHI-approved processing boundary."
+  },
+  {
+    "id": "OBL-PII-COMPLIANCE",
+    "title": "GDPR-compliant handling for personal data",
+    "source": "POL-DATA-009 (simulated)",
+    "match": "any",
+    "conditions": [
+      { "field": "data_sensitivity", "op": "equals", "value": "pii" },
+      { "field": "signatures", "op": "contains", "value": "SENSITIVE_DATA_PII" }
+    ],
+    "mandates_capabilities": ["CAP-MODEL-SERVING-APPROVED"],
+    "description": "Personal data must be processed only by components with a GDPR-compliant posture."
+  },
+  {
+    "id": "OBL-PHI-SAFE-LOGGING",
+    "title": "No PHI/PII in prompt or response logs",
+    "source": "POL-DATA-014 (simulated)",
+    "match": "any",
+    "conditions": [
+      { "field": "data_sensitivity", "op": "in", "value": ["pii", "phi"] }
+    ],
+    "mandates_capabilities": ["CAP-PHI-SAFE-LOGGING"],
+    "description": "Telemetry and prompt/response logging must redact or exclude sensitive data."
+  },
+  {
+    "id": "OBL-AUDIT-SUBJECT-TRACE",
+    "title": "Audit logging with subject traceability",
+    "source": "POL-AUD-003 (simulated)",
+    "match": "any",
+    "conditions": [
+      { "field": "data_sensitivity", "op": "in", "value": ["pii", "phi"] },
+      { "field": "signatures", "op": "contains", "value": "ACTION_REQUIRED" }
+    ],
+    "mandates_capabilities": ["CAP-AUDIT-SUBJECT-TRACE"],
+    "description": "Access to sensitive data or system-mutating actions must be logged with subject-level traceability."
+  },
+  {
+    "id": "OBL-GUARDRAILS-ALWAYS",
+    "title": "Input/output guardrails required",
+    "source": "OWASP-LLM-01/02 (curated control mapping)",
+    "match": "any",
+    "conditions": [
+      { "field": "always", "op": "equals", "value": true }
+    ],
+    "mandates_capabilities": ["CAP-INPUT-OUTPUT-GUARDRAILS"],
+    "description": "Untrusted input meets a model in essentially every solution class; injection/PII-leak defence is not optional."
+  },
+  {
+    "id": "OBL-EVAL-HARNESS-ALWAYS",
+    "title": "Evaluation harness required",
+    "source": "POL-AI-001 (simulated AI system registration policy)",
+    "match": "any",
+    "conditions": [
+      { "field": "always", "op": "equals", "value": true }
+    ],
+    "mandates_capabilities": ["CAP-EVAL-HARNESS"],
+    "description": "If output quality cannot be measured, it cannot be operated safely — required for every AI system registration."
+  },
+  {
+    "id": "OBL-OBSERVABILITY-ALWAYS",
+    "title": "Observability and tracing required",
+    "source": "POL-OPS-002 (simulated)",
+    "match": "any",
+    "conditions": [
+      { "field": "always", "op": "equals", "value": true }
+    ],
+    "mandates_capabilities": ["CAP-OBSERVABILITY-TRACE"],
+    "description": "Every production AI component must emit trace, cost, latency and tool-call telemetry."
+  },
+  {
+    "id": "OBL-PER-USER-AUTHZ",
+    "title": "Per-user authorisation on retrieval",
+    "source": "POL-SEC-021 (simulated)",
+    "match": "any",
+    "conditions": [
+      { "field": "signatures", "op": "contains", "value": "PER_USER_AUTHORISATION" },
+      { "field": "data_sensitivity", "op": "in", "value": ["pii", "phi"] }
+    ],
+    "mandates_capabilities": ["CAP-RETRIEVAL-PERMISSION-AWARE", "CAP-IDENTITY-PROPAGATION"],
+    "description": "Retrieval over sensitive or individually-scoped data must enforce the caller's own entitlements, not a shared service account."
+  },
+  {
+    "id": "OBL-ACTION-APPROVAL",
+    "title": "Human approval gate before irreversible or material action",
+    "source": "POL-HR-011 / POL-FIN-004 (simulated)",
+    "match": "any",
+    "conditions": [
+      { "field": "signatures", "op": "contains", "value": "IRREVERSIBLE_ACTION" },
+      { "field": "signatures", "op": "contains", "value": "FINANCIAL_MATERIALITY" }
+    ],
+    "mandates_capabilities": ["CAP-ACTION-AUTHORIZATION-WORKFLOW", "CAP-HUMAN-OVERSIGHT-REVIEW"],
+    "description": "Actions that are irreversible or financially material require a human approval checkpoint before execution."
+  },
+  {
+    "id": "OBL-MODEL-APPROVED-LIST",
+    "title": "Approved model list only",
+    "source": "POL-AI-007 (simulated)",
+    "match": "any",
+    "conditions": [
+      { "field": "always", "op": "equals", "value": true }
+    ],
+    "mandates_capabilities": ["CAP-MODEL-SERVING-APPROVED"],
+    "description": "Model inference must be served only through models on the approved list."
+  }
+]

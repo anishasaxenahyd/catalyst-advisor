@@ -12,7 +12,8 @@
     "scale_ceiling": "enterprise",
     "strengths": ["multi-step reasoning", "long-context synthesis", "reliable tool use"],
     "weaknesses": ["highest latency tier", "highest cost tier"],
-    "description": "Anthropic's frontier reasoning model. Best fit when a task requires chaining several judgment calls together, not just a single classification or lookup."
+    "description": "Anthropic's frontier reasoning model. Best fit when a task requires chaining several judgment calls together, not just a single classification or lookup.",
+    "capabilities": ["CAP-MODEL-SERVING-APPROVED", "CAP-TASK-PLANNING"]
   },
   {
     "id": "gpt-4o-mini",
@@ -27,7 +28,8 @@
     "scale_ceiling": "enterprise",
     "strengths": ["sub-200ms typical latency", "cheapest per-call cost in the catalog"],
     "weaknesses": ["weak multi-step reasoning", "not GDPR/HIPAA rated"],
-    "description": "A small, fast OpenAI model tuned for high-volume classification and routing decisions where cost per call matters more than depth of reasoning."
+    "description": "A small, fast OpenAI model tuned for high-volume classification and routing decisions where cost per call matters more than depth of reasoning.",
+    "capabilities": ["CAP-MODEL-SERVING-APPROVED", "CAP-CLASSIFICATION-SCORING"]
   },
   {
     "id": "gemini-2-0-flash",
@@ -42,7 +44,8 @@
     "scale_ceiling": "department",
     "strengths": ["document and diagram understanding", "reads scanned PDFs and architecture exports"],
     "weaknesses": ["mid-tier latency", "not yet HIPAA-eligible"],
-    "description": "Google's multimodal model, used for reading architecture diagrams, scanned documents, and image-heavy inputs."
+    "description": "Google's multimodal model, used for reading architecture diagrams, scanned documents, and image-heavy inputs.",
+    "capabilities": ["CAP-MODEL-SERVING-APPROVED", "CAP-IMAGE-DOCUMENT-UNDERSTANDING"]
   },
   {
     "id": "text-embedding-3-large",
@@ -58,7 +61,8 @@
     "strengths": ["cheap at large corpus scale", "strong retrieval recall for enterprise documents"],
     "weaknesses": ["not a generation model — always paired with a second model for RAG"],
     "description": "OpenAI's embedding model for retrieval-augmented patterns. Rarely the primary model in a recommendation, but frequently a supporting one.",
-    "is_primary_candidate": false
+    "is_primary_candidate": false,
+    "capabilities": ["CAP-CHUNK-INDEX"]
   },
   {
     "id": "llama-guard-3",
@@ -74,6 +78,7 @@
     "strengths": ["low-latency policy/safety screening", "broadest compliance coverage in the catalog"],
     "weaknesses": ["not intended as a primary generation model"],
     "description": "Meta's open-weight moderation and policy-compliance classifier, typically self-hosted and recommended as a supporting model alongside a primary generation model in regulated use cases.",
-    "is_primary_candidate": false
+    "is_primary_candidate": false,
+    "capabilities": ["CAP-INPUT-OUTPUT-GUARDRAILS", "CAP-MODEL-SERVING-APPROVED"]
   }
 ]

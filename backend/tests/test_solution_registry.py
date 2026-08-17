@@ -6,12 +6,13 @@ _VALID_PATTERN_IDS = {
     "pattern-realtime-copilot",
     "pattern-batch-classification",
     "pattern-autonomous-multi-agent",
+    "pattern-graphrag",
 }
 
 
-def test_solution_registry_loads_between_20_and_30_entries():
+def test_solution_registry_loads_between_20_and_35_entries():
     solutions = load_solution_registry()
-    assert 20 <= len(solutions) <= 30
+    assert 20 <= len(solutions) <= 35
 
 
 def test_solution_ids_are_unique():

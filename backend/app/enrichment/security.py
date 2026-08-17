@@ -24,8 +24,9 @@ def _security_query_tags(signal_vector: SignalVector, pattern: ArchitecturePatte
     own tag vocabulary (identity, encryption, agentic-safety, ...), distinct
     from the engine's controlled tag set (agentic, realtime, batch, ...) — the
     two were never designed to overlap. This bridges SignalVector/pattern
-    signals to that vocabulary directly, the same way `_known_tags()` bridges
-    the engine's vocabulary to the LLM in `app/engine/recommend.py`.
+    signals to that vocabulary directly, the same way the orchestrator
+    bridges the engine's tag vocabulary to the LLM extraction call in
+    `app/kernel/orchestrator.py`.
     """
     tags = {"identity", "access-control", "data-protection", "encryption"}
     if signal_vector.data_sensitivity == "pii":

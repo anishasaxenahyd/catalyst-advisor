@@ -27,6 +27,7 @@ import os
 import httpx
 from pydantic import ValidationError
 
+from app.kernel.schemas import KernelNarrationInput, KernelNarrativeExtras
 from app.models.schemas import (
     BusinessUnderstanding,
     EngineOutput,
@@ -40,7 +41,12 @@ from app.models.schemas import (
 )
 from app.providers.llm.base import LLMProvider
 from app.providers.llm.exceptions import LLMProviderError
-from app.providers.llm.prompts import NARRATIVE_PROMPT, PROMPT_OPTIMIZER_PROMPT, SIGNAL_VECTOR_PROMPT
+from app.providers.llm.prompts import (
+    KERNEL_NARRATION_PROMPT,
+    NARRATIVE_PROMPT,
+    PROMPT_OPTIMIZER_PROMPT,
+    SIGNAL_VECTOR_PROMPT,
+)
 from app.providers.llm.retry import RetryConfig, call_with_retries
 from app.providers.llm.utils import strip_json_fences
 from app.validation.prompt_optimization_normalizer import format_tracked_fields, normalize_optimization
@@ -180,6 +186,26 @@ class GroqProvider(LLMProvider):
             )
         except _TransientGroqError as exc:
             raise LLMProviderError(f"Groq unavailable after retries (optimize_prompt): {exc}") from exc
+
+    def narrate_kernel_findings(self, narration_input: KernelNarrationInput) -> KernelNarrativeExtras:
+        prompt = KERNEL_NARRATION_PROMPT.format(narration_input=narration_input.model_dump_json(indent=2))
+
+        def attempt() -> KernelNarrativeExtras:
+            raw = self._post(prompt)
+            try:
+                return KernelNarrativeExtras.model_validate_json(raw)
+            except (ValidationError, json.JSONDecodeError) as exc:
+                raise _TransientGroqError(f"Groq returned invalid kernel narration extras: {exc}") from exc
+
+        try:
+            return call_with_retries(
+                attempt,
+                retryable=(_TransientGroqError,),
+                config=self._retry_config,
+                op_name="groq.narrate_kernel_findings",
+            )
+        except _TransientGroqError as exc:
+            raise LLMProviderError(f"Groq unavailable after retries (narrate_kernel_findings): {exc}") from exc
 
 
 def _format_prior_answers(prior_answers: list[QAExchange]) -> str:

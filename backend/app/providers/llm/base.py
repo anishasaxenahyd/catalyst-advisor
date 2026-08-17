@@ -19,6 +19,7 @@ class from this package — only `LLMProvider` and the factory.
 
 from abc import ABC, abstractmethod
 
+from app.kernel.schemas import KernelNarrationInput, KernelNarrativeExtras
 from app.models.schemas import (
     EngineOutput,
     ExecutiveNarrative,
@@ -40,3 +41,11 @@ class LLMProvider(ABC):
     def optimize_prompt(
         self, raw_input: RawInput, prior_answers: list[QAExchange]
     ) -> PromptOptimizationResult: ...
+
+    @abstractmethod
+    def narrate_kernel_findings(self, narration_input: KernelNarrationInput) -> KernelNarrativeExtras:
+        """Stage 15 narration extras: prose over the Decision Kernel's
+        already-decided rejections, sourcing decisions, and alternatives.
+        Never permitted to introduce a pattern/asset/decision not already
+        present in `narration_input` — see `KernelNarrationInput`'s docstring."""
+        ...

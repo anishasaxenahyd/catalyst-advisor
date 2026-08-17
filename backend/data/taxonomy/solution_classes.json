@@ -1,0 +1,58 @@
+[
+  {
+    "id": "GROUNDED_KNOWLEDGE_ASSISTANT",
+    "name": "Grounded Knowledge Assistant",
+    "description": "Answers questions from enterprise data, conversationally, with attribution.",
+    "indicative_signatures": ["ENTERPRISE_PRIVATE_DATA", "ATTRIBUTION_REQUIRED", "INTERACTION_CONVERSATIONAL"],
+    "required_signature_categories": ["informational", "interaction"]
+  },
+  {
+    "id": "DOCUMENT_PROCESSING_PIPELINE",
+    "name": "Document Processing Pipeline",
+    "description": "Extracts, classifies, or transforms documents/records in bulk, without a human waiting per item.",
+    "indicative_signatures": ["INTERACTION_BATCH", "STRUCTURED_DATA_SOURCE", "HIGH_SCALE_VOLUME"],
+    "required_signature_categories": ["informational", "operational"]
+  },
+  {
+    "id": "DECISION_SUPPORT",
+    "name": "Decision Support",
+    "description": "Surfaces analysis and recommendations for a human to weigh, without generating a final answer directly consumed by an end user.",
+    "indicative_signatures": ["MULTI_HOP_QUERIES", "ENTERPRISE_PRIVATE_DATA"],
+    "required_signature_categories": ["quality"]
+  },
+  {
+    "id": "CONVERSATIONAL_TRANSACTION_AGENT",
+    "name": "Conversational Transaction Agent",
+    "description": "Converses with a user and can also execute actions that mutate a system of record.",
+    "indicative_signatures": ["INTERACTION_CONVERSATIONAL", "ACTION_REQUIRED"],
+    "required_signature_categories": ["interaction", "action"]
+  },
+  {
+    "id": "AUTONOMOUS_WORKFLOW",
+    "name": "Autonomous Workflow",
+    "description": "Executes a multi-step workflow across systems with minimal per-step human checkpoints.",
+    "indicative_signatures": ["TASK_DECOMPOSITION_REQUIRED", "ACTION_REQUIRED"],
+    "required_signature_categories": ["functional", "action"]
+  },
+  {
+    "id": "CONTENT_GENERATION",
+    "name": "Content Generation",
+    "description": "Drafts or generates net-new content for human review, not grounded question answering.",
+    "indicative_signatures": ["STYLE_FORMAT_UNACHIEVABLE_BY_PROMPTING"],
+    "required_signature_categories": []
+  },
+  {
+    "id": "CLASSIFICATION_EXTRACTION_SERVICE",
+    "name": "Classification / Extraction Service",
+    "description": "Applies a fixed label set or extraction schema to incoming items at scale.",
+    "indicative_signatures": ["HIGH_SCALE_VOLUME", "INTERACTION_BATCH"],
+    "required_signature_categories": ["operational"]
+  },
+  {
+    "id": "ANALYTICS_COPILOT",
+    "name": "Analytics Copilot",
+    "description": "Helps a user query and interpret structured/analytical data conversationally.",
+    "indicative_signatures": ["STRUCTURED_DATA_SOURCE", "INTERACTION_CONVERSATIONAL"],
+    "required_signature_categories": ["informational"]
+  }
+]

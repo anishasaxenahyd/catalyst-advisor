@@ -1,0 +1,146 @@
+[
+  {
+    "id": "CAP-RETRIEVAL-BASIC",
+    "name": "Basic document retrieval",
+    "description": "Retrieve relevant passages from an indexed corpus without per-user permission filtering.",
+    "category": "retrieval"
+  },
+  {
+    "id": "CAP-RETRIEVAL-PERMISSION-AWARE",
+    "name": "Permission-aware document retrieval",
+    "description": "Retrieve relevant passages from an indexed corpus while enforcing the caller's own access entitlements, not a shared service-account scope.",
+    "category": "retrieval"
+  },
+  {
+    "id": "CAP-CHUNK-INDEX",
+    "name": "Document ingestion & chunk indexing",
+    "description": "Ingest, chunk, and index source documents so they are retrievable, with a re-indexing path when sources change.",
+    "category": "retrieval"
+  },
+  {
+    "id": "CAP-CITATION-DOCUMENT",
+    "name": "Document-level citation resolution",
+    "description": "Attribute a generated answer back to the source document it was grounded in.",
+    "category": "retrieval"
+  },
+  {
+    "id": "CAP-CITATION-SPAN",
+    "name": "Span-level citation resolution",
+    "description": "Attribute a generated answer back to the specific passage/span of the source document it was grounded in, not just the document.",
+    "category": "retrieval"
+  },
+  {
+    "id": "CAP-ENTITY-GRAPH-TRAVERSAL",
+    "name": "Entity relationship traversal",
+    "description": "Traverse a maintained entity/relationship graph to answer multi-hop questions a single retrieval pass cannot.",
+    "category": "retrieval"
+  },
+  {
+    "id": "CAP-CONVERSATION-SESSION",
+    "name": "Conversational session management",
+    "description": "Maintain multi-turn conversational state and context for a synchronous, interactive experience.",
+    "category": "interaction"
+  },
+  {
+    "id": "CAP-STRUCTURED-OUTPUT",
+    "name": "Structured output constraint",
+    "description": "Constrain model output to a validated schema (JSON, form fields) rather than free text.",
+    "category": "interaction"
+  },
+  {
+    "id": "CAP-IMAGE-DOCUMENT-UNDERSTANDING",
+    "name": "Image / scanned-document understanding",
+    "description": "Extract information from images, scans, or diagrams as model input.",
+    "category": "interaction"
+  },
+  {
+    "id": "CAP-BATCH-ORCHESTRATION",
+    "name": "Batch / scheduled orchestration",
+    "description": "Run a pipeline against a volume of records on a schedule or trigger, without a human waiting synchronously.",
+    "category": "orchestration"
+  },
+  {
+    "id": "CAP-TOOL-INVOCATION-GATEWAY",
+    "name": "Tool invocation gateway",
+    "description": "Invoke a bounded set of external tools/systems on the model's behalf, with logging of every call.",
+    "category": "orchestration"
+  },
+  {
+    "id": "CAP-TASK-PLANNING",
+    "name": "Task planning & decomposition",
+    "description": "Decompose a goal into an ordered or dynamic sequence of steps rather than following a fixed script.",
+    "category": "orchestration"
+  },
+  {
+    "id": "CAP-MULTI-AGENT-ORCHESTRATION",
+    "name": "Multi-agent orchestration",
+    "description": "Coordinate multiple independently-scoped agents toward a shared objective, with handoff and result reconciliation.",
+    "category": "orchestration"
+  },
+  {
+    "id": "CAP-ACTION-AUTHORIZATION-WORKFLOW",
+    "name": "Action authorisation with approval workflow",
+    "description": "Route a proposed system-mutating action through a human approval step before it executes.",
+    "category": "action"
+  },
+  {
+    "id": "CAP-IDENTITY-PROPAGATION",
+    "name": "Identity propagation to downstream systems",
+    "description": "Carry the calling user's identity through to every downstream data or action call, rather than a shared service identity.",
+    "category": "action"
+  },
+  {
+    "id": "CAP-MODEL-SERVING-APPROVED",
+    "name": "Approved model serving",
+    "description": "Serve model inference only through models on the approved list, in the required network/region zone.",
+    "category": "model"
+  },
+  {
+    "id": "CAP-FINE-TUNING-PIPELINE",
+    "name": "Fine-tuning / domain adaptation pipeline",
+    "description": "Train or adapt a model on proprietary examples to change its style, format, or vocabulary behaviour.",
+    "category": "model"
+  },
+  {
+    "id": "CAP-CLASSIFICATION-SCORING",
+    "name": "High-volume classification / scoring",
+    "description": "Classify or score a large batch of records against a fixed label set.",
+    "category": "model"
+  },
+  {
+    "id": "CAP-INPUT-OUTPUT-GUARDRAILS",
+    "name": "Input/output guardrails",
+    "description": "Filter untrusted input and model output for injection attempts, policy violations, and PII/PHI leakage.",
+    "category": "assurance"
+  },
+  {
+    "id": "CAP-EVAL-HARNESS",
+    "name": "Evaluation harness",
+    "description": "Continuously measure output quality against a labelled or rubric-based test set so regressions are detectable.",
+    "category": "assurance"
+  },
+  {
+    "id": "CAP-OBSERVABILITY-TRACE",
+    "name": "Observability & tracing",
+    "description": "Capture trace, cost, latency, token, tool-call and retrieval logs for every request.",
+    "category": "assurance"
+  },
+  {
+    "id": "CAP-PHI-SAFE-LOGGING",
+    "name": "PHI/PII-safe logging",
+    "description": "Ensure sensitive data is redacted or excluded from prompt/response logs and telemetry.",
+    "category": "assurance"
+  },
+  {
+    "id": "CAP-AUDIT-SUBJECT-TRACE",
+    "name": "Audit logging with subject traceability",
+    "description": "Log every access/action with enough detail to answer 'who accessed what, when, and why' during an audit.",
+    "category": "assurance"
+  },
+  {
+    "id": "CAP-HUMAN-OVERSIGHT-REVIEW",
+    "name": "Human oversight / review workflow",
+    "description": "Route output through a human review step, from post-hoc sampling up to mandatory pre-action approval.",
+    "category": "assurance"
+  }
+]

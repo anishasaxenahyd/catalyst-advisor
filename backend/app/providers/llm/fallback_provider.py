@@ -8,6 +8,7 @@ but it would work identically pairing any two LLMProvider implementations.
 
 import logging
 
+from app.kernel.schemas import KernelNarrationInput, KernelNarrativeExtras
 from app.models.schemas import (
     EngineOutput,
     ExecutiveNarrative,
@@ -55,3 +56,13 @@ class FallbackLLMProvider(LLMProvider):
                 type(self.primary).__name__, type(exc).__name__, exc, type(self.fallback).__name__,
             )
             return self.fallback.optimize_prompt(raw_input, prior_answers)
+
+    def narrate_kernel_findings(self, narration_input: KernelNarrationInput) -> KernelNarrativeExtras:
+        try:
+            return self.primary.narrate_kernel_findings(narration_input)
+        except Exception as exc:
+            logger.warning(
+                "%s.narrate_kernel_findings failed (%s: %s) — falling back to %s.",
+                type(self.primary).__name__, type(exc).__name__, exc, type(self.fallback).__name__,
+            )
+            return self.fallback.narrate_kernel_findings(narration_input)

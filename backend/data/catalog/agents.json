@@ -6,7 +6,10 @@
     "description": "Pre-built agent that classifies, prioritizes, and routes inbound support tickets, optionally drafting a first-response reply for human review.",
     "tags": ["copilot", "assist", "realtime", "workflow"],
     "reuse_score": 70,
-    "compliance": ["SOC2"]
+    "compliance": ["SOC2"],
+    "capabilities": ["CAP-CLASSIFICATION-SCORING", "CAP-CONVERSATION-SESSION"],
+    "lifecycle_status": "supported",
+    "owning_team": "Customer Experience Platform Team"
   },
   {
     "id": "agent-contract-review",
@@ -15,6 +18,9 @@
     "description": "Agentic workflow that reads an incoming contract, flags clauses that deviate from an approved playbook, and produces a redline summary for legal review.",
     "tags": ["agentic", "document-heavy", "workflow"],
     "reuse_score": 65,
-    "compliance": ["SOC2", "GDPR"]
+    "compliance": ["SOC2", "GDPR"],
+    "capabilities": ["CAP-TASK-PLANNING", "CAP-CITATION-DOCUMENT"],
+    "lifecycle_status": "supported",
+    "owning_team": "Legal Engineering Team"
   }
 ]

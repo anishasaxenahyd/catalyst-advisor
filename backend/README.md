@@ -59,8 +59,10 @@ and integration points, and applies sensible defaults for anything that
 still can't be resolved. Every correction or default is recorded as a
 `ValidationWarning` on `SignalVector.validation_warnings`, and each field's
 origin — `user` (from a hint), `llm` (from the provider), or `default` — is
-recorded in `SignalVector.field_provenance`. Confidence scoring
-(`engine/scoring.py`) is weighted by that provenance (user > llm > default),
+recorded in `SignalVector.field_provenance`. Confidence is weighted by that
+provenance (user > llm > default) wherever it's computed — the Decision
+Kernel's sufficiency gate (`app/kernel/sufficiency.py`) and pattern/model
+selection now own that, replacing the old weighted-scoring engine —
 and every `DecisionTrace` carries `missing_information`,
 `validation_warnings`, and a `confidence_rationale` string derived from it.
 
@@ -116,9 +118,10 @@ loader-with-`lru_cache` shape as everything else in this codebase:
 
 `app/enrichment/` deterministically enriches every `Report` with an
 `enrichment` field built from the three sources above plus the engine's own
-config-driven rules — no LLM call, no new scoring dimension. It's the one
-intentional touch to `app/engine/recommend.py` (one import, one function
-call, one field on the final `Report`). Per-concern builders:
+config-driven rules — no LLM call, no new scoring dimension. It's called
+from `app/kernel/orchestrator.py` (the Decision Kernel's orchestrator,
+which now owns `/api/recommendations` end to end — see `app/kernel/`).
+Per-concern builders:
 
 - `business.py` — a templated restatement of the `SignalVector`
 - `security.py` — workbench + Solution Registry + Enterprise Knowledge

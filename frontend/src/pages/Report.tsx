@@ -14,6 +14,7 @@ import {
   ShieldAlert,
   Target,
   TrendingUp,
+  Workflow,
 } from "lucide-react";
 import { useRecommendation } from "../lib/RecommendationContext";
 import DecisionTraceCard from "../components/DecisionTraceCard";
@@ -29,12 +30,15 @@ import AlternativeSolutionCard from "../components/report/AlternativeSolutionCar
 import RoadmapTimeline from "../components/report/RoadmapTimeline";
 import RiskTable from "../components/report/RiskTable";
 import BusinessValueKpis from "../components/report/BusinessValueKpis";
+import SufficiencyBanner from "../components/report/SufficiencyBanner";
+import DecisionKernelPanel from "../components/report/DecisionKernelPanel";
 import { IconDiagram } from "../components/icons";
 import "../report.css";
 
 const NAV_SECTIONS = [
   { id: "overview", label: "Overview" },
   { id: "architecture", label: "Architecture" },
+  { id: "decision-kernel", label: "How We Decided" },
   { id: "components", label: "Components" },
   { id: "models", label: "AI Models" },
   { id: "workbench", label: "Workbench" },
@@ -82,6 +86,8 @@ export default function ReportPage() {
       </button>
 
       <ReportHeader report={report} onPrint={() => window.print()} onReset={reset} />
+
+      {report.decision_kernel && <SufficiencyBanner sufficiency={report.decision_kernel.sufficiency} />}
 
       <nav className="rpt-nav" aria-label="Report sections">
         {NAV_SECTIONS.map((s) => (
@@ -135,6 +141,25 @@ export default function ReportPage() {
           <DecisionTraceCard trace={architecture_recommendation.decision_trace} />
         </div>
       </div>
+
+      {/* ================================================================ */}
+      {/* Decision Kernel — pattern admissibility, sourcing, elimination,   */}
+      {/* alternatives, precedents. A projection of the kernel's own        */}
+      {/* staged output, not a separate narrative.                         */}
+      {/* ================================================================ */}
+      {report.decision_kernel && (
+        <div className="rpt-section" id="decision-kernel">
+          <div className="rpt-section-head">
+            <Workflow width={18} height={18} className="icon" />
+            <h2>How this was decided</h2>
+          </div>
+          <p className="rpt-section-subtitle">
+            Every pattern the library was checked against, including the ones ruled out and why — plus how each
+            required capability was sourced, what was eliminated, and what the real alternatives are.
+          </p>
+          <DecisionKernelPanel kernel={report.decision_kernel} />
+        </div>
+      )}
 
       {/* ================================================================ */}
       {/* Solution components                                              */}
